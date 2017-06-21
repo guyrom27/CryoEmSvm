@@ -8,11 +8,18 @@ class EulerAngle:
         self.Theta = Theta
         self.Psi = Psi
 
+    def __str__(self):
+        return str(tuple([self.Phi, self.Theta, self.Psi]))
+
+
 
 class SixPosition:
     def __init__(self, COM_position, orientation):
         self.COM_position = COM_position
         self.orientation = orientation
+
+    def __str__(self):
+        return str(self.COM_position) + " " + str(self.orientation)
 
 
 
@@ -28,7 +35,13 @@ class Candidate:
         self.label = label
         self.features = None
 
-    def set_featers(self, features):
+    def __str__(self):
+        return "Position: " + str(self.six_position) + "\n" +\
+               "Suggested Label: " + str(self.suggested_label) + "\n" +\
+               "Label: " + str(self.label) + "\n" +\
+               "Features: " + str(self.features) + "\n"
+
+    def set_features(self, features):
         self.features = features
 
     def set_label(self, label):

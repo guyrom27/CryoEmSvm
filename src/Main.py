@@ -6,13 +6,11 @@ TRAINING_SET_SIZE = 10
 
 JUNK_ID = 0
 
-import CommonDataTypes
 import CandidateSelector
 import TemplateGenerator
 import TomogramGenerator
 import Labeler
-import FeaturesExractor
-
+import FeaturesExtractor
 
 
 
@@ -20,10 +18,11 @@ def analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector):
     candidates = candidate_selector.select(tomogram)
 
     for candidate in candidates:
-        feature_vector = features_extractor.extract_features(candidate)
+        feature_vector = features_extractor.extract_features(tomogram, candidate)
         feature_vectors.append(feature_vector)
+        candidate.set_features(feature_vector)
         # this sets each candidate's label
-        label = labeler.associate_label(candidate)
+        label = labeler.label(candidate)
         candidate.set_label(label)
         labels.append(label)
     return (candidates, feature_vectors, labels)
@@ -40,7 +39,7 @@ templates = TemplateGenerator.generate_tilted_templates()
 #save templates to files
 
 candidate_selector = CandidateSelector.CandidateSelector(templates)
-features_extractor = FeaturesExractor.FeaturesExractor(templates)
+features_extractor = FeaturesExtractor.FeaturesExtractor(templates)
 
 
 #Training
@@ -55,9 +54,9 @@ for i in range(TRAINING_SET_SIZE):
     # configuration for tomogram generation
     criteria = (2,0)
     #with a set composition
-    tomogram = generate_tomogram(templates, criteria)
+    tomogram = TomogramGenerator.generate_tomogram(templates, criteria)
 
-    labeler = Labeler.Labeler(tomogram.composition)
+    labeler = Labeler.PositionLabeler(tomogram.composition)
 
     (candidates, single_iteration_feature_vectors, single_iteration_labels) = analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector)
     feature_vectors.extend(single_iteration_feature_vectors)
@@ -70,6 +69,8 @@ X = np.array(feature_vectors)
 y = np.array(labels)
 from sklearn.svm import SVC
 svm = SVC()
+print(X)
+print(y)
 svm.fit(X, y)
 
 #how to save to disk?
@@ -81,15 +82,15 @@ svm.fit(X, y)
 # configuration for tomogram generation
 criteria = ()
 #with a set composition
-tomogram = generate_tomogram(templates, criteria)
+tomogram = TomogramGenerator.generate_tomogram(templates, criteria)
 
-labeler = SvmLabeler(svm)
+labeler = Labeler.SvmLabeler(svm)
 
 (candidates, feature_vectors, predicted_labels) = analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector)
 
 #test results
 
-ground_truth_labeler = PositionLabeler(tomogram.composition)
+ground_truth_labeler = Labeler.PositionLabeler(tomogram.composition)
 
 #junk was identified as non junk
 false_positive = 0

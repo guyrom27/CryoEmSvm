@@ -3,8 +3,6 @@ import CommonDataTypes
 
 import numpy as np
 import scipy.ndimage.interpolation
-#from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
 
 
 #The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
@@ -66,7 +64,7 @@ def generate_tilted_templates():
 
 
     circle_dm = np.zeros(TEMPLATE_DIMENSIONS)
-    fill_with_circle(circle_dm, TEMPLATE_DIMENSION/3)
+    fill_with_circle(circle_dm, TEMPLATE_DIMENSION/4)
     circle_templates = []
     for tilt in tilts:
          circle_templates.append(CommonDataTypes.TiltedTemplate(rotate(circle_dm,tilt), tilt, 1))
@@ -75,13 +73,15 @@ def generate_tilted_templates():
     square_dm = np.zeros(TEMPLATE_DIMENSIONS)
     fill_with_square(square_dm, TEMPLATE_DIMENSION/2)
     for tilt in tilts:
-        square_templates.append(CommonDataTypes.TiltedTemplate(rotate(square_dm, tilt), tilt, 1))
+        square_templates.append(CommonDataTypes.TiltedTemplate(rotate(square_dm, tilt), tilt, 2))
 
     return (circle_templates,square_templates)
 
 
 
 if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+
     fig, ax = plt.subplots()
 
     templates = generate_tilted_templates()

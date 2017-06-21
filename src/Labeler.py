@@ -1,4 +1,6 @@
+DISTANCE_THRESHOLD = 0.5
 
+import numpy as np
 
 class Labeler:
     #make abstract method
@@ -6,6 +8,7 @@ class Labeler:
     def label(self, candidate):
         return None
 
+JUNK_ID = 0
 
 class PositionLabeler:
     def __init__(self, composition):
@@ -15,7 +18,12 @@ class PositionLabeler:
 
     # make abstract method
     def label(self, candidate):
-        return None
+        candidate.set_label(JUNK_ID)
+        for real_candidate in self.composition:
+            dist_vec = np.array(candidate.six_position.COM_position) - np.array(real_candidate.six_position.COM_position)
+            if np.dot(dist_vec,dist_vec) <= DISTANCE_THRESHOLD**2:
+                candidate.set_label(real_candidate.label)
+        return candidate.label
 
 
 class SvmLabeler(Labeler):
@@ -23,4 +31,5 @@ class SvmLabeler(Labeler):
         self.svm = svm
 
     def label(self, candidate):
-        return svm.predict(candidate.features)
+        print(candidate)
+        return self.svm.predict(candidate.features)
