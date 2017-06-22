@@ -2,7 +2,7 @@
 Read
 """
 
-TRAINING_SET_SIZE = 10
+TRAINING_SET_SIZE = 1
 
 JUNK_ID = 0
 
@@ -16,15 +16,14 @@ import FeaturesExtractor
 
 def analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector):
     candidates = candidate_selector.select(tomogram)
+    feature_vectors = []
+    labels = []
 
     for candidate in candidates:
-        feature_vector = features_extractor.extract_features(tomogram, candidate)
-        feature_vectors.append(feature_vector)
-        candidate.set_features(feature_vector)
+        feature_vectors.append(features_extractor.extract_features(tomogram, candidate))
         # this sets each candidate's label
-        label = labeler.label(candidate)
-        candidate.set_label(label)
-        labels.append(label)
+        labels.append(labeler.label(candidate))
+
     return (candidates, feature_vectors, labels)
 
 
@@ -61,8 +60,6 @@ for i in range(TRAINING_SET_SIZE):
     (candidates, single_iteration_feature_vectors, single_iteration_labels) = analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector)
     feature_vectors.extend(single_iteration_feature_vectors)
     labels.extend(single_iteration_labels)
-
-
 
 import numpy as np
 X = np.array(feature_vectors)
@@ -105,7 +102,7 @@ true_identification = 0
 true_rejection = 0
 
 for candidate in candidates:
-    true_label = ground_truth_labeler.label(candidate)
+    true_label = ground_truth_labeler.label(candidate, False)
     predicted_label = candidate.label
     if (true_label == JUNK_ID):
         if (predicted_label == JUNK_ID):
@@ -124,7 +121,7 @@ for candidate in candidates:
 success = true_identification + true_rejection
 
 #print SVM statistics
-print("SVM error rate= " + (len(candidates) - success) / len(candidates))
+print("SVM error rate= " + str((len(candidates) - success) / len(candidates)))
 
 
 

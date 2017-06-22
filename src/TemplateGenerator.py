@@ -7,6 +7,7 @@ import scipy.ndimage.interpolation
 
 #The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
 TEMPLATE_DIMENSION = 20
+TEMPLATE_DIMENSIONS_2D = (TEMPLATE_DIMENSION,TEMPLATE_DIMENSION,1)
 TEMPLATE_DIMENSIONS = (TEMPLATE_DIMENSION,TEMPLATE_DIMENSION)
 
 
@@ -58,20 +59,26 @@ def generate_tilted_templates():
     """
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
+    return generate_tilted_templates_2d()
+
+def generate_tilted_templates_2d():
+    """
+    :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
+    """
     tilts = []
     for theta in range(0,90,15):
         tilts.append(CommonDataTypes.EulerAngle(theta,None,None))
 
 
-    circle_dm = np.zeros(TEMPLATE_DIMENSIONS)
-    fill_with_circle(circle_dm, TEMPLATE_DIMENSION/4)
+    circle_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
+    fill_with_circle(circle_dm[:,:,0], TEMPLATE_DIMENSION/4)
     circle_templates = []
     for tilt in tilts:
          circle_templates.append(CommonDataTypes.TiltedTemplate(rotate(circle_dm,tilt), tilt, 1))
 
     square_templates = []
-    square_dm = np.zeros(TEMPLATE_DIMENSIONS)
-    fill_with_square(square_dm, TEMPLATE_DIMENSION/2)
+    square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
+    fill_with_square(square_dm[:,:,0], TEMPLATE_DIMENSION/2)
     for tilt in tilts:
         square_templates.append(CommonDataTypes.TiltedTemplate(rotate(square_dm, tilt), tilt, 2))
 
@@ -82,17 +89,20 @@ def generate_tilted_templates():
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
-    fig, ax = plt.subplots()
-
     templates = generate_tilted_templates()
 
-
-    #ax.imshow(create_circle(100))
+    fig, ax = plt.subplots()
     ax.imshow(templates[0][0].density_map)
 
 
     fig, ax = plt.subplots()
     ax.imshow(templates[1][3].density_map)
+
+    templates_2d = generate_tilted_templates_2d()
+    print(templates_2d[0][0].density_map.shape)
+
+    fig, ax = plt.subplots()
+    ax.imshow(templates_2d[1][3].density_map[:,:,0])
 
     plt.show()
 

@@ -2,32 +2,34 @@ from CommonDataTypes import *
 
 
 import numpy as np
-import scipy.ndimage.interpolation
-#from mpl_toolkits.mplot3d import Axes3D
-
-
-#The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
 TOMOGRAM_DIMENSION = 40
 TOMOGRAM_DIMENSIONS = (TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION)
+TOMOGRAM_DIMENSIONS_2D = (TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION,1)
 
-def put_template(dm, template_dm, position):
-    dm[position[0] - template_dm.shape[0]//2:position[0] + template_dm.shape[0]//2,position[1] - template_dm.shape[1]//2:position[1] + template_dm.shape[1]//2] += template_dm
+#def put_template(dm, template_dm, position):
+#    dm[position[0] - template_dm.shape[0]//2:position[0] + template_dm.shape[0]//2,position[1] - template_dm.shape[1]//2:position[1] + template_dm.shape[1]//2] += template_dm
+
+def put_template(tomogram_dm, template_dm, position):
+    corner = [position[i] - template_dm.shape[i] // 2 for i in range(len(tomogram_dm.shape))]
+    shape = tuple([slice(corner[i],corner[i] + template_dm.shape[i]) for i in range(len(corner))])
+    tomogram_dm[shape] += template_dm
 
 
 def generate_tomogram(templates, criteria):
-    dm = np.zeros(TOMOGRAM_DIMENSIONS)
-
-    c1 = Candidate(SixPosition((10, 10, 0),templates[1][0].orientation), None, templates[1][0].template_id)
-    put_template(dm,templates[1][0].density_map, c1.six_position.COM_position)
-
-    c2 = Candidate(SixPosition((27, 18, 0), templates[1][2].orientation), None, templates[1][2].template_id)
-    put_template(dm, templates[1][2].density_map, c2.six_position.COM_position)
-
-    c3 = Candidate(SixPosition((10, 28, 0), templates[0][0].orientation), None, templates[0][0].template_id)
-    put_template(dm, templates[0][0].density_map, c3.six_position.COM_position)
+    return generate_tomogram_2d(templates, ((1,0,10,10),(1,2,27,18),(0,0,10,28)))
 
 
-    return Tomogram(dm, (c1,c2,c3))
+def generate_tomogram_2d(templates, criteria):
+    tomogram_dm = np.zeros(TOMOGRAM_DIMENSIONS_2D)
+    composition = []
+    for item in criteria:
+        template = templates[item[0]][item[1]]
+        position = (item[2],item[3],0)
+        candidate = Candidate(SixPosition(position,template.orientation), None, template.template_id)
+        put_template(tomogram_dm, template.density_map, candidate.six_position.COM_position)
+        composition.append(candidate)
+
+    return Tomogram(tomogram_dm, tuple(composition))
 
 
 if __name__ == '__main__':
@@ -49,7 +51,7 @@ if __name__ == '__main__':
     features_extractor = FeaturesExtractor(templates)
     for candidate in candidates:
         labeler.label(candidate)
-        candidate.set_featers(features_extractor.extract_features(tomogram, candidate))
+        candidate.set_features(features_extractor.extract_features(tomogram, candidate))
 
 
     #print(len(candidates))
@@ -57,19 +59,18 @@ if __name__ == '__main__':
         print(candidate)
 
     fig, ax = plt.subplots()
-    ax.imshow(tomogram.density_map)
+    ax.imshow(tomogram.density_map[:,:,0])
 
     fig, ax = plt.subplots()
-    candidate_positions = np.zeros(tomogram.density_map.shape)
+    candidate_positions = np.zeros(tomogram.density_map[:,:,0].shape)
     for candidate in candidates:
         pos = candidate.six_position.COM_position
-        if candidate.label == 0:
+        if candidate.label == 1:
             col = 0.9
-        elif candidate.label == 1:
+        elif candidate.label == 2:
             col = 0.6
         else:
             col = 0.3
-
         candidate_positions[pos[0]][pos[1]] = col
     ax.imshow(candidate_positions)
 

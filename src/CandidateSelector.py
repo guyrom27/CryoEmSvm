@@ -10,7 +10,7 @@ class CandidateSelector:
         self.templates = templates
 
     def find_local_maxima(self, correlation_array):
-        res = np.nonzero(PeakDetection.detect_peaks(correlation_array))
+        res = np.nonzero(PeakDetection.detect_peaks(correlation_array[:,:,0])) #### 2D
         return [(x[0],x[1],0) for x in zip(res[0],res[1]) if correlation_array[x] > CORRELATION_THRESHOLD]
 
     def select(self, tomogram):

@@ -15,8 +15,8 @@ class EulerAngle:
 
 class SixPosition:
     def __init__(self, COM_position, orientation):
-        self.COM_position = COM_position
-        self.orientation = orientation
+        self.COM_position = COM_position    # 3 tuple
+        self.orientation = orientation      # EulerAngle
 
     def __str__(self):
         return str(self.COM_position) + " " + str(self.orientation)
@@ -30,10 +30,10 @@ class Candidate:
     """
 
     def __init__(self, six_position, suggested_label=None, label = None):
-        self.six_position = six_position
-        self.suggested_label = suggested_label
-        self.label = label
-        self.features = None
+        self.six_position = six_position            # SixPosition
+        self.suggested_label = suggested_label      # int
+        self.label = label                          # int
+        self.features = None                        # list
 
     def __str__(self):
         return "Position: " + str(self.six_position) + "\n" +\
@@ -49,12 +49,11 @@ class Candidate:
 
 
 
-
 class TiltedTemplate:
     def __init__(self, density_map, orientation, template_id):
-        self.template_id = template_id
-        self.density_map = density_map
-        self.orientation = orientation
+        self.template_id = template_id      # int
+        self.density_map = density_map      # numpy 3d array
+        self.orientation = orientation      # EulerAngle
 
 
 
@@ -65,6 +64,6 @@ class Tomogram:
     composition is a list of labeled candidates, that represents the ground truth
     """
     def __init__(self, density_map, composition):
-        self.density_map = density_map
-        self.composition = composition
+        self.density_map = density_map      # numpy 3d array
+        self.composition = composition      # list of labeled candidates
 
