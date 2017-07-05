@@ -1,13 +1,12 @@
 import chimera
-from chimera import runCommand
 from VolumeViewer import open_volume_file
 from Matrix import euler_xform
-from chimera import specifier
 import numpy as np
 
-def create_dm(pdbname, outputname):
-	chan = chimera.openModels.open(pdbname)[0]
-	# center structure
+RESOULTION = 10
+ANGLE_RES = 30
+
+def center_strcture(chan):
 	com = [sum([c[i] for c in chan.coordSets[0].coords()]) / len(chan.coordSets[0].coords()) for i in range(3)]
 	for j in range(len(chan.atoms)):
 		p = chan.atoms[j].coord()
@@ -15,18 +14,33 @@ def create_dm(pdbname, outputname):
 			p[i] -= com[i]
 		chan.atoms[j].setCoord(p)
 
+def matrix_com(m):
+	return [np.dot(np.array(range(m.shape[i])),np.sum(np.sum(m,max((i+1)%3,(i+2)%3)),min((i+1)%3,(i+2)%3))) for i in range(3)] / sum(sum(sum(m)))
+
+
+def create_dm(pdbname, outputname):
 	# create density map
-	runCommand('molmap #0 5 modelId 1')
-	dm = specifier.evalSpec('#1').models()[0]
+	chan = chimera.openModels.open(pdbname)[0]
+	chimera.runCommand('molmap #0 %s modelId 1' % str(RESOULTION))
+	dm = chimera.specifier.evalSpec('#1').models()[0]
 	chan.destroy()
 
-	# rotate
-	euler_angles = [0,0,0]
+	# rotate and save
 	translation = [0,0,0]
-	xf = euler_xform(euler_angles, translation)
-	dm.openState.localXform(xf)
+	rot_phi = euler_xform([ANGLE_RES,0,0], translation)
+	rot_theta = euler_xform([0,ANGLE_RES,0], translation)
+	rot_psi = euler_xform([0,0,ANGLE_RES], translation)
+	for theta in range(0, 181, ANGLE_RES):
+		for phi in range(0, 360, ANGLE_RES):
+			for psi in range(0, 360, ANGLE_RES):
+				dm.openState.localXform(rot_psi)
+				angle_str = ''.join(['_' + str(angle) for angle in [phi,theta,psi]])
+				np.save(outputname + angle_str, dm.matrix())
+			dm.openState.localXform(rot_psi)
+			dm.openState.localXform(rot_phi)
+		dm.openState.localXform(rot_phi)
+		dm.openState.localXform(rot_theta)
 
-	np.save(outputname,dm.matrix())
 	dm.close()
 
 
