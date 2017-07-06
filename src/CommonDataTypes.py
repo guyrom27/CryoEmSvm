@@ -26,13 +26,15 @@ class SixPosition:
 
 class Candidate:
     """
-    This is the result of candidate selection from a tomogram
+    This is a way to associate metadata to a posistion:
+    label, suggested label, and feature vector
     """
 
     def __init__(self, six_position, suggested_label=None, label = None):
         self.six_position = six_position            # SixPosition
         self.suggested_label = suggested_label      # int
         self.label = label                          # int
+        self.tilt_label = None                      # int
         self.features = None                        # list
 
     def __str__(self):
@@ -40,6 +42,9 @@ class Candidate:
                "Suggested Label: " + str(self.suggested_label) + "\n" +\
                "Label: " + str(self.label) + "\n" +\
                "Features: " + str(self.features) + "\n"
+
+    def set_features(self, features):
+        self.features = features
 
     def set_features(self, features):
         self.features = features
