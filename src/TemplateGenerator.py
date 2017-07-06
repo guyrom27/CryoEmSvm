@@ -6,7 +6,7 @@ import scipy.ndimage.interpolation
 
 
 #The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
-TEMPLATE_DIMENSION = 20
+TEMPLATE_DIMENSION = 19
 TEMPLATE_DIMENSIONS_2D = (TEMPLATE_DIMENSION,TEMPLATE_DIMENSION,1)
 TEMPLATE_DIMENSIONS = (TEMPLATE_DIMENSION,TEMPLATE_DIMENSION)
 
