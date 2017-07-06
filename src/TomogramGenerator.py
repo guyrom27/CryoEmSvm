@@ -10,26 +10,40 @@ TOMOGRAM_DIMENSIONS_2D = (TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION,1)
 #    dm[position[0] - template_dm.shape[0]//2:position[0] + template_dm.shape[0]//2,position[1] - template_dm.shape[1]//2:position[1] + template_dm.shape[1]//2] += template_dm
 
 def put_template(tomogram_dm, template_dm, position):
+    """
+    3D READY
+    :param tomogram_dm:  dm is density map
+    :param template_dm: dm is density map
+    :param position: center posistion
+    :return:
+    """
     corner = [position[i] - template_dm.shape[i] // 2 for i in range(len(tomogram_dm.shape))]
     shape = tuple([slice(corner[i],corner[i] + template_dm.shape[i]) for i in range(len(corner))])
     tomogram_dm[shape] += template_dm
 
+def generate_tomogram_with_given_candidates(templates, composition, dimensions):
+    """
+    3D READY!
+    :param templates: list of lists: first dimension is different template_ids second dimension is tilt_id
+    :param composition: list of candidates to put in the tomogram
+    :param dimensions: the dimensions of the Tomogram- tuple of sizes e.g. (100,100) for 2D, or (100,100,100) for 3D
+    :return: Tomogram object
+    """
+    tomogram_dm = np.zeros(dimensions)
+    for candidate in composition:
+        put_template(tomogram_dm, templates[candidate.label][candidate.tilt_label].density_map, candidate.six_position.COM_position)
+    return Tomogram(tomogram_dm, tuple(composition))
 
 def generate_tomogram(templates, criteria):
-    return generate_tomogram_2d(templates, ((1,0,10,10),(1,2,27,18),(0,0,10,28)))
+    candidates = []
+    for i in criteria:
+        candidate = Candidate(SixPosition((i[2],i[3],0),EulerAngle(0,0,0)))
+        candidate.label = i[0]
+        candidate.tilt_label = i[1]
+        candidates.append(candidate)
 
+    return generate_tomogram_with_given_candidates(templates, candidates, TOMOGRAM_DIMENSIONS_2D)
 
-def generate_tomogram_2d(templates, criteria):
-    tomogram_dm = np.zeros(TOMOGRAM_DIMENSIONS_2D)
-    composition = []
-    for item in criteria:
-        template = templates[item[0]][item[1]]
-        position = (item[2],item[3],0)
-        candidate = Candidate(SixPosition(position,template.orientation), None, template.template_id)
-        put_template(tomogram_dm, template.density_map, candidate.six_position.COM_position)
-        composition.append(candidate)
-
-    return Tomogram(tomogram_dm, tuple(composition))
 
 
 if __name__ == '__main__':
