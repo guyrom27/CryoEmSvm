@@ -21,7 +21,7 @@ def put_template(tomogram_dm, template_dm, position):
     shape = tuple([slice(corner[i],corner[i] + template_dm.shape[i]) for i in range(len(corner))])
     tomogram_dm[shape] += template_dm
 
-def generate_tomogram_with_given_candidates(templates, composition, dimensions):
+def generate_tomogram_with_given_candidates(templates, composition, dimensions=TOMOGRAM_DIMENSIONS_2D):
     """
     3D READY!
     :param templates: list of lists: first dimension is different template_ids second dimension is tilt_id
@@ -31,19 +31,16 @@ def generate_tomogram_with_given_candidates(templates, composition, dimensions):
     """
     tomogram_dm = np.zeros(dimensions)
     for candidate in composition:
-        put_template(tomogram_dm, templates[candidate.label][candidate.tilt_label].density_map, candidate.six_position.COM_position)
+        put_template(tomogram_dm, templates[candidate.label][candidate.six_position.tilt_id].density_map, candidate.six_position.COM_position)
     return Tomogram(tomogram_dm, tuple(composition))
 
-def generate_tomogram(templates, criteria):
-    candidates = []
-    for i in criteria:
-        candidate = Candidate(SixPosition((i[2],i[3],0),EulerAngle(0,0,0)))
-        candidate.label = i[0]
-        candidate.tilt_label = i[1]
-        candidates.append(candidate)
-
-    return generate_tomogram_with_given_candidates(templates, candidates, TOMOGRAM_DIMENSIONS_2D)
-
+def generate_random_tomogram(templates, criteria):
+    """
+    :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
+    :param criteria: for each template in templates, how many instances should appear in the resulting tomogram and how many tilts should appear
+    :return:
+    """
+    raise NotImplemented("not impld")
 
 
 if __name__ == '__main__':
@@ -54,7 +51,8 @@ if __name__ == '__main__':
 
     templates = generate_tilted_templates()
 
-    tomogram = generate_tomogram(templates, None)
+    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
+    tomogram = generate_tomogram_with_given_candidates(templates, criteria)
 
     import CandidateSelector
     import Labeler
