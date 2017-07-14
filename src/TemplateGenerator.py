@@ -1,4 +1,4 @@
-import CommonDataTypes
+from CommonDataTypes import *
 
 
 import numpy as np
@@ -26,6 +26,7 @@ def create_sphere(rad):
 
 
 def rotate3d(dm, phi, theta, psi):
+    raise NotImplemented("not impld")
     return dm
 
 def fill_with_square(dm, side):
@@ -65,22 +66,24 @@ def generate_tilted_templates_2d():
     """
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
-    tilts = []
+
+    #TODO use init_tilts instead
+    EulerAngle.Tilts = []
     for theta in range(0,90,15):
-        tilts.append(CommonDataTypes.EulerAngle(theta,None,None))
+        EulerAngle.Tilts.append(EulerAngle(theta,None,None))
 
 
     circle_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
     fill_with_circle(circle_dm[:,:,0], TEMPLATE_DIMENSION/4)
     circle_templates = []
-    for tilt in tilts:
-         circle_templates.append(CommonDataTypes.TiltedTemplate(rotate(circle_dm,tilt), tilt, 1))
+    for tilt in EulerAngle.Tilts:
+         circle_templates.append(TiltedTemplate(rotate(circle_dm,tilt), tilt, 1))
 
     square_templates = []
     square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
     fill_with_square(square_dm[:,:,0], TEMPLATE_DIMENSION/2)
-    for tilt in tilts:
-        square_templates.append(CommonDataTypes.TiltedTemplate(rotate(square_dm, tilt), tilt, 2))
+    for tilt in EulerAngle.Tilts:
+        square_templates.append(TiltedTemplate(rotate(square_dm, tilt), tilt, 2))
 
     return (circle_templates,square_templates)
 
