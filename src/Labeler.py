@@ -1,5 +1,5 @@
-DISTANCE_THRESHOLD = 0.5
-JUNK_ID = 0
+DISTANCE_THRESHOLD = 2
+JUNK_ID = -1
 
 import numpy as np
 

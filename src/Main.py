@@ -4,14 +4,13 @@ Read
 
 TRAINING_SET_SIZE = 1
 
-JUNK_ID = 0
-
+from CommonDataTypes import *
 import CandidateSelector
 import TemplateGenerator
 import TomogramGenerator
 import Labeler
 import FeaturesExtractor
-
+from Labeler import JUNK_ID
 
 
 def analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector):
@@ -47,13 +46,12 @@ feature_vectors = []
 #a label is a template_id, where 0 is junk
 labels = []
 
-
+criteria = (Candidate.fromTuple(1,0,10,10),Candidate.fromTuple(1,2,27,18),Candidate.fromTuple(0,0,10,28))
 
 for i in range(TRAINING_SET_SIZE):
     # configuration for tomogram generation
-    criteria = (2,0)
     #with a set composition
-    tomogram = TomogramGenerator.generate_tomogram(templates, criteria)
+    tomogram = TomogramGenerator.generate_tomogram_with_given_candidates(templates, criteria)
 
     labeler = Labeler.PositionLabeler(tomogram.composition)
 
@@ -68,6 +66,9 @@ from sklearn.svm import SVC
 svm = SVC()
 print(X)
 print(y)
+if (len(np.unique(y)) == 1):
+    print("SVM training must contain more than one label type (all candidates are the same label)")
+    exit()
 svm.fit(X, y)
 
 #how to save to disk?
@@ -77,9 +78,8 @@ svm.fit(X, y)
 #identification
 
 # configuration for tomogram generation
-criteria = ()
 #with a set composition
-tomogram = TomogramGenerator.generate_tomogram(templates, criteria)
+tomogram = TomogramGenerator.generate_tomogram_with_given_candidates(templates, criteria)
 
 labeler = Labeler.SvmLabeler(svm)
 
@@ -101,9 +101,9 @@ true_identification = 0
 #junk was accurately identified
 true_rejection = 0
 
-for candidate in candidates:
-    true_label = ground_truth_labeler.label(candidate, False)
-    predicted_label = candidate.label
+for candidate in enumerate(candidates):
+    true_label = ground_truth_labeler.label(candidate[1], False)
+    predicted_label = labels[candidate[0]]
     if (true_label == JUNK_ID):
         if (predicted_label == JUNK_ID):
             true_rejection += 1
