@@ -1,3 +1,53 @@
+import argparse
+from SvmTrain import SUPPORTED_GENERATORS, svm_train
+from SvmEval import svm_eval
+
+SUPPORTED_COMMANDS = ('train', 'eval')
+
+parser = argparse.ArgumentParser(description='Train or evaluate an SVM to classify electron density maps.')
+subparsers = parser.add_subparsers(dest='command', help='Command to initiate.')
+
+train_parser = subparsers.add_parser(SUPPORTED_COMMANDS[0])
+train_parser.add_argument('svm_path', metavar='svm', nargs=1, type=str,
+                          help='Path to save in the created svm.')
+train_parser.add_argument('-t', '--templatepath', metavar='templatepath', dest='template_paths', nargs='+', type=str,
+                         required=True,
+                         help='Paths to the templates to be trained with.')
+train_parser.add_argument('-d', '--datapath', metavar='datapath', dest='tomogram_paths', nargs='+', type=str,
+                         required=True,
+                         help='Paths to the tomograms to be trained on. If used with -g only the first path will be '
+                              'used and it will be used to save the generated tomograms into.')
+train_parser.add_argument('-g', '--generate', choices=SUPPORTED_GENERATORS, dest='generator', nargs=1, type=str,
+                          help='The generator to be used in generation of the data.')
+train_parser.add_argument('-s', '--source', dest='source_svm', nargs=1, type=str,
+                          help='An SVM pickle which will be used to start with.')
+
+eval_parser = subparsers.add_parser(SUPPORTED_COMMANDS[1])
+eval_parser.add_argument('svm_path', metavar='svm', nargs=1, type=str,
+                         help='Path to the pickle of the svm to use.')
+eval_parser.add_argument('-t', '--templatepath', metavar='templatepath', dest='template_paths', nargs='+', type=str,
+                         required=True,
+                         help='Path to the templates to be used by the SVM.')
+eval_parser.add_argument('-d', '--datapath', metavar='datapath', dest='tomogram_paths', nargs='+', type=str,
+                         required=True,
+                         help='Path to the tomograms to be evaluated.')
+eval_parser.add_argument('-o', '--outpath', dest='out_path', nargs='+', type=str, required=True,
+                         help='Path to which the results will be saved. Should have the same number of elements as '
+                         'datapath.')
+
+args = parser.parse_args('train svm.sk -t template -d tomogram.map'.split())
+print(args)
+
+if args.command == SUPPORTED_COMMANDS[0]:
+    svm_train(args.svm_path[0], args.template_paths, args.tomogram_paths,
+              source_svm=args.source_svm[0] if args.source_svm is not None else None,
+              generator=args.generator[0] if args.generator is not None else None)
+elif args.command == SUPPORTED_COMMANDS[1]:
+    svm_eval(args.svm_path[0], args.template_paths, args.tomogram_paths, args.out_path)
+else:
+    raise NotImplementedError('Command %s is not implemented.' % args.command)
+
+'''
 """
 Read
 """
@@ -72,7 +122,7 @@ if (len(np.unique(y)) == 1):
 svm.fit(X, y)
 
 #how to save to disk?
-
+# TODO: Use pickle or sklearn.externals.joblib. See: http://scikit-learn.org/stable/modules/model_persistence.html
 
 
 #identification
@@ -102,6 +152,7 @@ true_identification = 0
 true_rejection = 0
 
 for candidate in enumerate(candidates):
+    print(candidate)
     true_label = ground_truth_labeler.label(candidate[1], False)
     predicted_label = labels[candidate[0]]
     if (true_label == JUNK_ID):
@@ -127,3 +178,4 @@ print("SVM error rate= " + str((len(candidates) - success) / len(candidates)))
 
 #save results
 
+'''
