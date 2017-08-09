@@ -4,7 +4,7 @@ from scipy.ndimage.morphology import generate_binary_structure, binary_erosion
 
 
 # Credit: https://stackoverflow.com/questions/3684484/peak-detection-in-a-2d-array
-def detect_peaks(image, rank, connectivity):
+def detect_peaks(image, rank=2, connectivity=2):
     """
     Takes an image and detect the peaks using the local maximum filter.
     Returns a boolean mask of the peaks (i.e. 1 when

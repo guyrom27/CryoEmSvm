@@ -63,7 +63,7 @@ def show_candidates(selector, candidates, tomogram):
 
     ax = plt.subplot(143)
     ax.set_title('Blurred Correlation')
-    ax.imshow(selector.blurred_correlation_array)
+    ax.imshow(selector.blurred_correlation_array[:,:,0])
 
     ax = plt.subplot(144)
     ax.set_title('Selected Candidates')
