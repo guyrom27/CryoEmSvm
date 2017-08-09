@@ -25,7 +25,10 @@ def show_densitymap(dm, title, subplot=111):
     ax = plt.subplot(subplot)
     fig = plt.gcf()
     fig.suptitle(title)
-    ax.imshow(dm)
+    if len(dm.shape) == 3:
+        ax.imshow(dm[:, :, 0])
+    else:
+        ax.imshow(dm)
 
 def show_templates(templates):
     print("There are " + str(len(templates)) + " templates-")
