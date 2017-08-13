@@ -129,7 +129,6 @@ class pds:
         return sample
 
 if __name__ == '__main__':
-    import numpy as np
     r = 2
     n = 40
     for i in range(100):
