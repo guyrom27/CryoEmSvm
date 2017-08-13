@@ -1,5 +1,6 @@
 from enum import Enum, auto
 import pickle
+import numpy as np
 
 import TemplateGenerator
 
@@ -106,7 +107,12 @@ class NormalizedTemplateFactory(TemplateFactory) :
 
 
     def normalize(self, template):
-        #put your code here
+        from math import sqrt
+        factor = sqrt(np.sum(np.square(template.density_map))) #calculate the L2 norm of the template
+        if factor != 0:
+            template.density_map /= factor
+        else:
+            print("Error normalizing template: L2 norm is zero")
         return template
 
 
