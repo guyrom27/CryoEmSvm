@@ -96,6 +96,20 @@ class TemplateFactory:
             raise NotImplementedError('The generator %s is not implemented' % str(self.kind))
 
 
+class NormalizedTemplateFactory(TemplateFactory) :
+    def __init__(self, kind):
+        TemplateFactory.__init__(self, kind)
+
+    def build(self):
+        for template in TemplateFactory.build(self):
+            yield self.normalize(template)
+
+
+    def normalize(self, template):
+        #put your code here
+        return template
+
+
 if __name__ == '__main__':
     print(Generator.SOLID.value)
     print(Generator.SOLID == 'SOLID')

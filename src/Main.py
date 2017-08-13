@@ -64,7 +64,7 @@ def main(argv):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        from TemplateFactory import TemplateFactory, Generator
+        from TemplateFactory import TemplateFactory, NormalizedTemplateFactory, Generator
         from TomogramFactory import TomogramFactory
         from CandidateSelector import CandidateSelector
         from FeaturesExtractor import FeaturesExtractor
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         main('eval svm.pkl -t tmpl1.pkl tmpl2.pkl -d tmgrm.pkl -o out.pkl'.split())
 
         # Load the templates and the tomogram and reevaluate the ground truth
-        gf_templates = TemplateFactory(Generator.LOAD)
+        gf_templates = NormalizedTemplateFactory(Generator.LOAD)
         gf_templates.set_paths(['tmpl1.pkl', 'tmpl2.pkl'])
         templates = list(gf_templates.build())
 
