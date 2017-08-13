@@ -34,6 +34,11 @@ class EulerAngle:
     def __str__(self):
         return str(tuple([self.Phi, self.Theta, self.Psi]))
 
+    @classmethod
+    def rand_tilt_id(cls):
+        import random
+        return random.randint(0, len(cls.Tilts)-1 )
+
 #DEFAULT
 EulerAngle.init_tilts(15,15,15)
 
