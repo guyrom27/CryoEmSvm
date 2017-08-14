@@ -1,5 +1,6 @@
 from TomogramGenerator import *
 from TemplateGenerator import generate_tilted_templates
+from Constants import JUNK_ID
 from FeaturesExtractor import FeaturesExtractor
 import matplotlib.pyplot as plt
 import CandidateSelector
@@ -76,25 +77,67 @@ def show_candidates(selector, candidates, tomogram):
 if __name__ == '__main__':
 
     templates = generate_tilted_templates()
-    show_templates(templates)
+    #show_templates(templates)
 
-    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
+    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 3, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
     tomogram = generate_tomogram_with_given_candidates(templates, criteria)
-    show_tomogram(tomogram, criteria)
+    #show_tomogram(tomogram, criteria)
 
     selector = CandidateSelector.CandidateSelector(templates)
     candidates = selector.select(tomogram)
-    show_candidates(selector, candidates, tomogram)
+    #show_candidates(selector, candidates, tomogram)
 
 
     labeler = Labeler.PositionLabeler(tomogram.composition)
     features_extractor = FeaturesExtractor(templates)
-    tilt_finder = TiltFinder(templates)
 
     for candidate in candidates:
         labeler.label(candidate)
         candidate.set_features(features_extractor.extract_features(tomogram, candidate))
-        tilt_finder.find_best_tilts(tomogram, candidate)
+
+    #train the SVM on the tomogram
+    Xlist = [c.features for c in candidates]
+    Ylist = [c.label for c in candidates]
+    from sklearn.svm import SVC
+    svm = SVC()
+    x = np.array(Xlist)
+    y = np.array(Ylist)
+    if (len(np.unique(y)) == 1):
+        print("SVM training must contain more than one label type (all candidates are the same label)")
+        exit()
+    svm.fit(x, y)
+
+    svm_labeler = Labeler.SvmLabeler(svm)
+    #from SvmEval import analyze_tomogram
+    svm_candidates = selector.select(tomogram)
+    tilt_finder = TiltFinder.TiltFinder(templates)
+    for c in svm_candidates:
+        #analyze_tomogram(tomogram, svm_labeler, features_extractor, selector, tilt_finder)
+        c.set_features(features_extractor.extract_features(tomogram, c))
+        svm_labeler.label(c)
+        tilt_finder.find_best_tilt(tomogram, c)
+
+    non_junk_candidates = [c for c in svm_candidates if c.label != JUNK_ID]
+    svm_tomogram = generate_tomogram_with_given_candidates(templates, non_junk_candidates)
+
+    print("Ground Truth Candidates:")
+    for c in candidates:
+        print("=====\n" + str(c))
+
+    print("Reconstructed Candidates:")
+    for c in non_junk_candidates:
+        print("=====\n" + str(c))
+
+    fig = plt.figure(2)
+    ax = plt.subplot(121)
+    ax.set_title('Truth Tomogram')
+    ax.imshow(tomogram.density_map[:, :, 0])
+
+    ax = plt.subplot(122)
+    ax.set_title('Reconstructed Tomogram')
+    ax.imshow(svm_tomogram.density_map[:, :, 0])
+
+    plt.show()
 
     exit(0)
 
@@ -118,5 +161,7 @@ if __name__ == '__main__':
         candidate_positions[pos[0]][pos[1]] = col
     ax.imshow(candidate_positions)
 
+
     plt.show()
+
 
