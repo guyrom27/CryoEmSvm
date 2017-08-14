@@ -80,7 +80,7 @@ if __name__ == '__main__':
     templates = generate_tilted_templates()
     #show_templates(templates)
 
-    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 3, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
+    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
     tomogram = generate_tomogram_with_given_candidates(templates, criteria)
     #show_tomogram(tomogram, criteria)
 
@@ -123,11 +123,11 @@ if __name__ == '__main__':
 
     print("Ground Truth Candidates:")
     for c in criteria:
-        print("=====\n" + str(c))
+        print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
 
     print("Reconstructed Candidates:")
     for c in non_junk_candidates:
-        print("=====\n" + str(c))
+        print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
 
     fig = plt.figure(2)
     ax = plt.subplot(121)
