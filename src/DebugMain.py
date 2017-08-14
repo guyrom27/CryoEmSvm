@@ -114,7 +114,7 @@ if __name__ == '__main__':
     templates = generate_tilted_templates()
     #show_templates(templates)
 
-    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
+    criteria = (Candidate.fromTuple(1, 0, 52, 32), Candidate.fromTuple(1, 2, 37, 28), Candidate.fromTuple(0, 0, 70, 23))
     tomogram = generate_tomogram_with_given_candidates(templates, criteria)
     #show_tomogram(tomogram, criteria)
 
