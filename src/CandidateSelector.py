@@ -107,7 +107,7 @@ if __name__ == '__main__':
     positions = cs.find_local_maxima(correlation)
     maximums = np.zeros(correlation.shape)
     for position in positions:
-        maximums[position] = corre
+        maximums[position] = correlation
     ax.imshow(maximums.reshape(maximums.shape[:2]))
 
     plt.show()

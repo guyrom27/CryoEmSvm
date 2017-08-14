@@ -181,7 +181,7 @@ def generate_tilted_templates_2d():
     for tilt in enumerate(EulerAngle.Tilts):
         flipped_Lshaped_templates.append(TiltedTemplate(rotate(flipped_L_dm,tilt[1]), tilt[0], 1))
 
-    return (circle_templates,square_templates,Lshaped_templates, flipped_Lshaped_templates)
+    return (circle_templates, square_templates, Lshaped_templates, flipped_Lshaped_templates)
 
 
 # -------------------------------------------------------------------------------- #

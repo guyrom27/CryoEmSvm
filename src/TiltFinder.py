@@ -14,8 +14,8 @@ class TiltFinder:
         best_tilt = -1
 
         for tilted_template in template:
-            #correlation = signal.correlate(tomogram.density_map, tilted_template.density_map, mode='same')
-            correlation = signal.fftconvolve(tomogram.density_map, tilted_template.density_map, mode='same')
+            correlation = signal.correlate(tomogram.density_map, tilted_template.density_map, mode='same')
+            #correlation = signal.fftconvolve(tomogram.density_map, tilted_template.density_map, mode='same')
             #can't we just calculate the correlation? We dont need fft since
             #only want one position... seems kind of wasteful
             if max_correlation < correlation[candidate.six_position.COM_position]:

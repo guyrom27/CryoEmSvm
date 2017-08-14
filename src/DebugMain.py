@@ -59,19 +59,19 @@ def show_candidates(selector, candidates, tomogram):
     fig = plt.figure(3)
     fig.suptitle("Candidate selection")
 
-    ax = plt.subplot(141)
+    ax = plt.subplot(221)
     ax.set_title('Original Tomogram')
     ax.imshow(tomogram.density_map[:, :, 0])
 
-    ax = plt.subplot(142)
+    ax = plt.subplot(222)
     ax.set_title('Max Correlation')
     ax.imshow(selector.max_correlation_per_3loc[:,:,0])
 
-    ax = plt.subplot(143)
+    ax = plt.subplot(223)
     ax.set_title('Blurred Correlation')
     ax.imshow(selector.blurred_correlation_array[:,:,0])
 
-    ax = plt.subplot(144)
+    ax = plt.subplot(224)
     ax.set_title('Selected Candidates')
     dm = candidates2dm(candidates, tomogram.density_map.shape)
     ax.imshow(dm[:, :, 0])
@@ -117,12 +117,13 @@ def compare_candidate_COM(truth_candidates, reco_candidates, tomogram):
 
 if __name__ == '__main__':
     templates = generate_tilted_templates()
+    templates = (templates[2], templates[3]) #Test only L shaped templates
     #show_templates(templates)
 
     #composition = (Candidate.fromTuple(1, 0, 52, 32), Candidate.fromTuple(1, 2, 37, 28), Candidate.fromTuple(0, 0, 70, 23))
     #tomogram = generate_tomogram_with_given_candidates(templates, criteria)
 
-    criteria = [0, 0, 3, 3]
+    criteria = [3, 3]
     truth_tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria)
     composition = truth_tomogram.composition
     #show_tomogram(tomogram, criteria)
@@ -130,7 +131,7 @@ if __name__ == '__main__':
     tomogram = Noise.make_noisy_tomogram(truth_tomogram)
     selector = CandidateSelector.CandidateSelector(templates)
     candidates = selector.select(tomogram)
-    #show_candidates(selector, candidates, tomogram)
+    show_candidates(selector, candidates, tomogram)
 
 
     labeler = Labeler.PositionLabeler(tomogram.composition)
@@ -164,11 +165,11 @@ if __name__ == '__main__':
 
     print("Ground Truth Candidates:")
     for c in composition:
-        print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
+        print("=====\nPos = " + str(c.six_position) + "\tLabel = " + str(c.label))
 
     print("Reconstructed Candidates:")
     for c in non_junk_candidates:
-        print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
+        print("=====\nPos = " + str(c.six_position) + "\tLabel = " + str(c.label))
 
     compare_reconstruced_tomogram(truth_tomogram, svm_tomogram, True) #True = draw the difference map as well
 
