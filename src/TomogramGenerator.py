@@ -58,16 +58,18 @@ def generate_random_candidates(template_side_len, criteria, dim=2):
     separation = template_side_len * (dim ** 0.5)
 
     # we don't want COM points too close to the sides
+    gap_shape = [(template_side_len - 1) // 2] * 3
+
+    # pad a bit so we won't have boundary issues during detection
+    gap_shape = [2*x for x in gap_shape]
+
     if dim == 2:
-        gap_shape = [(template_side_len - 1)//2] * 2
-        gap_shape.append(0)
+        gap_shape[2] = 0
     else:
         assert(dim == 3)
-        gap_shape = [(template_side_len - 1)/2] * 3
-
-
 
     COM_valid_space = [TOMOGRAM_DIMENSION - 2*x for x in gap_shape]
+
     if dim==2:
         COM_valid_space[2] = 1
 
