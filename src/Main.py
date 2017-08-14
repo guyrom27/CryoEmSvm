@@ -101,6 +101,7 @@ if __name__ == '__main__':
         gf_svm_tomograms.set_paths(['out.pkl'])
         svm_tomogram = list(gf_svm_tomograms.build())[0]
 
+
         # Get the labels
         suggested_labels = [candidate.label for candidate in svm_tomogram.composition]
 

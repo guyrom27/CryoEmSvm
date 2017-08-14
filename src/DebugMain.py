@@ -121,7 +121,7 @@ if __name__ == '__main__':
     svm_tomogram = generate_tomogram_with_given_candidates(templates, non_junk_candidates)
 
     print("Ground Truth Candidates:")
-    for c in candidates:
+    for c in criteria:
         print("=====\n" + str(c))
 
     print("Reconstructed Candidates:")
