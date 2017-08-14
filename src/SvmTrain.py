@@ -9,8 +9,7 @@ import FeaturesExtractor
 import Labeler
 import TiltFinder
 
-# TODO: Move analyze_tomogram somewhere else
-from SvmEval import analyze_tomogram
+from AnalyzeTomogram import analyze_tomogram
 
 def svm_train(svm_path, template_paths, tomogram_paths, source_svm=None, template_generator=None,
               generate_tomograms=False):

@@ -150,7 +150,7 @@ if __name__ == '__main__':
     svm_labeler = Labeler.SvmLabeler(svm)
     tilt_finder = TiltFinder.TiltFinder(templates)
 
-    from SvmEval import analyze_tomogram
+    from AnalyzeTomogram import analyze_tomogram
     (svm_candidates, feature_vectors, labels) = \
         analyze_tomogram(tomogram, svm_labeler, features_extractor, selector, tilt_finder, True)
 
