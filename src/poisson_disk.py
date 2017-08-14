@@ -149,7 +149,7 @@ if __name__=='__main__':
     from matplotlib import pyplot as plt
     r = 6
     n = 60
-    for i in range(15):
+    for it in range(15):
         obj = pds(100, 80, 1, r, n)
         sample1 = obj.randomize_spaced_points()
         x = [x[0] for x in sample1]
@@ -169,7 +169,7 @@ if __name__=='__main__':
 
     r = 15
     n = 100
-    for i in range(15):
+    for it in range(15):
         obj = pds(100, 80, 80, r, n)
         sample1 = obj.randomize_spaced_points()
         x = [x[0] for x in sample1]
