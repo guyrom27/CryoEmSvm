@@ -122,7 +122,7 @@ if __name__ == '__main__':
     #composition = (Candidate.fromTuple(1, 0, 52, 32), Candidate.fromTuple(1, 2, 37, 28), Candidate.fromTuple(0, 0, 70, 23))
     #tomogram = generate_tomogram_with_given_candidates(templates, criteria)
 
-    criteria = [4, 3]
+    criteria = [0, 0, 3, 3]
     truth_tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria)
     composition = truth_tomogram.composition
     #show_tomogram(tomogram, criteria)
