@@ -100,10 +100,10 @@ def compare_candidate_COM(truth_candidates, reco_candidates, tomogram):
     map = tomogram.density_map
     for c in truth_candidates:
         pos = c.six_position.COM_position
-        map[pos] += 2
+        map[pos[0], pos[1], 0] += 2
     for c in reco_candidates:
         pos = c.six_position.COM_position
-        map[pos] += 1
+        map[pos[0], pos[1], 0] += 1
     print('This is the generated tomogram for criteria: ' + str(criteria))
     fig = plt.figure(2)
     fig.suptitle("Centers")
