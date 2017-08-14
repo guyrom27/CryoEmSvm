@@ -1,5 +1,5 @@
 import scipy
-from random import random
+import random
 
 #reference: http://connor-johnson.com/2015/04/08/poisson-disk-sampling/
 #article: http://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
@@ -7,7 +7,7 @@ class pds:
 
     def __init__(self, w, h, d, r, n, k=30):
         """
-
+        for 2D use d=1
         :param w: x dim size
         :param h: y dim size
         :param d: z dim size
@@ -27,12 +27,17 @@ class pds:
         self.r2 = r ** 2.0
         self.A = 3.0 * self.r2
         # cs is the cell size
-        self.cs = r / scipy.sqrt(3)
+        if d == 1:
+            self.cs = r / scipy.sqrt(2)
+        else:
+            self.cs = r / scipy.sqrt(3)
+
         # gw and gh are the number of grid cells
         self.gw = int(scipy.ceil(self.w / self.cs))
         self.gh = int(scipy.ceil(self.h / self.cs))
         self.gd = int(scipy.ceil(self.h / self.cs))
 
+        self.shape = [w, h, d]
         self.bin_shape = [1, self.gw, self.gw * self.gh]
 
         # create a grid and a queue
@@ -41,9 +46,9 @@ class pds:
         # set the queue size and sample size to zero
         self.qs, self.ss = 0, 0
 
-    def distance(self, x, y, z):
+    def distance(self, s):
         # find where (x,y,z) sits in the grid
-        [x_idx, y_idx, z_idx] = self.find_bin([x,y,z])
+        [x_idx, y_idx, z_idx] = self.find_bin(s)
         # determine a neighborhood of cells around (x,y,z)
         x0 = max(x_idx - 2, 0)
         y0 = max(y_idx - 2, 0)
@@ -58,10 +63,10 @@ class pds:
                     step = self.to_3d([x_idx,y_idx,z_idx])
                     # if the sample point exists on the grid
                     if self.grid[step]:
-                        s = self.grid[step]
-                        dx = (s[0] - x) ** 2.0
-                        dy = (s[1] - y) ** 2.0
-                        dz = (s[2] - z) ** 2.0
+                        p = self.grid[step]
+                        dx = (p[0] - s[0]) ** 2.0
+                        dy = (p[1] - s[1]) ** 2.0
+                        dz = (p[2] - s[2]) ** 2.0
                         # and it is too close
                         if dx + dy + dz < self.r2:
                             # then barf
@@ -75,8 +80,7 @@ class pds:
         return sum([x[0]*x[1] for x in zip(s,self.bin_shape)])
 
 
-    def set_point(self, x, y, z):
-        s = [x, y, z]
+    def set_point(self, s):
         self.queue.append(s)
         self.qs += 1
 
@@ -84,9 +88,7 @@ class pds:
 
         step = self.to_3d(self.find_bin(s))
 
-        if (self.grid[step] != None):
-            print("hello")
-            assert(False)
+        assert(self.grid[step] == None)
         self.grid[step] = s
         self.ss += 1
 
@@ -94,48 +96,95 @@ class pds:
 
     def create_point_grid(self):
         while self.ss < self.n:
+            print("iter")
             if (self.qs == 0):
                 print("randomization failed")
-                exit(1)
-            idx_in_q = int(random() * self.qs)
+                return
+            idx_in_q = int(random.uniform(0,1) * self.qs)
+            print("inx:",idx_in_q)
             s = self.queue[idx_in_q]
+            added_points = 0
             for i in range(self.k):
 
-                phi = 2 * scipy.pi * random()
-                theta = scipy.pi * random()
-                r = scipy.sqrt(self.A * random() + self.r2)
+                r = scipy.sqrt(self.A * random.uniform(0, 1) + self.r2)
+                phi = 2 * scipy.pi * random.uniform(0, 1)
+                if (self.d == 1):
+                    theta = scipy.pi / 2
+                else:
+                    theta = scipy.pi * random.uniform(0, 1)
+
+
 
                 x = int(s[0] + r * scipy.sin(theta) * scipy.cos(phi))
                 y = int(s[1] + r * scipy.sin(theta) * scipy.sin(phi))
                 z = int(s[2] + r * scipy.cos(theta))
 
+                rand_point = [x, y, z]
                 if (x >= 0) and (x < self.w):
                     if (y >= 0) and (y < self.h):
                         if (z >= 0) and (z < self.d):
-                            if (self.distance(x, y, z)):
-                                self.set_point(x, y, z)
+                            if (self.distance(rand_point)):
+                                self.set_point(rand_point)
+                                print("iter3")
+                                added_points += 1
                                 if (self.ss >= self.n):
                                     break
-            del self.queue[idx_in_q]
-            self.qs -= 1
-
+            if (added_points == 0):
+                print("deleting")
+                self.grid[self.to_3d(self.find_bin(s))] = None
+                self.ss -= 1
+                del self.queue[idx_in_q]
+                self.qs -= 1
 
     def randomize_spaced_points(self):
         if self.ss == 0:
-            [x,y,z] = [random() * i for i in [self.w, self.h, self.d]]
-            self.set_point(x, y, z)
+            s = [int(random.uniform(0,1) * i) for i in [self.w, self.h, self.d]]
+            print("seed:", s)
+            self.set_point(s)
         self.create_point_grid()
         sample = list(filter(None, self.grid))
         return sample
 
-if __name__ == '__main__':
-    r = 2
-    n = 40
-    for i in range(100):
-        obj = pds(10, 20, 10, r, n)
+if __name__=='__main__':
+    from matplotlib import pyplot as plt
+    r = 6
+    n = 60
+    for i in range(15):
+        obj = pds(100, 80, 1, r, n)
         sample1 = obj.randomize_spaced_points()
+        x = [x[0] for x in sample1]
+        y = [x[1] for x in sample1]
         for i in enumerate(sample1):
             for j in range(i[0]+1, len(sample1)):
                 if sum([(x[1]-x[0])**2 for x in zip(i[1],sample1[j])]) < r:
                     assert(False)
         assert(len(sample1) == n)
+
+    plt.scatter(x, y)
+    plt.axvline(x=0, ymin=10 / 90, ymax=80 / 90, color='red')
+    plt.axvline(x=100, ymin=10 / 90, ymax=80 / 90, color='red')
+    plt.axhline(y=80, xmin=20 / 140, xmax=120 / 140, color='red')
+    plt.axhline(y=0, xmin=20 / 140, xmax=120 / 140, color='red')
+    plt.show()
+
+    r = 15
+    n = 100
+    for i in range(15):
+        obj = pds(100, 80, 80, r, n)
+        sample1 = obj.randomize_spaced_points()
+        x = [x[0] for x in sample1]
+        y = [x[1] for x in sample1]
+        z = [x[2] for x in sample1]
+        for i in enumerate(sample1):
+            for j in range(i[0]+1, len(sample1)):
+                if sum([(x[1]-x[0])**2 for x in zip(i[1],sample1[j])]) < r:
+                    assert(False)
+        assert(len(sample1) == n)
+
+    from mpl_toolkits.mplot3d import Axes3D
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(x,y,z)
+    ax.margins(0, 0, 0)
+    plt.show()
+
