@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import CandidateSelector
 import Labeler
 import TiltFinder
+import Noise
 
 
 def print_candidate_list(candidates):
@@ -103,7 +104,10 @@ def compare_candidate_COM(truth_candidates, reco_candidates, tomogram):
         map[pos[0], pos[1], 0] += 2
     for c in reco_candidates:
         pos = c.six_position.COM_position
-        map[pos[0], pos[1], 0] += 1
+        if c.label == JUNK_ID:
+            map[pos[0], pos[1], 0] -= 1
+        else:
+            map[pos[0], pos[1], 0] += 1
     print('This is the generated tomogram for criteria: ' + str(criteria))
     fig = plt.figure(2)
     fig.suptitle("Centers")
@@ -119,10 +123,11 @@ if __name__ == '__main__':
     #tomogram = generate_tomogram_with_given_candidates(templates, criteria)
 
     criteria = [4, 3]
-    tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria)
-    composition = tomogram.composition
+    truth_tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria)
+    composition = truth_tomogram.composition
     #show_tomogram(tomogram, criteria)
 
+    tomogram = Noise.make_noisy_tomogram(truth_tomogram)
     selector = CandidateSelector.CandidateSelector(templates)
     candidates = selector.select(tomogram)
     #show_candidates(selector, candidates, tomogram)
@@ -165,33 +170,8 @@ if __name__ == '__main__':
     for c in non_junk_candidates:
         print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
 
-    compare_reconstruced_tomogram(tomogram, svm_tomogram, True) #True = draw the difference map as well
+    compare_reconstruced_tomogram(truth_tomogram, svm_tomogram, True) #True = draw the difference map as well
 
-    compare_candidate_COM(composition, svm_candidates, tomogram) #display the center of mass of the candidates
+    compare_candidate_COM(composition, svm_candidates, truth_tomogram) #display the center of mass of the candidates
 
     exit(0)
-
-    #print(len(candidates))
-    for candidate in candidates:
-        print(candidate)
-
-    fig, ax = plt.subplots()
-    ax.imshow(tomogram.density_map[:,:,0])
-
-    fig, ax = plt.subplots()
-    candidate_positions = np.zeros(tomogram.density_map[:,:,0].shape)
-    for candidate in candidates:
-        pos = candidate.six_position.COM_position
-        if candidate.label == 1:
-            col = 0.9
-        elif candidate.label == 2:
-            col = 0.6
-        else:
-            col = 0.3
-        candidate_positions[pos[0]][pos[1]] = col
-    ax.imshow(candidate_positions)
-
-
-    plt.show()
-
-
