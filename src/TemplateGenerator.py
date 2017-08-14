@@ -1,8 +1,8 @@
 from CommonDataTypes import *
 
-
 import numpy as np
 import scipy.ndimage.interpolation
+import pickle
 
 
 #The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
@@ -12,8 +12,9 @@ TEMPLATE_DIMENSIONS = (TEMPLATE_DIMENSION,TEMPLATE_DIMENSION,TEMPLATE_DIMENSION)
 
 
 
-def create_cube(dim):
-    return np.ones((dim,dim,dim))
+# -------------------------------------------------------------------------------- #
+# --------------------------------------- 3D ------------------------------------- #
+# -------------------------------------------------------------------------------- #
 
 def fill_with_sphere(dm, rad):
     for x in range(2*rad):
@@ -23,6 +24,7 @@ def fill_with_sphere(dm, rad):
                     dm[x,y,z] = 1
     return dm
 
+
 def fill_with_cube(dm, side):
     dim = dm.shape[0]
     top_left = int(dim/2-side/2)
@@ -31,6 +33,7 @@ def fill_with_cube(dm, side):
             for z in range(int(side)):
                 dm[top_left+x,top_left+y, top_left+z] = 1
     return dm
+
 
 def rotate3d(dm, eu_angle):
     # rotate euler angles
@@ -42,14 +45,12 @@ def rotate3d(dm, eu_angle):
     rotated_dim = rotated.shape[0]
     original_dim = dm.shape[0]
 
-    #return rotated[rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2,
-    #               rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2,
-    #               rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2]
+    return rotated[rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2,
+                   rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2,
+                   rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2]
 
-
-    print(dm.shape)
-    print(rotated.shape)
     return rotated
+
 
 def show3d(dm):
     import matplotlib
@@ -64,11 +65,30 @@ def show3d(dm):
     plt.show()
 
 
-# def rotate3d(dm, phi, theta, psi):
-#     raise NotImplemented("not impld")
-#     return dm
+def load_templates_3d(templates_path):
+    # load pickles
+    template_ids = pickle.load(open(templates_path + 'template_ids.p','rb'))
+    tilt_ids = pickle.load(open(templates_path + 'tilt_ids.p','rb'))
+
+    # load and create tilted template for every tilt_id and template_id
+    tilted_templates = tuple([tuple([TiltedTemplate(np.load(templates_path + str(template_id) + '_' + str(tilt_id) + '.npy'), tilt_id, template_id) for tilt_id in tilt_ids.keys()]) for template_id in template_ids.keys()])
+
+    # assert tilt and template ids match location in tuples
+    for template_id in range(len(tilted_templates)):
+        for tilt_id in range(len(tilted_templates[template_id])):
+            tilted_template = tilted_templates[template_id][tilt_id]
+            assert(tilted_template.template_id == template_id and tilted_template.tilt_id == tilt_id)
+
+    return tilted_templates, template_ids, tilt_ids
 
 
+def generate_tilted_templates_3d(templates_path):
+    return
+
+
+# -------------------------------------------------------------------------------- #
+# --------------------------------------- 2D ------------------------------------- #
+# -------------------------------------------------------------------------------- #
 
 def fill_with_square(dm, side):
     dim = dm.shape[0]
@@ -78,6 +98,7 @@ def fill_with_square(dm, side):
             dm[top_left+x,top_left+y] = 1
     return dm
 
+
 def fill_with_circle(dm, rad):
     dim = dm.shape[0]
     for x in range(dim):
@@ -86,6 +107,7 @@ def fill_with_circle(dm, rad):
                 dm[x,y] = 1
     return dm
 
+
 def rotate2d(dm, theta):
     rotated = scipy.ndimage.interpolation.rotate(dm, theta)
     rotated_dim = rotated.shape[0]
@@ -93,16 +115,6 @@ def rotate2d(dm, theta):
 
     return rotated[rotated_dim//2-original_dim//2:rotated_dim//2+original_dim//2,rotated_dim//2-original_dim//2:rotated_dim//2+original_dim//2]
 
-def rotate(dm, eu_angle):
-    return rotate2d(dm, eu_angle.Phi)
-
-
-
-def generate_tilted_templates():
-    """
-    :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
-    """
-    return generate_tilted_templates_2d()
 
 def generate_tilted_templates_2d():
     """
@@ -130,11 +142,30 @@ def generate_tilted_templates_2d():
     return (circle_templates,square_templates)
 
 
+# -------------------------------------------------------------------------------- #
+# ------------------------------------ GENERAL ----------------------------------- #
+# -------------------------------------------------------------------------------- #
+def rotate(dm, eu_angle):
+    return rotate2d(dm, eu_angle.Phi)
+
+def generate_tilted_templates():
+    """
+    :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
+    """
+    return generate_tilted_templates_2d()
+
+
+
+
 
 if __name__ == '__main__':
     import matplotlib
     matplotlib.use('TkAgg')
     import matplotlib.pyplot as plt
+
+    tilted_templates, template_ids, tilt_ids = load_templates_3d(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\')
+    print('Done!')
+
 
     # templates = generate_tilted_templates()
     #
@@ -162,9 +193,10 @@ if __name__ == '__main__':
     #show3d(rotate3d(cube_dm,EulerAngle(45,30,0)))
     #sphere_dm = fill_with_sphere(np.zeros(TEMPLATE_DIMENSIONS), TEMPLATE_DIMENSION // 3)
     #show3d(sphere_dm)
-    a = np.load(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\tmp_330_150_90.npy')
-    show3d(a)
-    plt.show()
+
+    #a = np.load(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\tmp_330_150_90.npy')
+    #show3d(a)
+    #plt.show()
 
 
 
