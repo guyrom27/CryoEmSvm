@@ -3,7 +3,7 @@ from VolumeViewer import open_volume_file, volume_from_grid_data
 from VolumeData import Array_Grid_Data
 from Matrix import euler_xform
 import numpy as np
-import pickle
+import sys, pickle, argparse
 
 
 
@@ -102,7 +102,7 @@ def calc_com(matrix):
 
     :param matrix: density map matrix
     """
-    return [np.dot(np.array(range(matrix.shape[i])),np.sum(np.sum(matrix,max((i+1)%3,(i+2)%3)),min((i+1)%3,(i+2)%3))) for i in range(3)] / sum(sum(sum(matrix)))
+    return np.round([np.dot(np.array(range(matrix.shape[i])),np.sum(np.sum(matrix,max((i+1)%3,(i+2)%3)),min((i+1)%3,(i+2)%3))) for i in range(3)] / sum(sum(sum(matrix))))
 
 def calc_dim(matrix):
     """
@@ -203,6 +203,7 @@ def tilt_and_save(model, euler_angles, dim, output_name):
     
     tilted = create_tilted_model(model, euler_angles)
     matrix = get_matrix_and_center(tilted.matrix(), dim)
+    print(euler_angles, calc_com(matrix))
     tilted.close()
     np.save(output_name, matrix)
 
@@ -222,11 +223,13 @@ def flow(criteria, angle_res, output_path):
     """
     
     # get dim
+    print('a')
     dim = 0
     for criterion in criteria:
         model = create_model(*criterion)
         dim = max(dim,calc_dim(model.matrix()))
         model.close()
+    print('b')
 
     # create tilted density maps
     tilts = generate_tilts(angle_res)
@@ -236,28 +239,59 @@ def flow(criteria, angle_res, output_path):
             output_name = output_path + str(template_id) + '_' + str(tilt_id)
             tilt_and_save(model, tilt, dim, output_name)
         model.close() # close model
-
+    print('c')
     # create meta data
     template_ids = dict([(template_id, criterion) for template_id, criterion in enumerate(criteria)])
     tilt_ids = dict([(tilt_id, tilt) for tilt_id, tilt in enumerate(tilts)])
     pickle.dump(template_ids, open(output_path + 'template_ids.p', 'wb'))
     pickle.dump(tilt_ids, open(output_path + 'tilt_ids.p', 'wb'))
+    print('d')
+
+
+def parse_config(template_type, config_path):
+    with open(config_path) as f:
+        #return [(template_type, line.split(':')[0], [int(val) for val in line.split(':')[1].split(',')]) for line in f.readlines()]
+        return [(template_type, line.split(':')[0], int(line.split(':')[1])) for line in f.readlines()]
+
+def main(argv):
+    # parse arguments
+    parser = argparse.ArgumentParser(description = '')
+    parser.add_argument('-o', '--output_path', required=True, nargs=1, type=str, help='output dir')
+    parser.add_argument('-a', '--angle_res', required=True, nargs=1, type=int, help='angle resolution')
+    parser.add_argument('-g', '--geometric_config_path', nargs=1, type=str, help='output dir')
+    parser.add_argument('-p', '--pdb_config_path', nargs=1, type=str, help='output dir')
+    args = parser.parse_args(argv)  
+
+    # set sdtout and stderr
+    #stdpath = r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\'
+    sys.stdout = open(args.output_path[0] + 'output.txt', 'w')
+    sys.stderr = open(args.output_path[0] + 'error.txt', 'w')
+    print('Start!')
+
+    # get criteria
+    criteria = []
+    if args.geometric_config_path:
+        criteria += parse_config('G', args.geometric_config_path[0])
+    if args.pdb_config_path:
+        criteria += parse_config('P', args.pdb_config_path[0])
     
+
+    print(criteria)
+    print(args.output_path[0])
+    print(args.angle_res[0])
+
+    # run
+    flow(criteria, args.angle_res[0], args.output_path[0])
+    print('Done!')
     
 
 if __name__ == '__main__':
-    pdb_name = r'C:\Users\Matan\Dropbox\Study\S-3B\Workshop\Tutotrial\1k4c.pdb'
-    criteria = [('P',pdb_name,10),('G','cube',10),('G','sphere',10)]
-    output_path = r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\'
-    flow(criteria, 30, output_path)
-    #output_name = r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\tmp'
-
-    #model = create_pdb_model(pdb_name, 10)
-    #model = create_geometric_model('cube', 10)
-    #tilted = create_tilted(model, [45,45,0])
-
-    #matrix = get_matrix_and_center(model,50)
-    #
-    #matrix = get_matrix_and_center(tilted,50)
-    #np.save(output_name + '_tilted', matrix)
-
+    main(sys.argv[1:])
+    # output_path = r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\'
+    # sys.stdout = open(output_path + 'output.txt', 'w')
+    # sys.stderr = open(output_path + 'error.txt', 'w')
+    # pdb_name = r'C:\Users\Matan\Dropbox\Study\S-3B\Workshop\Tutotrial\1k4c.pdb'
+    # criteria = [('P',pdb_name,10),('G','cube',10),('G','sphere',10)]
+    # 
+    # flow(criteria, 30, output_path)
+    
