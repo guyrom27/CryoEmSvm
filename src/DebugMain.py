@@ -1,6 +1,3 @@
-from CommonDataTypes import *
-
-import numpy as np
 from TomogramGenerator import *
 from TemplateGenerator import generate_tilted_templates
 from FeaturesExtractor import FeaturesExtractor
@@ -9,6 +6,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import CandidateSelector
 import Labeler
+import TiltFinder
 
 
 def print_candidate_list(candidates):
@@ -27,7 +25,10 @@ def show_densitymap(dm, title, subplot=111):
     ax = plt.subplot(subplot)
     fig = plt.gcf()
     fig.suptitle(title)
-    ax.imshow(dm)
+    if len(dm.shape) == 3:
+        ax.imshow(dm[:, :, 0])
+    else:
+        ax.imshow(dm)
 
 def show_templates(templates):
     print("There are " + str(len(templates)) + " templates-")
@@ -65,7 +66,7 @@ def show_candidates(selector, candidates, tomogram):
 
     ax = plt.subplot(143)
     ax.set_title('Blurred Correlation')
-    ax.imshow(selector.blurred_correlation_array)
+    ax.imshow(selector.blurred_correlation_array[:,:,0])
 
     ax = plt.subplot(144)
     ax.set_title('Selected Candidates')
@@ -89,12 +90,14 @@ if __name__ == '__main__':
 
     labeler = Labeler.PositionLabeler(tomogram.composition)
     features_extractor = FeaturesExtractor(templates)
+    tilt_finder = TiltFinder(templates)
+
     for candidate in candidates:
         labeler.label(candidate)
         candidate.set_features(features_extractor.extract_features(tomogram, candidate))
+        tilt_finder.find_best_tilts(tomogram, candidate)
+
     exit(0)
-
-
 
     #print(len(candidates))
     for candidate in candidates:

@@ -118,14 +118,14 @@ def generate_tilted_templates_2d():
     circle_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
     fill_with_circle(circle_dm[:,:,0], TEMPLATE_DIMENSION/4)
     circle_templates = []
-    for tilt in EulerAngle.Tilts:
-         circle_templates.append(TiltedTemplate(rotate(circle_dm,tilt), tilt, 1))
+    for tilt in enumerate(EulerAngle.Tilts):
+         circle_templates.append(TiltedTemplate(rotate(circle_dm,tilt[1]), tilt[0], 1))
 
     square_templates = []
     square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
     fill_with_square(square_dm[:,:,0], TEMPLATE_DIMENSION/2)
-    for tilt in EulerAngle.Tilts:
-        square_templates.append(TiltedTemplate(rotate(square_dm, tilt), tilt, 2))
+    for tilt in enumerate(EulerAngle.Tilts):
+        square_templates.append(TiltedTemplate(rotate(square_dm, tilt[1]), tilt[0], 2))
 
     return (circle_templates,square_templates)
 

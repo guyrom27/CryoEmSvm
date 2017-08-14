@@ -1,5 +1,4 @@
-DISTANCE_THRESHOLD = 2
-JUNK_ID = -1
+from Constants import JUNK_ID, DISTANCE_THRESHOLD
 
 import numpy as np
 
@@ -35,5 +34,5 @@ class SvmLabeler(Labeler):
     def label(self, candidate, set_label = True):
         candidate_label = self.svm.predict(np.array([candidate.features]))
         if set_label:
-            candidate.set_label(candidate_label)
+            candidate.set_label(candidate_label[0]) #for some reason I candidate label is an array
         return candidate_label
