@@ -45,6 +45,7 @@ def show_templates(templates):
 
 def show_tomogram(tomogram, criteria):
     print('This is the generated tomogram for criteria: ' + str(criteria))
+    print('The tomogram composition is: ' + str(tomogram.composition))
     fig = plt.figure(2)
     fig.suptitle("Tomogram")
     ax = plt.subplot()
@@ -114,8 +115,12 @@ if __name__ == '__main__':
     templates = generate_tilted_templates()
     #show_templates(templates)
 
-    criteria = (Candidate.fromTuple(1, 0, 52, 32), Candidate.fromTuple(1, 2, 37, 28), Candidate.fromTuple(0, 0, 70, 23))
-    tomogram = generate_tomogram_with_given_candidates(templates, criteria)
+    #composition = (Candidate.fromTuple(1, 0, 52, 32), Candidate.fromTuple(1, 2, 37, 28), Candidate.fromTuple(0, 0, 70, 23))
+    #tomogram = generate_tomogram_with_given_candidates(templates, criteria)
+
+    criteria = [4,3]
+    tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria)
+    composition = tomogram.composition
     #show_tomogram(tomogram, criteria)
 
     selector = CandidateSelector.CandidateSelector(templates)
@@ -153,7 +158,7 @@ if __name__ == '__main__':
     svm_tomogram = generate_tomogram_with_given_candidates(templates, non_junk_candidates)
 
     print("Ground Truth Candidates:")
-    for c in criteria:
+    for c in composition:
         print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
 
     print("Reconstructed Candidates:")
@@ -162,7 +167,7 @@ if __name__ == '__main__':
 
     compare_reconstruced_tomogram(tomogram, svm_tomogram, True) #True = draw the difference map as well
 
-    compare_candidate_COM(criteria, svm_candidates, tomogram) #display the center of mass of the candidates
+    compare_candidate_COM(composition, svm_candidates, tomogram) #display the center of mass of the candidates
 
     exit(0)
 
