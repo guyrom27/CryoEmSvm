@@ -1,12 +1,10 @@
-from CommonDataTypes import *
-
-import numpy as np
 from TomogramGenerator import *
 from TemplateGenerator import generate_tilted_templates
 from FeaturesExtractor import FeaturesExtractor
 import matplotlib.pyplot as plt
 import CandidateSelector
 import Labeler
+import TiltFinder
 
 
 def print_candidate_list(candidates):
@@ -91,12 +89,14 @@ if __name__ == '__main__':
 
     labeler = Labeler.PositionLabeler(tomogram.composition)
     features_extractor = FeaturesExtractor(templates)
+    tilt_finder = TiltFinder(templates)
+
     for candidate in candidates:
         labeler.label(candidate)
         candidate.set_features(features_extractor.extract_features(tomogram, candidate))
+        tilt_finder.find_best_tilts(tomogram, candidate)
+
     exit(0)
-
-
 
     #print(len(candidates))
     for candidate in candidates:

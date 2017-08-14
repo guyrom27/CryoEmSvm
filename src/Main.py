@@ -68,8 +68,10 @@ if __name__ == '__main__':
         from TomogramFactory import TomogramFactory
         from CandidateSelector import CandidateSelector
         from FeaturesExtractor import FeaturesExtractor
+        from TiltFinder import TiltFinder
         from SvmEval import analyze_tomogram
         import Labeler
+
         print('Starting test...')
 
         main('train svm.pkl -t tmpl1.pkl tmpl2.pkl -d tmgrm.pkl -g SOLID'.split())
@@ -87,11 +89,12 @@ if __name__ == '__main__':
 
         candidate_selector = CandidateSelector(templates)
         features_extractor = FeaturesExtractor(templates)
+        tilt_finder = TiltFinder(templates)
 
         labeler = Labeler.PositionLabeler(tomogram.composition)
 
         (candidates, feature_vectors, labels) = \
-            analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector)
+            analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector, tilt_finder)
 
         # Load the svm evaluation result
         gf_svm_tomograms = TomogramFactory(None)

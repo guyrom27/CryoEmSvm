@@ -105,14 +105,14 @@ class NormalizedTemplateFactory(TemplateFactory) :
         for template in TemplateFactory.build(self):
             yield self.normalize(template)
 
-
     def normalize(self, template):
         from math import sqrt
-        factor = sqrt(np.sum(np.square(template.density_map))) #calculate the L2 norm of the template
-        if factor != 0:
-            template.density_map /= factor
-        else:
-            print("Error normalizing template: L2 norm is zero")
+        for tilted_template in template:
+            factor = sqrt(np.sum(np.square(tilted_template.density_map))) #calculate the L2 norm of the template
+            if factor != 0:
+                tilted_template.density_map /= factor
+            else:
+                print("Error normalizing template: L2 norm is zero")
         return template
 
 

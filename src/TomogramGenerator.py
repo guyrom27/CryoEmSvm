@@ -1,10 +1,12 @@
 from CommonDataTypes import *
 
-
+from Constants import TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSIONS,TOMOGRAM_DIMENSIONS_2D
 import numpy as np
+'''
 TOMOGRAM_DIMENSION = 40
 TOMOGRAM_DIMENSIONS = (TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION)
 TOMOGRAM_DIMENSIONS_2D = (TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION,1)
+'''
 
 #def put_template(dm, template_dm, position):
 #    dm[position[0] - template_dm.shape[0]//2:position[0] + template_dm.shape[0]//2,position[1] - template_dm.shape[1]//2:position[1] + template_dm.shape[1]//2] += template_dm

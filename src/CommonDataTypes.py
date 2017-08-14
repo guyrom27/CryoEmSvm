@@ -51,7 +51,7 @@ class SixPosition:
         :param tilt_id:  id that corresponds to EulerAngle's tilt_id
         """
         self.COM_position = COM_position    # 3 tuple
-        self.tilt_id = tilt_id      # tilt id
+        self.tilt_id = tilt_id              # tilt id
 
     def __str__(self):
         return str(self.COM_position) + " " + str(self.tilt_id)
@@ -96,7 +96,7 @@ class TiltedTemplate:
     def __init__(self, density_map, tilt_id, template_id):
         self.template_id = template_id      # int
         self.density_map = density_map      # numpy 3d array
-        self.tilt_id = tilt_id      # EulerAngle
+        self.tilt_id = tilt_id              # EulerAngle
 
 
 
