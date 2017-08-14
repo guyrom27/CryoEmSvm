@@ -1,4 +1,5 @@
 from CommonDataTypes import *
+from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D
 
 import numpy as np
 import scipy.ndimage.interpolation
@@ -6,9 +7,6 @@ import pickle
 
 
 #The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
-TEMPLATE_DIMENSION = 19
-TEMPLATE_DIMENSIONS_2D = (TEMPLATE_DIMENSION,TEMPLATE_DIMENSION,1)
-TEMPLATE_DIMENSIONS = (TEMPLATE_DIMENSION,TEMPLATE_DIMENSION,TEMPLATE_DIMENSION)
 
 
 
