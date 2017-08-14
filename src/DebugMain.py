@@ -2,6 +2,8 @@ from TomogramGenerator import *
 from TemplateGenerator import generate_tilted_templates
 from Constants import JUNK_ID
 from FeaturesExtractor import FeaturesExtractor
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import CandidateSelector
 import Labeler
@@ -75,7 +77,6 @@ def show_candidates(selector, candidates, tomogram):
     plt.show()
 
 if __name__ == '__main__':
-
     templates = generate_tilted_templates()
     #show_templates(templates)
 
