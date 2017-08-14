@@ -76,6 +76,33 @@ def show_candidates(selector, candidates, tomogram):
 
     plt.show()
 
+def compare_reconstruced_tomogram(truth_tomogram, recon_tomogram):
+    fig = plt.figure(2)
+    ax = plt.subplot(121)
+    ax.set_title('Truth Tomogram')
+    ax.imshow(truth_tomogram.density_map[:, :, 0])
+
+    ax = plt.subplot(122)
+    ax.set_title('Reconstructed Tomogram')
+    ax.imshow(recon_tomogram.density_map[:, :, 0])
+
+    plt.show()
+
+def compare_candidate_COM(truth_candidates, reco_candidates, tomogram):
+    map = tomogram.density_map
+    for c in truth_candidates:
+        pos = c.six_position.COM_position
+        map[pos] += 2
+    for c in reco_candidates:
+        pos = c.six_position.COM_position
+        map[pos] += 1
+    print('This is the generated tomogram for criteria: ' + str(criteria))
+    fig = plt.figure(2)
+    fig.suptitle("Centers")
+    ax = plt.subplot()
+    ax.imshow(map[:, :, 0])
+    plt.show()
+
 if __name__ == '__main__':
     templates = generate_tilted_templates()
     #show_templates(templates)
@@ -129,16 +156,9 @@ if __name__ == '__main__':
     for c in non_junk_candidates:
         print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
 
-    fig = plt.figure(2)
-    ax = plt.subplot(121)
-    ax.set_title('Truth Tomogram')
-    ax.imshow(tomogram.density_map[:, :, 0])
+    compare_reconstruced_tomogram(tomogram, svm_tomogram)
 
-    ax = plt.subplot(122)
-    ax.set_title('Reconstructed Tomogram')
-    ax.imshow(svm_tomogram.density_map[:, :, 0])
-
-    plt.show()
+    compare_candidate_COM(criteria, svm_candidates, tomogram)
 
     exit(0)
 
