@@ -113,7 +113,7 @@ def rotate2d(dm, theta):
     rotated_dim = rotated.shape[0]
     original_dim = dm.shape[0]
 
-    return rotated[rotated_dim//2-original_dim//2:rotated_dim//2+original_dim//2,rotated_dim//2-original_dim//2:rotated_dim//2+original_dim//2]
+    return rotated[rotated_dim//2-original_dim//2:rotated_dim//2-original_dim//2 + original_dim,rotated_dim//2-original_dim//2:rotated_dim//2-original_dim//2 + original_dim]
 
 
 def generate_tilted_templates_2d():
