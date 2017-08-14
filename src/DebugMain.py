@@ -76,7 +76,7 @@ def show_candidates(selector, candidates, tomogram):
 
     plt.show()
 
-def compare_reconstruced_tomogram(truth_tomogram, recon_tomogram):
+def compare_reconstruced_tomogram(truth_tomogram, recon_tomogram, plot_dif_map = False):
     fig = plt.figure(2)
     ax = plt.subplot(121)
     ax.set_title('Truth Tomogram')
@@ -85,7 +85,14 @@ def compare_reconstruced_tomogram(truth_tomogram, recon_tomogram):
     ax = plt.subplot(122)
     ax.set_title('Reconstructed Tomogram')
     ax.imshow(recon_tomogram.density_map[:, :, 0])
+    plt.show()
 
+    if not plot_dif_map:
+        return
+    fig = plt.figure(3)
+    ax = plt.subplot()
+    ax.set_title('Overlap')
+    ax.imshow(truth_tomogram.density_map[:, :, 0] - recon_tomogram.density_map[:, :, 0])
     plt.show()
 
 def compare_candidate_COM(truth_candidates, reco_candidates, tomogram):
@@ -136,14 +143,11 @@ if __name__ == '__main__':
     svm.fit(x, y)
 
     svm_labeler = Labeler.SvmLabeler(svm)
-    #from SvmEval import analyze_tomogram
-    svm_candidates = selector.select(tomogram)
     tilt_finder = TiltFinder.TiltFinder(templates)
-    for c in svm_candidates:
-        #analyze_tomogram(tomogram, svm_labeler, features_extractor, selector, tilt_finder)
-        c.set_features(features_extractor.extract_features(tomogram, c))
-        svm_labeler.label(c)
-        tilt_finder.find_best_tilt(tomogram, c)
+
+    from SvmEval import analyze_tomogram
+    (svm_candidates, feature_vectors, labels) = \
+        analyze_tomogram(tomogram, svm_labeler, features_extractor, selector, tilt_finder, True)
 
     non_junk_candidates = [c for c in svm_candidates if c.label != JUNK_ID]
     svm_tomogram = generate_tomogram_with_given_candidates(templates, non_junk_candidates)
@@ -156,9 +160,9 @@ if __name__ == '__main__':
     for c in non_junk_candidates:
         print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
 
-    compare_reconstruced_tomogram(tomogram, svm_tomogram)
+    compare_reconstruced_tomogram(tomogram, svm_tomogram, True) #True = draw the difference map as well
 
-    compare_candidate_COM(criteria, svm_candidates, tomogram)
+    compare_candidate_COM(criteria, svm_candidates, tomogram) #display the center of mass of the candidates
 
     exit(0)
 
