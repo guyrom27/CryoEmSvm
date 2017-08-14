@@ -96,12 +96,12 @@ class pds:
 
     def create_point_grid(self):
         while self.ss < self.n:
-            print("iter")
+            #print("iter")
             if (self.qs == 0):
-                print("randomization failed")
-                return
+                print("randomization failed- trying to randomize ", self.n, " points in a ", self.shape, " space with min separation ", int(self.r2**0.5))
+                exit(1)
             idx_in_q = int(random.uniform(0,1) * self.qs)
-            print("inx:",idx_in_q)
+            #print("inx:",idx_in_q)
             s = self.queue[idx_in_q]
             added_points = 0
             for i in range(self.k):
@@ -125,12 +125,12 @@ class pds:
                         if (z >= 0) and (z < self.d):
                             if (self.distance(rand_point)):
                                 self.set_point(rand_point)
-                                print("iter3")
+                                #print("iter3")
                                 added_points += 1
                                 if (self.ss >= self.n):
                                     break
             if (added_points == 0):
-                print("deleting")
+                #print("deleting")
                 self.grid[self.to_3d(self.find_bin(s))] = None
                 self.ss -= 1
                 del self.queue[idx_in_q]
@@ -139,7 +139,7 @@ class pds:
     def randomize_spaced_points(self):
         if self.ss == 0:
             s = [int(random.uniform(0,1) * i) for i in [self.w, self.h, self.d]]
-            print("seed:", s)
+            #print("seed:", s)
             self.set_point(s)
         self.create_point_grid()
         sample = list(filter(None, self.grid))
