@@ -1,5 +1,6 @@
 from CommonDataTypes import *
-from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D
+from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D, TEMPLATE_DIMENSIONS_2D_CONTAINER
+from TemplateUtil import align_densitymap_to_COM
 
 import numpy as np
 import scipy.ndimage.interpolation
@@ -135,7 +136,7 @@ def generate_tilted_templates_2d():
     square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
     fill_with_square(square_dm[:,:,0], TEMPLATE_DIMENSION/2)
     for tilt in enumerate(EulerAngle.Tilts):
-        square_templates.append(TiltedTemplate(rotate(square_dm, tilt[1]), tilt[0], 2))
+        square_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(square_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 2))
 
     return (circle_templates,square_templates)
 
