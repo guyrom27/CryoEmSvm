@@ -89,9 +89,10 @@ def generate_random_tomogram(templates, template_side, criteria, dim=2):
 # -------------------------------------------------- Generators ------------------------------------------------------ #
 # TODO: place holders for the tomogram generators
 def tomogram_generator(paths, templates):
-    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
+    from Constants import DEFAULT_COMPOSITION_TUPLES_3D
+    composition = [Candidate.fromTuple(*t) for t in DEFAULT_COMPOSITION_TUPLES_3D]
     for path in paths:
-        tomogram = generate_tomogram_with_given_candidates(templates, criteria)
+        tomogram = generate_tomogram_with_given_candidates(templates, composition)
         with open(path, 'wb') as file:
             pickle.dump(tomogram, file)
         yield tomogram

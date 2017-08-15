@@ -1,6 +1,6 @@
 import sys
 import argparse
-from TemplateFactory import Generator
+from TemplateGenerator import Generator
 from SvmTrain import svm_train
 from SvmEval import svm_eval
 
