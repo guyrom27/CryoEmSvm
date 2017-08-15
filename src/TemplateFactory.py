@@ -1,66 +1,4 @@
-from enum import Enum
-import pickle
-import numpy as np
-
-import TemplateGenerator
-
-
-# TODO: Place holders for template generator
-# TODO: move to other file
-def template_loader(paths, save):
-    if not save:
-        for path in paths:
-            with open(path, 'rb') as file:
-                yield pickle.load(file)
-    else:
-        for path in paths:
-            with open(path, 'wb') as file:
-                yield lambda x: pickle.dump(x, file)
-
-
-def template_generator_solid(paths):
-    templates = TemplateGenerator.generate_tilted_templates()
-    for i, path in enumerate(paths):
-        template = templates[i]
-        with open(path, 'wb') as file:
-            pickle.dump(template, file)
-        yield template
-
-
-def template_generator_fuzzy(paths):
-    yield NotImplementedError('Generator fuzzy not implemented')
-
-
-class Generator(Enum):
-    # Override equality checks to accept string
-    def __eq__(self, other):
-        if isinstance(other, Generator):
-            return super(Generator, self).__eq__(other)
-        else:
-            return self.value == other
-
-    def __ne__(self, other):
-        result = self.__eq__(other)
-        if result is not NotImplemented:
-            return not result
-        return result
-
-    # Shortcut to the keys
-    @staticmethod
-    def keys():
-        return Generator.__members__.keys()
-
-    # Define contains to enable sort of 'in' query for strings on the values in the enum
-    @staticmethod
-    def contains(item):
-        if isinstance(item, Generator):
-            return item in Generator
-        else:
-            return item in Generator.keys()
-
-    LOAD = 'LOAD'
-    SOLID = 'SOLID'
-    FUZZY = 'FUZZY'
+from TemplateGenerator import Generator, template_loader, template_generator_solid, template_generator_3d_load
 
 
 class TemplateFactory:
@@ -87,29 +25,10 @@ class TemplateFactory:
             return template_loader(self.paths, self.save)
         elif self.kind == Generator.SOLID:
             return template_generator_solid(self.paths)
-        elif self.kind == Generator.FUZZY:
-            return template_generator_fuzzy(self.paths)
+        elif self.kind == Generator.LOAD_3D:
+            return template_generator_3d_load(self.paths)
         else:
             raise NotImplementedError('The generator %s is not implemented' % str(self.kind))
-
-
-class NormalizedTemplateFactory(TemplateFactory) :
-    def __init__(self, kind):
-        TemplateFactory.__init__(self, kind)
-
-    def build(self):
-        for template in TemplateFactory.build(self):
-            yield self.normalize(template)
-
-    def normalize(self, template):
-        from math import sqrt
-        for tilted_template in template:
-            factor = sqrt(np.sum(np.square(tilted_template.density_map))) #calculate the L2 norm of the template
-            if factor != 0:
-                tilted_template.density_map /= factor
-            else:
-                print("Error normalizing template: L2 norm is zero")
-        return template
 
 
 if __name__ == '__main__':
