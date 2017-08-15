@@ -314,9 +314,7 @@ def main(argv):
     
 
 if __name__ == '__main__':
-    tmp = r"C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\template_generator.py -o C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates\ -a 60 -g C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates\geometric.txt"
-    main((tmp.split())[1:])
-    #main(sys.argv[1:])
+    main(sys.argv[1:])
     # output_path = r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\'
     # sys.stdout = open(output_path + 'output.txt', 'w')
     # sys.stderr = open(output_path + 'error.txt', 'w')
