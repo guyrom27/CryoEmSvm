@@ -41,7 +41,7 @@ def show_candidates(selector, candidates, tomogram):
 
 if __name__ == '__main__':
     #templates = generate_tilted_templates()
-    templates, template_metadata, tilt_metadata = load_templates_3d(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\')
+    templates, template_metadata, tilt_metadata = load_templates_3d(r'..\Chimera\Templates' + '\\')
     EulerAngle.Tilts = tilt_metadata
     show_templates(templates)
 
