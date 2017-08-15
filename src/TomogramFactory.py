@@ -1,4 +1,5 @@
 from TomogramGenerator import tomogram_generator, tomogram_loader
+from Constants import DEFAULT_COMPOSITION_TUPLES_2D
 
 class TomogramFactory:
     def __init__(self, templates):

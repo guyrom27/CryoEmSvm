@@ -4,6 +4,7 @@ from TemplateGenerator import generate_tilted_templates, load_templates_3d
 from Constants import JUNK_ID
 from FeaturesExtractor import FeaturesExtractor
 from CommonDataTypes import Candidate, EulerAngle
+from TemplateMaxCorrelations import TemplateMaxCorrelations
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -44,7 +45,7 @@ if __name__ == '__main__':
     EulerAngle.Tilts = tilt_metadata
     show_templates(templates)
 
-    #composition = (Candidate.fromTuple(1, 0, 52, 32,35), Candidate.fromTuple(1, 2, 37, 28,45), Candidate.fromTuple(0, 0, 70, 23,45), Candidate.fromTuple(0, 9, 70, 23,72))
+    #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_3D]
     #composition = (Candidate.fromTuple(1, 0, 12, 12, 12), Candidate.fromTuple(0, 6, 27, 27, 27))
     #tomogram = generate_tomogram_with_given_candidates(templates, composition, TOMOGRAM_DIMENSIONS_3D)
 
@@ -53,6 +54,9 @@ if __name__ == '__main__':
     composition = tomogram.composition
     show_tomogram(tomogram, criteria)
     VisualUtils.slider3d(tomogram.density_map)
+
+    print('calculating correlations')
+    max_correlations = TemplateMaxCorrelations(tomogram, templates)
 
     print('selecting')
     selector = CandidateSelector.CandidateSelector(templates)
@@ -63,10 +67,10 @@ if __name__ == '__main__':
     labeler = Labeler.PositionLabeler(tomogram.composition)
 
     print('extracting features')
-    features_extractor = FeaturesExtractor(templates)
+    features_extractor = FeaturesExtractor(max_correlations)
     for candidate in candidates:
         labeler.label(candidate)
-        candidate.set_features(features_extractor.extract_features(tomogram, candidate))
+        candidate.set_features(features_extractor.extract_features(candidate))
 
     #train the SVM on the tomogram
     print('training')

@@ -2,6 +2,7 @@ from TomogramGenerator import *
 from TemplateGenerator import generate_tilted_templates
 from Constants import JUNK_ID
 from FeaturesExtractor import FeaturesExtractor
+from TemplateMaxCorrelations import TemplateMaxCorrelations
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -120,7 +121,7 @@ if __name__ == '__main__':
     templates = (templates[2], templates[3]) #Test only L shaped templates
     #show_templates(templates)
 
-    #composition = (Candidate.fromTuple(1, 0, 52, 32), Candidate.fromTuple(1, 2, 37, 28), Candidate.fromTuple(0, 0, 70, 23))
+    #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
     #tomogram = generate_tomogram_with_given_candidates(templates, criteria)
 
     criteria = [3, 3]
@@ -128,18 +129,22 @@ if __name__ == '__main__':
     composition = truth_tomogram.composition
     #show_tomogram(tomogram, criteria)
 
-    tomogram = Noise.make_noisy_tomogram(truth_tomogram)
+    #tomogram = Noise.make_noisy_tomogram(truth_tomogram)
+    tomogram = truth_tomogram
+    max_correlations = TemplateMaxCorrelations(tomogram, templates)
+
     selector = CandidateSelector.CandidateSelector(templates)
     candidates = selector.select(tomogram)
     show_candidates(selector, candidates, tomogram)
 
 
     labeler = Labeler.PositionLabeler(tomogram.composition)
-    features_extractor = FeaturesExtractor(templates)
+    #features_extractor = FeaturesExtractor(templates)
+    features_extractor = FeaturesExtractor(max_correlations)
 
     for candidate in candidates:
         labeler.label(candidate)
-        candidate.set_features(features_extractor.extract_features(tomogram, candidate))
+        candidate.set_features(features_extractor.extract_features(candidate))
 
     #train the SVM on the tomogram
     Xlist = [c.features for c in candidates]

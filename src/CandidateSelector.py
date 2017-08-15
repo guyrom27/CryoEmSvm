@@ -89,10 +89,11 @@ if __name__ == '__main__':
     from TemplateGenerator import generate_tilted_templates
     from TomogramGenerator import generate_tomogram_with_given_candidates
     import matplotlib.pyplot as plt
+    from Constants import DEFAULT_COMPOSITION_TUPLES_2D
 
     templates = generate_tilted_templates()
-    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
-    tomogram = generate_tomogram_with_given_candidates(templates, criteria)
+    composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
+    tomogram = generate_tomogram_with_given_candidates(templates, composition)
 
     cs = CandidateSelector(templates, 2)
 
