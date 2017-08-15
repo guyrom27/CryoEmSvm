@@ -1,14 +1,15 @@
 import pickle
 import TomogramGenerator
 from CommonDataTypes import Candidate
+from Constants import DEFAULT_COMPOSITION_TUPLES_2D
 
 
 # TODO: place holders for the tomogram generators
 # TODO: move to other file
 def tomogram_generator(paths, templates):
-    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
+    composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
     for path in paths:
-        tomogram = TomogramGenerator.generate_tomogram_with_given_candidates(templates, criteria)
+        tomogram = TomogramGenerator.generate_tomogram_with_given_candidates(templates, composition)
         with open(path, 'wb') as file:
             pickle.dump(tomogram, file)
         yield tomogram

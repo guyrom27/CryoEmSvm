@@ -45,7 +45,7 @@ if __name__ == '__main__':
     EulerAngle.Tilts = tilt_metadata
     show_templates(templates)
 
-    #composition = (Candidate.fromTuple(1, 0, 52, 32,35), Candidate.fromTuple(1, 2, 37, 28,45), Candidate.fromTuple(0, 0, 70, 23,45), Candidate.fromTuple(0, 9, 70, 23,72))
+    #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_3D]
     #composition = (Candidate.fromTuple(1, 0, 12, 12, 12), Candidate.fromTuple(0, 6, 27, 27, 27))
     #tomogram = generate_tomogram_with_given_candidates(templates, composition, TOMOGRAM_DIMENSIONS_3D)
 

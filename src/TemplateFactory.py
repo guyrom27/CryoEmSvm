@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 import pickle
 import numpy as np
 
@@ -32,10 +32,6 @@ def template_generator_fuzzy(paths):
 
 
 class Generator(Enum):
-    # Set auto value generation to the name of the key
-    def _generate_next_value_(name, start, count, last_values):
-        return name
-
     # Override equality checks to accept string
     def __eq__(self, other):
         if isinstance(other, Generator):
@@ -62,9 +58,9 @@ class Generator(Enum):
         else:
             return item in Generator.keys()
 
-    LOAD = auto()
-    SOLID = auto()
-    FUZZY = auto()
+    LOAD = 'LOAD'
+    SOLID = 'SOLID'
+    FUZZY = 'FUZZY'
 
 
 class TemplateFactory:

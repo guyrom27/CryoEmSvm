@@ -7,19 +7,19 @@ import sys, pickle, argparse
 
 
 
-def create_pdb_model(pdb_name, resolution):
+def create_pdb_model(pdb_name, params_list):
     """
     Creates chimera model object from pdb file
     Centers model at center of frame (for future rotations)
     Model object is numbered #1
     
     :param pdb_name: path to pdb file
-    :param resolution: sampeling resolution
+    :param params_list: sampling resolution
     """
-    
+    resoultion = params_list[0]
     # create model from pdb file
     chan = chimera.openModels.open(pdb_name)[0]
-    chimera.runCommand('molmap #0 %s modelId 1' % str(resolution))
+    chimera.runCommand('molmap #0 %s modelId 1' % str(resoultion))
     model = chimera.specifier.evalSpec('#1').models()[0]
     chan.destroy()
 
@@ -29,27 +29,27 @@ def create_pdb_model(pdb_name, resolution):
     
     return model
 
-def create_cube_matrix(side):
+def create_cube_matrix(params):
     """
     Creates cube density map matrix - a cube of size side^3
     centered in an empty matirx of size (2*side)^3
 
-    :param side: number of pixels in cube edge
+    :param params: singleton list - number of pixels in cube edge
     """
-    
+    side = params[0]
     matrix = np.zeros((side*2,side*2,side*2))
     matrix[side//2:side//2+side,side//2:side//2+side,side//2:side//2+side] = np.ones((side,side,side))
     return matrix
 
 
-def create_sphere_matrix(rad):
+def create_sphere_matrix(params):
     """
     Creates sphere density map matrix - a sphere of radius rad
     centered in an empty matirx of size (2*rad)^3
 
-    :param rad: sphere radius in number of pixels
+    :param params: singleton list- sphere radius in number of pixels
     """
-    
+    rad = params[0]
     matrix = np.zeros((2*rad,2*rad,2*rad))
     for x in range(2*rad):
         for y in range(2*rad):
@@ -58,20 +58,53 @@ def create_sphere_matrix(rad):
                     matrix[x,y,z] = 1
     return matrix
 
-def create_geometric_model(shape_name, var):
+def shape_to_slices(shape, corner = None):
+    if not corner:
+        corner = [0]*len(shape)
+    assert(len(shape) == len(corner))
+    return tuple([slice(corner[i],corner[i]+shape[i]) for i in range(len(shape))])
+
+def create_L_matrix(params):
+    """
+        |-w1-|
+     _   ____
+     |  |x __| h2
+     h1 | |
+     |  | |
+     _  |_|
+         w2
+       x is the the coordinate (0,0,0)
+
+       zdepth is the z axis size
+    """
+    [w1, w2, h1, h2, zdepth] = params
+    assert(w2 <= w1 and h2 <= h1 and zdepth > 0)
+    #along the x axis
+    x_bar = np.ones((w1,h2,zdepth))
+    # along the y axis
+    y_bar = np.ones((w2,h1,zdepth))
+    matrix = np.zeros((w1, h1, zdepth))
+    matrix[shape_to_slices(x_bar.shape)] = x_bar
+    matrix[shape_to_slices(y_bar.shape)] = y_bar
+    return matrix
+
+
+def create_geometric_model(shape_name, param_list):
     """
     Creates chimera model object from a geometric shape
     Centers model at center of frame (for future rotations)
     Model object is numbered #1
     
     :param shpae_name: one of known shapes - cube, sphere
-    :param var: geomteric shpae paramter (cube side, sphere radius)
+    :param param_list: list of geomteric shape paramters (cube side, sphere radius..)
     """
     
     if shape_name == 'cube':
-        matrix = create_cube_matrix(var)
+        matrix = create_cube_matrix(param_list)
     elif shape_name == 'sphere':
-        matrix = create_sphere_matrix(var)
+        matrix = create_sphere_matrix(param_list)
+    elif shape_name == 'L':
+        matrix = create_L_matrix(param_list)
     else:
         raise('unkown shape!')
 
@@ -87,11 +120,11 @@ def create_geometric_model(shape_name, var):
     return model
 
 
-def create_model(model_type, model_str, model_var):
+def create_model(model_type, model_str, param_list):
     if model_type == 'G':
-        return create_geometric_model(model_str, model_var)
+        return create_geometric_model(model_str, param_list)
     elif model_type == 'P':
-        return create_pdb_model(model_str, model_var)
+        return create_pdb_model(model_str, param_list)
     else:
         raise('unkown model type!')
 
@@ -213,7 +246,7 @@ def flow(criteria, angle_res, output_path):
     Creates desnsity map of given models at all possible tilts according
     to given angle resolution and saves to file
 
-    :param criteria: list of tempalte types in the following format:
+    :param criteria: list of template types in the following format:
                      (template_type, template_str, template_var) where
                      - template_type = G: geometric / P: pdb
                      - template_str = shape name / pdb file path
@@ -223,13 +256,11 @@ def flow(criteria, angle_res, output_path):
     """
     
     # get dim
-    print('a')
     dim = 0
     for criterion in criteria:
         model = create_model(*criterion)
         dim = max(dim,calc_dim(model.matrix()))
         model.close()
-    print('b')
 
     # create tilted density maps
     tilts = generate_tilts(angle_res)
@@ -248,7 +279,7 @@ def flow(criteria, angle_res, output_path):
 def parse_config(template_type, config_path):
     with open(config_path) as f:
         #return [(template_type, line.split(':')[0], [int(val) for val in line.split(':')[1].split(',')]) for line in f.readlines()]
-        return [(template_type, line.split(':')[0], int(line.split(':')[1])) for line in f.readlines()]
+        return [(template_type, line.split(':')[0], [int(param) for param in line.split(':')[1].split(',')]) for line in f.readlines()]
 
 def main(argv):
     # parse arguments
