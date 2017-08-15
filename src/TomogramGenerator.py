@@ -86,47 +86,4 @@ def generate_random_tomogram(templates, template_side, criteria, dim=2):
 
 
 if __name__ == '__main__':
-
-    from TemplateGenerator import generate_tilted_templates
-    from FeaturesExtractor import FeaturesExtractor
-    import matplotlib.pyplot as plt
-
-    templates = generate_tilted_templates()
-
-    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
-    tomogram = generate_tomogram_with_given_candidates(templates, criteria)
-
-    import CandidateSelector
-    import Labeler
-
-    selector = CandidateSelector.CandidateSelector(templates)
-    candidates = selector.select(tomogram)
-    labeler = Labeler.PositionLabeler(tomogram.composition)
-    features_extractor = FeaturesExtractor(templates)
-    for candidate in candidates:
-        labeler.label(candidate)
-        candidate.set_features(features_extractor.extract_features(tomogram, candidate))
-
-
-    #print(len(candidates))
-    for candidate in candidates:
-        print(candidate)
-
-    fig, ax = plt.subplots()
-    ax.imshow(tomogram.density_map[:,:,0])
-
-    fig, ax = plt.subplots()
-    candidate_positions = np.zeros(tomogram.density_map[:,:,0].shape)
-    for candidate in candidates:
-        pos = candidate.six_position.COM_position
-        if candidate.label == 1:
-            col = 0.9
-        elif candidate.label == 2:
-            col = 0.6
-        else:
-            col = 0.3
-        candidate_positions[pos[0]][pos[1]] = col
-    ax.imshow(candidate_positions)
-
-    plt.show()
-
+    pass
