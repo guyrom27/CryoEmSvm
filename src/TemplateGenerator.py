@@ -163,7 +163,7 @@ def generate_tilted_templates_2d():
 
     square_templates = []
     square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_square(square_dm[:,:,0], TEMPLATE_DIMENSION/2)
+    fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION/2)
     for tilt in enumerate(EulerAngle.Tilts):
         square_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(square_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 2))
 
@@ -253,7 +253,16 @@ if __name__ == '__main__':
     import matplotlib
     matplotlib.use('TkAgg')
     import matplotlib.pyplot as plt
+    import VisualUtils
 
+    '''
+    fig1 = plt.figure(1)
+    ax = plt.subplot()
+    ax.imshow(dm[:,:,0])
+    plt.show()
+    '''
+
+    '''
     templates = generate_tilted_templates()
     for i in range(len(templates[2])):
         fig = plt.figure(2)
@@ -263,7 +272,7 @@ if __name__ == '__main__':
         ax = plt.subplot(122)
         ax.imshow(templates[3][i].density_map[:, :, 0])
         plt.show()
-    '''
+  
     d1 = np.zeros([25, 25, 1])
     fill_with_L(d1, 11, 7, 3, 3)
 
