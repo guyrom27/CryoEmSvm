@@ -2,22 +2,11 @@ from CommonDataTypes import *
 
 from Constants import TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSIONS_2D, TOMOGRAM_DIMENSIONS_3D
 import numpy as np
-
+from TemplateUtil import put_template
 
 #def put_template(dm, template_dm, position):
 #    dm[position[0] - template_dm.shape[0]//2:position[0] + template_dm.shape[0]//2,position[1] - template_dm.shape[1]//2:position[1] + template_dm.shape[1]//2] += template_dm
 
-def put_template(tomogram_dm, template_dm, position):
-    """
-    3D READY
-    :param tomogram_dm:  dm is density map
-    :param template_dm: dm is density map
-    :param position: center of cube/square position
-    :return:
-    """
-    corner = [position[i] - template_dm.shape[i] // 2 for i in range(len(tomogram_dm.shape))]
-    shape = tuple([slice(corner[i],corner[i] + template_dm.shape[i]) for i in range(len(corner))])
-    tomogram_dm[shape] += template_dm
 
 def generate_tomogram_with_given_candidates(templates, composition, dimensions=TOMOGRAM_DIMENSIONS_2D):
     """

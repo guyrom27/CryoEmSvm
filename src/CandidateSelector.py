@@ -80,6 +80,7 @@ class CandidateSelector:
                                                            signal.fftconvolve(tomogram.density_map, tilted.density_map,
                                                                               mode='same'))
 
+
         self.positions = self.find_local_maxima(self.max_correlation_per_3loc)
         return [Candidate(SixPosition(position, None), None) for position in self.positions]
 
@@ -106,7 +107,7 @@ if __name__ == '__main__':
     positions = cs.find_local_maxima(correlation)
     maximums = np.zeros(correlation.shape)
     for position in positions:
-        maximums[position] = corre
+        maximums[position] = correlation
     ax.imshow(maximums.reshape(maximums.shape[:2]))
 
     plt.show()

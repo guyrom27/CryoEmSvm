@@ -1,5 +1,6 @@
 from CommonDataTypes import *
-from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D
+from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D, TEMPLATE_DIMENSIONS_2D_CONTAINER
+from TemplateUtil import align_densitymap_to_COM
 
 import numpy as np
 import scipy.ndimage.interpolation
@@ -105,6 +106,34 @@ def fill_with_circle(dm, rad):
                 dm[x,y] = 1
     return dm
 
+#   |--w1--|
+# _   ____
+# |  |x __| h2
+# h1 | |
+# |  | |
+# _  |_|
+#     w2
+#   x is the position of the center of the picture
+#
+def fill_with_L(dm, h1, w1, h2, w2, flip= False):
+    dim = dm.shape[0]
+    corner_x = (dim - 1)/2
+    corner_y = (dim - 1)/2
+    offset_x = (w2 - 1)/2
+    offset_y = (h2 - 1)/2
+    #I want the center of rotation to be the corner
+    ind_map = lambda p: (int(corner_y - p[1]), int(corner_x + p[0]))
+    if flip:
+        ind_map = lambda p: (int(corner_y - p[1]), int(corner_x - p[0]))
+    for x in range(int(w1)):
+        for y in range(int(h1)):
+            dm[ind_map((x - offset_x, y - offset_y))] = 1
+
+    for x in range(int(w2), int(w1)):
+        for y in range(int(h2), int(h1)):
+            dm[ind_map((x - offset_x, y - offset_y))] = 0
+    return dm
+
 
 def rotate2d(dm, theta):
     rotated = scipy.ndimage.interpolation.rotate(dm, theta)
@@ -121,7 +150,7 @@ def generate_tilted_templates_2d():
 
     #TODO use init_tilts instead
     EulerAngle.Tilts = []
-    for theta in range(0,90,15):
+    for theta in range(0,345,15):
         EulerAngle.Tilts.append(EulerAngle(theta,None,None))
 
 
@@ -135,9 +164,24 @@ def generate_tilted_templates_2d():
     square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
     fill_with_square(square_dm[:,:,0], TEMPLATE_DIMENSION/2)
     for tilt in enumerate(EulerAngle.Tilts):
-        square_templates.append(TiltedTemplate(rotate(square_dm, tilt[1]), tilt[0], 2))
+        square_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(square_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 2))
 
-    return (circle_templates,square_templates)
+    Lshaped_templates = []
+    L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
+    x = 11
+    if (TEMPLATE_DIMENSION-1)/2 < 11:
+        x = 9
+    fill_with_L(L_dm[:,:,0], x , 7, 3, 3)
+    for tilt in enumerate(EulerAngle.Tilts):
+        Lshaped_templates.append(TiltedTemplate(rotate(L_dm, tilt[1]), tilt[0], 1))
+
+    flipped_Lshaped_templates = []
+    flipped_L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
+    fill_with_L(flipped_L_dm[:, :, 0], x, 7, 3, 3, True)
+    for tilt in enumerate(EulerAngle.Tilts):
+        flipped_Lshaped_templates.append(TiltedTemplate(rotate(flipped_L_dm,tilt[1]), tilt[0], 1))
+
+    return (circle_templates, square_templates, Lshaped_templates, flipped_Lshaped_templates)
 
 
 # -------------------------------------------------------------------------------- #
@@ -155,14 +199,38 @@ def generate_tilted_templates():
 
 
 
-
 if __name__ == '__main__':
     import matplotlib
     matplotlib.use('TkAgg')
     import matplotlib.pyplot as plt
 
-    tilted_templates, template_ids, tilt_ids = load_templates_3d(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\')
-    print('Done!')
+    templates = generate_tilted_templates()
+    for i in range(len(templates[2])):
+        fig = plt.figure(2)
+        ax = plt.subplot(121)
+        ax.imshow(templates[2][i].density_map[:, :, 0])
+
+        ax = plt.subplot(122)
+        ax.imshow(templates[3][i].density_map[:, :, 0])
+        plt.show()
+    '''
+    d1 = np.zeros([25, 25, 1])
+    fill_with_L(d1, 11, 7, 3, 3)
+
+    fig, ax = plt.subplots()
+    ax.imshow(d1[:, :, 0])
+    plt.show()
+
+    d1 = np.zeros([25, 25, 1])
+    fill_with_L(d1, 11, 7, 3, 3, True)
+
+    fig, ax = plt.subplots()
+    ax.imshow(d1[:, :, 0])
+    plt.show()
+    '''
+
+    #tilted_templates, template_ids, tilt_ids = load_templates_3d(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\')
+    #print('Done!')
 
 
     # templates = generate_tilted_templates()
@@ -181,6 +249,7 @@ if __name__ == '__main__':
     # ax.imshow(templates_2d[1][3].density_map[:,:,0])
     #
     # plt.show()
+
 
     #square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
     #fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION / 2)
