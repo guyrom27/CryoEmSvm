@@ -2,3 +2,6 @@
 *.xml
 *.npy
 .idea/CryoEmSvm.iml
+Chimera/Templates/output.txt
+Chimera/Templates/error.txt
+*.p
