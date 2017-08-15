@@ -128,6 +128,17 @@ def create_model(model_type, model_str, param_list):
     else:
         raise('unkown model type!')
 
+#reference: scipy source
+def center_of_mass(inp, labels=None, index=None):
+    normalizer = sum(inp, labels, index)
+    grids = np.ogrid[[slice(0, i) for i in inp.shape]]
+
+    results = [sum(inp * grids[dir].astype(float), labels, index) / normalizer for dir in range(inp.ndim)]
+
+    if np.isscalar(results[0]):
+        return tuple(results)
+
+    return [tuple(v) for v in np.array(results).T]
 
 def calc_com(matrix):
     """
@@ -155,7 +166,9 @@ def calc_dim(matrix):
                     rad = max(rad, np.sqrt(sum((np.array([x,y,z])-com)**2)))
 
     # get box dimensions (and add some spares)
-    return int(np.ceil(2 * rad * 1.1))
+    dim = int(np.ceil(2 * rad * 1.1))
+    # center is ill defined for even shapes
+    return dim if (dim % 2 == 1) else (dim + 1)
 
 
 
@@ -219,7 +232,6 @@ def get_matrix_and_center(matrix, dim):
     com = [int(x) for x in calc_com(big_matrix)]
     shape = tuple([slice(com[i]-dim//2, com[i]-dim//2+dim) for i in range(3)])
     truncated_matrix = big_matrix[shape]
-
     return truncated_matrix
 
 
