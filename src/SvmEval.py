@@ -1,7 +1,6 @@
 import pickle
 
-from TomogramGenerator import generate_tomogram_with_given_candidates
-from CommonDataTypes import Tomogram
+from TemplateMaxCorrelations import TemplateMaxCorrelations
 from TemplateFactory import TemplateFactory, Generator
 from TomogramFactory import TomogramFactory
 import Labeler
@@ -28,14 +27,16 @@ def svm_eval(svm_path, template_paths, tomogram_paths, out_paths):
     templates = list(TemplateFactory(Generator.LOAD).set_paths(template_paths).build())
 
     labeler = Labeler.SvmLabeler(svm)
-    candidate_selector = CandidateSelector.CandidateSelector(templates)
-    features_extractor = FeaturesExtractor.FeaturesExtractor(templates)
-    tilt_finder = TiltFinder.TiltFinder(templates)
 
     tomograms = TomogramFactory(None).set_paths(tomogram_paths).build()
     tomogram_outs = TomogramFactory(None).set_paths(out_paths).set_save(True).build()
 
     for tomogram, save_tomogram in zip(tomograms, tomogram_outs):
+        labeler = Labeler.PositionLabeler(tomogram.composition)
+        max_correlations = TemplateMaxCorrelations(tomogram, templates)
+        candidate_selector = CandidateSelector.CandidateSelector(max_correlations)
+        features_extractor = FeaturesExtractor.FeaturesExtractor(max_correlations)
+        tilt_finder = TiltFinder.TiltFinder(max_correlations)
 
         # Analyze the tomogram
         (candidates, feature_vectors, predicted_labels) = analyze_tomogram(tomogram, labeler, features_extractor,

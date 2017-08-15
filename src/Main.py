@@ -1,6 +1,7 @@
 import sys
 import argparse
 from TemplateGenerator import Generator
+from TemplateMaxCorrelations import TemplateMaxCorrelations
 from SvmTrain import svm_train
 from SvmEval import svm_eval
 
@@ -84,13 +85,15 @@ if __name__ == '__main__':
         gf_templates.set_paths(['tmpl1.pkl', 'tmpl2.pkl'])
         templates = list(gf_templates.build())
 
-        gf_tomograms = TomogramFactory(None)
+        gf_tomograms = TomogramFactory(templates)
         gf_tomograms.set_paths(['tmgrm.pkl'])
         tomogram = list(gf_tomograms.build())[0]
 
-        candidate_selector = CandidateSelector(templates)
-        features_extractor = FeaturesExtractor(templates)
-        tilt_finder = TiltFinder(templates)
+        labeler = Labeler.PositionLabeler(tomogram.composition)
+        max_correlations = TemplateMaxCorrelations(tomogram, templates)
+        candidate_selector = CandidateSelector(max_correlations)
+        features_extractor = FeaturesExtractor(max_correlations)
+        tilt_finder = TiltFinder(max_correlations)
 
         labeler = Labeler.PositionLabeler(tomogram.composition)
 
@@ -98,7 +101,7 @@ if __name__ == '__main__':
             analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector, tilt_finder)
 
         # Load the svm evaluation result
-        gf_svm_tomograms = TomogramFactory(None)
+        gf_svm_tomograms = TomogramFactory(templates)
         gf_svm_tomograms.set_paths(['out.pkl'])
         svm_tomogram = list(gf_svm_tomograms.build())[0]
 

@@ -2,6 +2,7 @@ from sklearn.svm import SVC
 import numpy as np
 import pickle
 
+from TemplateMaxCorrelations import TemplateMaxCorrelations
 from TemplateFactory import TemplateFactory
 from TomogramFactory import TomogramFactory
 import CandidateSelector
@@ -33,10 +34,6 @@ def svm_train(svm_path, template_paths, tomogram_paths, source_svm=None, templat
     gf_tomograms.set_paths(tomogram_paths)
     tomograms = gf_tomograms.build()
 
-    candidate_selector = CandidateSelector.CandidateSelector(templates)
-    features_extractor = FeaturesExtractor.FeaturesExtractor(templates)
-    tilt_finder = TiltFinder.TiltFinder(templates)
-
     # Training
 
     feature_vectors = []
@@ -46,6 +43,10 @@ def svm_train(svm_path, template_paths, tomogram_paths, source_svm=None, templat
     # Generate the training set
     for tomogram in tomograms:
         labeler = Labeler.PositionLabeler(tomogram.composition)
+        max_correlations = TemplateMaxCorrelations(tomogram, templates)
+        candidate_selector = CandidateSelector.CandidateSelector(max_correlations)
+        features_extractor = FeaturesExtractor.FeaturesExtractor(max_correlations)
+        tilt_finder = TiltFinder.TiltFinder(max_correlations)
 
         (candidates, single_iteration_feature_vectors, single_iteration_labels) = \
             analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector, tilt_finder)
@@ -62,6 +63,8 @@ def svm_train(svm_path, template_paths, tomogram_paths, source_svm=None, templat
 
     x = np.array(feature_vectors)
     y = np.array(labels)
+    # print(x.shape)
+    # print(y.shape)
     if (len(np.unique(y)) == 1):
         print("SVM training must contain more than one label type (all candidates are the same label)")
         exit()
