@@ -1,8 +1,9 @@
+
 from TomogramGenerator import generate_tomogram_with_given_candidates, generate_random_tomogram, TOMOGRAM_DIMENSIONS_3D
 from TemplateGenerator import generate_tilted_templates, load_templates_3d
 from Constants import JUNK_ID
 from FeaturesExtractor import FeaturesExtractor
-from CommonDataTypes import Candidate
+from CommonDataTypes import Candidate, EulerAngle
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -39,17 +40,18 @@ def show_candidates(selector, candidates, tomogram):
 
 if __name__ == '__main__':
     #templates = generate_tilted_templates()
-    templates, template_ids, tilt_ids = load_templates_3d(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\')
+    templates, template_metadata, tilt_metadata = load_templates_3d(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\')
+    EulerAngle.Tilts = tilt_metadata
     show_templates(templates)
 
     #composition = (Candidate.fromTuple(1, 0, 52, 32,35), Candidate.fromTuple(1, 2, 37, 28,45), Candidate.fromTuple(0, 0, 70, 23,45), Candidate.fromTuple(0, 9, 70, 23,72))
-    composition = (Candidate.fromTuple(1, 0, 12, 12, 12), Candidate.fromTuple(0, 6, 27, 27, 27))
-    tomogram = generate_tomogram_with_given_candidates(templates, composition, TOMOGRAM_DIMENSIONS_3D)
+    #composition = (Candidate.fromTuple(1, 0, 12, 12, 12), Candidate.fromTuple(0, 6, 27, 27, 27))
+    #tomogram = generate_tomogram_with_given_candidates(templates, composition, TOMOGRAM_DIMENSIONS_3D)
 
-    #criteria = [4,3]
-    #tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria, 3)
-    #composition = tomogram.composition
-    #show_tomogram(tomogram, criteria)
+    criteria = [1,1]
+    tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria, 3)
+    composition = tomogram.composition
+    show_tomogram(tomogram, criteria)
     VisualUtils.slider3d(tomogram.density_map)
 
     print('selecting')
@@ -89,7 +91,7 @@ if __name__ == '__main__':
 
     print('generating output tomogram')
     non_junk_candidates = [c for c in svm_candidates if c.label != JUNK_ID]
-    svm_tomogram = generate_tomogram_with_given_candidates(templates, non_junk_candidates)
+    svm_tomogram = generate_tomogram_with_given_candidates(templates, non_junk_candidates, TOMOGRAM_DIMENSIONS_3D)
 
     print("Ground Truth Candidates:")
     for c in composition:

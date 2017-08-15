@@ -239,13 +239,10 @@ def flow(criteria, angle_res, output_path):
             output_name = output_path + str(template_id) + '_' + str(tilt_id)
             tilt_and_save(model, tilt, dim, output_name)
         model.close() # close model
-    print('c')
-    # create meta data
-    template_ids = dict([(template_id, criterion) for template_id, criterion in enumerate(criteria)])
-    tilt_ids = dict([(tilt_id, tilt) for tilt_id, tilt in enumerate(tilts)])
-    pickle.dump(template_ids, open(output_path + 'template_ids.p', 'wb'))
-    pickle.dump(tilt_ids, open(output_path + 'tilt_ids.p', 'wb'))
-    print('d')
+
+    # save meta data
+    pickle.dump(criteria, open(output_path + 'template_ids.p', 'wb'))
+    pickle.dump(tilts, open(output_path + 'tilt_ids.p', 'wb'))
 
 
 def parse_config(template_type, config_path):
