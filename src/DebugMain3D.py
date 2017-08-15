@@ -59,7 +59,7 @@ if __name__ == '__main__':
     max_correlations = TemplateMaxCorrelations(tomogram, templates)
 
     print('selecting')
-    selector = CandidateSelector.CandidateSelector(templates)
+    selector = CandidateSelector.CandidateSelector(max_correlations)
     candidates = selector.select(tomogram)
     #show_candidates(selector, candidates, tomogram)
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     svm.fit(x, y)
 
     svm_labeler = Labeler.SvmLabeler(svm)
-    tilt_finder = TiltFinder.TiltFinder(templates)
+    tilt_finder = TiltFinder.TiltFinder(max_correlations)
 
     print('svm labeling')
     from AnalyzeTomogram import analyze_tomogram
