@@ -1,7 +1,8 @@
-from CommonDataTypes import *
-
-from Constants import TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSIONS_2D, TOMOGRAM_DIMENSIONS_3D
 import numpy as np
+import pickle
+
+from CommonDataTypes import Tomogram, Candidate, SixPosition, EulerAngle
+from Constants import TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSIONS_2D, TOMOGRAM_DIMENSIONS_3D
 from TemplateUtil import put_template
 
 #def put_template(dm, template_dm, position):
@@ -85,8 +86,29 @@ def generate_random_tomogram(templates, template_side, criteria, dim=2):
     return generate_tomogram_with_given_candidates(templates, candidates, TOMOGRAM_DIMENSIONS_3D if dim == 3 else TOMOGRAM_DIMENSIONS_2D )
 
 
-if __name__ == '__main__':
+# -------------------------------------------------- Generators ------------------------------------------------------ #
+# TODO: place holders for the tomogram generators
+def tomogram_generator(paths, templates):
+    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
+    for path in paths:
+        tomogram = generate_tomogram_with_given_candidates(templates, criteria)
+        with open(path, 'wb') as file:
+            pickle.dump(tomogram, file)
+        yield tomogram
 
+
+def tomogram_loader(paths, save):
+    if not save:
+        for path in paths:
+            with open(path, 'rb') as file:
+                yield pickle.load(file)
+    else:
+        for path in paths:
+            with open(path, 'wb') as file:
+                yield lambda x: pickle.dump(x, file)
+
+
+if __name__ == '__main__':
     from TemplateGenerator import generate_tilted_templates
     from FeaturesExtractor import FeaturesExtractor
     import matplotlib.pyplot as plt

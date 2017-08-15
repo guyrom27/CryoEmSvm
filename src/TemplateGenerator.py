@@ -1,10 +1,11 @@
-from CommonDataTypes import *
-from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D, TEMPLATE_DIMENSIONS_2D_CONTAINER
-from TemplateUtil import align_densitymap_to_COM
-
 import numpy as np
 import scipy.ndimage.interpolation
 import pickle
+
+from CommonDataTypes import TiltedTemplate, EulerAngle
+from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D, TEMPLATE_DIMENSIONS_2D_CONTAINER
+from TemplateUtil import align_densitymap_to_COM
+from StringComperableEnum import StringComperableEnum
 
 
 #The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
@@ -190,6 +191,7 @@ def generate_tilted_templates_2d():
 def rotate(dm, eu_angle):
     return rotate2d(dm, eu_angle.Phi)
 
+
 def generate_tilted_templates():
     """
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
@@ -197,6 +199,54 @@ def generate_tilted_templates():
     return generate_tilted_templates_2d()
 
 
+def normalize(self, template):
+    from math import sqrt
+    for tilted_template in template:
+        factor = sqrt(np.sum(np.square(tilted_template.density_map))) #calculate the L2 norm of the template
+        if factor != 0:
+            tilted_template.density_map /= factor
+        else:
+            print("Error normalizing template: L2 norm is zero")
+    return template
+
+
+def normalize_all(self, templates):
+    return [normalize(template) for template in templates]
+
+
+# -------------------------------------------------- Generators ------------------------------------------------------ #
+# Enum containing all the supported generators
+class Generator(StringComperableEnum):
+    LOAD = 'LOAD'
+    SOLID = 'SOLID'
+    LOAD_3D = 'LOAD_3D'
+
+
+# TODO: Place holders for template generator
+def template_loader(paths, save):
+    if not save:
+        for path in paths:
+            with open(path, 'rb') as file:
+                yield pickle.load(file)
+    else:
+        for path in paths:
+            with open(path, 'wb') as file:
+                yield lambda x: pickle.dump(x, file)
+
+
+def template_generator_solid(paths):
+    templates = generate_tilted_templates()
+    for i, path in enumerate(paths):
+        template = templates[i]
+        with open(path, 'wb') as file:
+            pickle.dump(template, file)
+        yield template
+
+
+def template_generator_3d_load(paths):
+    templates = load_templates_3d(paths[0])
+    for template in templates:
+        yield template
 
 
 if __name__ == '__main__':

@@ -1,29 +1,4 @@
-import pickle
-import TomogramGenerator
-from CommonDataTypes import Candidate
-
-
-# TODO: place holders for the tomogram generators
-# TODO: move to other file
-def tomogram_generator(paths, templates):
-    criteria = (Candidate.fromTuple(1, 0, 10, 10), Candidate.fromTuple(1, 2, 27, 18), Candidate.fromTuple(0, 0, 10, 28))
-    for path in paths:
-        tomogram = TomogramGenerator.generate_tomogram_with_given_candidates(templates, criteria)
-        with open(path, 'wb') as file:
-            pickle.dump(tomogram, file)
-        yield tomogram
-
-
-def tomogram_loader(paths, save):
-    if not save:
-        for path in paths:
-            with open(path, 'rb') as file:
-                yield pickle.load(file)
-    else:
-        for path in paths:
-            with open(path, 'wb') as file:
-                yield lambda x: pickle.dump(x, file)
-
+from TomogramGenerator import tomogram_generator, tomogram_loader
 
 class TomogramFactory:
     def __init__(self, templates):
