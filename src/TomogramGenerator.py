@@ -108,3 +108,4 @@ def tomogram_loader(paths, save):
                 yield lambda x: pickle.dump(x, file)
 
 if __name__ == '__main__':
+    pass
