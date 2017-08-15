@@ -31,7 +31,7 @@ def svm_eval(svm_path, template_paths, tomogram_paths, out_paths):
     :param tomogram_paths: List of paths to the tomograms.
     :param out_paths: List of paths to which the results of the evaluation of the tomograms will be saved.
     """
-    print('Starting evaluation')
+    print('Starting evaluation...')
     # Load the data
     with open(svm_path, 'rb') as file:
         svm = pickle.load(file)
@@ -52,4 +52,4 @@ def svm_eval(svm_path, template_paths, tomogram_paths, out_paths):
 
         save_tomogram(tomogram)
 
-    print('Evaluation finished')
+    print('Evaluation finished!')
