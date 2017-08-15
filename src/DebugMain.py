@@ -120,7 +120,7 @@ if __name__ == '__main__':
     templates = (templates[2], templates[3]) #Test only L shaped templates
     #show_templates(templates)
 
-    #composition = (Candidate.fromTuple(1, 0, 52, 32), Candidate.fromTuple(1, 2, 37, 28), Candidate.fromTuple(0, 0, 70, 23))
+    #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
     #tomogram = generate_tomogram_with_given_candidates(templates, criteria)
 
     criteria = [3, 3]
