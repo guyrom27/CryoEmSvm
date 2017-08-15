@@ -7,9 +7,9 @@ from TomogramFactory import TomogramFactory
 import CandidateSelector
 import FeaturesExtractor
 import Labeler
+import TiltFinder
 
-# TODO: Move analyze_tomogram somewhere else
-from SvmEval import analyze_tomogram
+from AnalyzeTomogram import analyze_tomogram
 
 def svm_train(svm_path, template_paths, tomogram_paths, source_svm=None, template_generator=None,
               generate_tomograms=False):
@@ -35,6 +35,7 @@ def svm_train(svm_path, template_paths, tomogram_paths, source_svm=None, templat
 
     candidate_selector = CandidateSelector.CandidateSelector(templates)
     features_extractor = FeaturesExtractor.FeaturesExtractor(templates)
+    tilt_finder = TiltFinder.TiltFinder(templates)
 
     # Training
 
@@ -47,7 +48,7 @@ def svm_train(svm_path, template_paths, tomogram_paths, source_svm=None, templat
         labeler = Labeler.PositionLabeler(tomogram.composition)
 
         (candidates, single_iteration_feature_vectors, single_iteration_labels) = \
-            analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector)
+            analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector, tilt_finder)
 
         feature_vectors.extend(single_iteration_feature_vectors)
         labels.extend(single_iteration_labels)

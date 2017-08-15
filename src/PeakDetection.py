@@ -80,5 +80,5 @@ if __name__ == '__main__':
                          [0, 0, 0, 0, 0],
                          [0, 0, 0, 0, 0]]],
                        np.float64)
-    peaks3d = detect_peaks(image3d, 3)
+    peaks3d = detect_peaks(image3d, 3, 3)
     print(peaks3d)

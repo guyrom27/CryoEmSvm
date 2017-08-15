@@ -64,12 +64,14 @@ def main(argv):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        from TemplateFactory import TemplateFactory, Generator
+        from TemplateFactory import TemplateFactory, NormalizedTemplateFactory, Generator
         from TomogramFactory import TomogramFactory
         from CandidateSelector import CandidateSelector
         from FeaturesExtractor import FeaturesExtractor
+        from TiltFinder import TiltFinder
         from SvmEval import analyze_tomogram
         import Labeler
+
         print('Starting test...')
 
         main('train svm.pkl -t tmpl1.pkl tmpl2.pkl -d tmgrm.pkl -g SOLID'.split())
@@ -77,7 +79,7 @@ if __name__ == '__main__':
         main('eval svm.pkl -t tmpl1.pkl tmpl2.pkl -d tmgrm.pkl -o out.pkl'.split())
 
         # Load the templates and the tomogram and reevaluate the ground truth
-        gf_templates = TemplateFactory(Generator.LOAD)
+        gf_templates = NormalizedTemplateFactory(Generator.LOAD)
         gf_templates.set_paths(['tmpl1.pkl', 'tmpl2.pkl'])
         templates = list(gf_templates.build())
 
@@ -87,16 +89,18 @@ if __name__ == '__main__':
 
         candidate_selector = CandidateSelector(templates)
         features_extractor = FeaturesExtractor(templates)
+        tilt_finder = TiltFinder(templates)
 
         labeler = Labeler.PositionLabeler(tomogram.composition)
 
         (candidates, feature_vectors, labels) = \
-            analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector)
+            analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector, tilt_finder)
 
         # Load the svm evaluation result
         gf_svm_tomograms = TomogramFactory(None)
         gf_svm_tomograms.set_paths(['out.pkl'])
         svm_tomogram = list(gf_svm_tomograms.build())[0]
+
 
         # Get the labels
         suggested_labels = [candidate.label for candidate in svm_tomogram.composition]

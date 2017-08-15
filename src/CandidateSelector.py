@@ -52,7 +52,8 @@ class CandidateSelector:
         self.positions = None
 
     def find_local_maxima(self, correlation_array):
-        """
+        """lation[position]
+    fig, ax = plt.subplots()
         Generates a list of coordinates of peaks that are greater than the threshold.
         :param correlation_array: The array of the correlation.
         :return: A list of the coordinates of the picks.
@@ -78,6 +79,7 @@ class CandidateSelector:
                 self.max_correlation_per_3loc = np.maximum(self.max_correlation_per_3loc,
                                                            signal.fftconvolve(tomogram.density_map, tilted.density_map,
                                                                               mode='same'))
+
 
         self.positions = self.find_local_maxima(self.max_correlation_per_3loc)
         return [Candidate(SixPosition(position, None), None) for position in self.positions]
@@ -105,8 +107,7 @@ if __name__ == '__main__':
     positions = cs.find_local_maxima(correlation)
     maximums = np.zeros(correlation.shape)
     for position in positions:
-        maximums[position] = correlation[position]
-    fig, ax = plt.subplots()
+        maximums[position] = correlation
     ax.imshow(maximums.reshape(maximums.shape[:2]))
 
     plt.show()

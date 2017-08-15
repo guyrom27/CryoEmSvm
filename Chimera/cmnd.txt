@@ -1,0 +1,1 @@
+chimera --nogui --script "C:\Users\Matan\PycharmProjects\Workshop\Chimera\template_generator.py -o C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\ -a 60 -g C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\geometric.txt"
