@@ -216,7 +216,7 @@ def normalize_all(self, templates):
 
 # -------------------------------------------------- Generators ------------------------------------------------------ #
 # Enum containing all the supported generators
-class Generator(StringComperableEnum):
+class TemplateGenerator(StringComperableEnum):
     LOAD = 'LOAD'
     SOLID = 'SOLID'
     LOAD_3D = 'LOAD_3D'

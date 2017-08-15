@@ -3,6 +3,7 @@ import pickle
 
 from CommonDataTypes import Tomogram, Candidate, SixPosition, EulerAngle
 from Constants import TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSIONS_2D, TOMOGRAM_DIMENSIONS_3D
+from StringComperableEnum import StringComperableEnum
 from TemplateUtil import put_template
 
 #def put_template(dm, template_dm, position):
@@ -87,6 +88,10 @@ def generate_random_tomogram(templates, template_side, criteria, dim=2):
 
 
 # -------------------------------------------------- Generators ------------------------------------------------------ #
+class TomogramGenerator(StringComperableEnum):
+    LOAD = 'LOAD'
+    OLD_GENERATOR = 'OLD_GENERATOR'
+
 # TODO: place holders for the tomogram generators
 def tomogram_generator(paths, templates):
     from Constants import DEFAULT_COMPOSITION_TUPLES_2D
