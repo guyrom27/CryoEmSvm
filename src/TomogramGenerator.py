@@ -20,6 +20,19 @@ import random
 # - generate random tomograms from criteria and number
 # - load tomograms from files
 
+
+def get_tomogram_shape(dim):
+    """
+    :param dim 2 for 2D 3 for 3D:
+    :return: tomogram required shape (according to dimension)
+    """
+    if dim == 2:
+        return TOMOGRAM_DIMENSIONS_2D
+    elif dim == 3:
+        return TOMOGRAM_DIMENSIONS_3D
+    else:
+        assert(False)
+
 def generate_tomogram_with_given_candidates(templates, composition, dim):
     """
     3D READY!
@@ -28,7 +41,7 @@ def generate_tomogram_with_given_candidates(templates, composition, dim):
     :param dim 2 for 2D 3 for 3D
     :return: Tomogram object
     """
-    tomogram_dm = np.zeros(TOMOGRAM_DIMENSIONS_3D if dim == 3 else TOMOGRAM_DIMENSIONS_2D)
+    tomogram_dm = np.zeros(get_tomogram_shape(dim))
     for candidate in composition:
         if candidate.label != JUNK_ID:
             put_template(tomogram_dm, templates[candidate.label][candidate.six_position.tilt_id].density_map, candidate.six_position.COM_position)
@@ -48,7 +61,7 @@ def randomize_spaced_out_points(space, separation, n_points):
     return obj.randomize_spaced_points()
 
 
-def generate_random_candidates(template_side_len, criteria, dim=2):
+def generate_random_candidates(template_side_len, criteria, dim):
     """
     :param template_side_len:  we assume templates are cubes
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
@@ -87,7 +100,7 @@ def generate_random_candidates(template_side_len, criteria, dim=2):
     return [Candidate(SixPosition(pos_id[0], EulerAngle.rand_tilt_id()), label=pos_id[1]) for pos_id in zip(points, flat_ids)]
 
 
-def generate_random_tomogram(templates, criteria, dim=2):
+def generate_random_tomogram(templates, criteria, dim):
     """
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
@@ -99,7 +112,7 @@ def generate_random_tomogram(templates, criteria, dim=2):
     return generate_tomogram_with_given_candidates(templates, candidates, dim)
 
 
-def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim=2, seed=None):
+def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed=None):
     """
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
@@ -204,7 +217,7 @@ def tomogram_loader(paths, save):
 def tomogram_example_generator_random(templates, template_side, criteria, dim, num_tomograms):
     for _ in range(num_tomograms):
         yield generate_random_tomogram(templates, criteria, dim)
-
+#training_tomograms = tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_tomograms=1)
 
 if __name__ == '__main__':
     pass

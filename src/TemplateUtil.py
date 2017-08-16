@@ -64,11 +64,8 @@ def align_densitymap_to_COM(densitymap, container_size_3D):
     top_left_corner = (np.floor(COM - ((np.array(container_size_2D) - 1)/2))).astype(int).tolist()
     shape = shape_to_slices(container_size_2D, top_left_corner)
     truncated_matrix = big_container[shape]
-    try:
-        return truncated_matrix.reshape(container_size_3D)
-    except Exception:
-        print("hello")
 
+    return truncated_matrix.reshape(container_size_3D)
 
 
 if __name__ == '__main__':

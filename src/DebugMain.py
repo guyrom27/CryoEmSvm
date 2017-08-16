@@ -14,15 +14,14 @@ from VisualUtils import candidates2dm, show_templates, show_candidates, show_tom
 
 
 if __name__ == '__main__':
+    dim = 2
     templates = generate_tilted_templates_2d()
     #show_templates(templates)
 
     #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
-    #tomogram = generate_tomogram_with_given_candidates(templates, criteria)
-    criteria = [1, 2, 3]
-    import random
-    random.seed(12)
-    truth_tomogram = generate_random_tomogram(templates, criteria)
+    #tomogram = generate_tomogram_with_given_candidates(templates, criteria, dim)
+    criteria = [1, 2, 3, 1]
+    truth_tomogram = generate_random_tomogram(templates, criteria, dim)
     # tomogram = Noise.make_noisy_tomogram(truth_tomogram)
     tomogram = truth_tomogram
     #show_tomogram(tomogram, criteria)
@@ -60,7 +59,7 @@ if __name__ == '__main__':
     (svm_candidates, feature_vectors, labels) = \
         analyze_tomogram(tomogram, svm_labeler, features_extractor, selector, tilt_finder, True)
 
-    svm_tomogram = generate_tomogram_with_given_candidates(templates, svm_candidates, 2)
+    svm_tomogram = generate_tomogram_with_given_candidates(templates, svm_candidates, dim)
 
     print("Ground Truth Candidates:")
     for c in truth_tomogram.composition:
