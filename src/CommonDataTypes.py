@@ -90,6 +90,12 @@ class Candidate:
     def set_label(self, label):
         self.label = label
 
+    def get_tilt_id(self):
+        return self.six_position.tilt_id
+
+    def get_position(self):
+        return self.six_position.COM_position
+
 
 
 class TiltedTemplate:
