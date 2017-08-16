@@ -165,10 +165,9 @@ def calc_dim(matrix):
                 if matrix[x,y,z] > 0:
                     rad = max(rad, np.sqrt(sum((np.array([x,y,z])-com)**2)))
 
-    # get box dimensions (and add some spares)
-    dim = int(np.ceil(2 * rad * 1.1))
-    # center is ill defined for even shapes
-    return dim if (dim % 2 == 1) else (dim + 1)
+    # get box dimensions (and add some spares), make it odd, because center is ill defined for even shapes
+    dim = int(np.ceil(rad)) * 2 + 3
+    return dim
 
 
 
@@ -333,6 +332,8 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
+    #tmp = r"C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\template_generator.py -o C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates\ -a 60 -g C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates\geometric.txt"
+    #main((tmp.split())[1:])
     # output_path = r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\'
     # sys.stdout = open(output_path + 'output.txt', 'w')
     # sys.stderr = open(output_path + 'error.txt', 'w')

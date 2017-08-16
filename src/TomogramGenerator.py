@@ -58,13 +58,14 @@ def generate_random_candidates(template_side_len, criteria, dim=2, seed=None):
     n = sum(criteria)
 
     #this is the minimal separation between two square templates
-    separation = template_side_len * (dim ** 0.5)
+    separation = template_side_len
 
     # we don't want COM points too close to the sides
-    gap_shape = [(template_side_len - 1) // 2] * 3
+    template_radius = (template_side_len - 1) // 2
+    gap_shape = [template_radius] * 3
 
     # pad a bit so we won't have boundary issues during detection
-    gap_shape = [2*x for x in gap_shape]
+    gap_shape = [(x + 3) for x in gap_shape]
 
     if dim == 2:
         gap_shape[2] = 0
