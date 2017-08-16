@@ -1,14 +1,24 @@
-import numpy as np
-import pickle
-
+from Constants import JUNK_ID
 from CommonDataTypes import Tomogram, Candidate, SixPosition, EulerAngle
 from Constants import TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSIONS_2D, TOMOGRAM_DIMENSIONS_3D
 from StringComperableEnum import StringComperableEnum
 from TemplateUtil import put_template
 
-#def put_template(dm, template_dm, position):
-#    dm[position[0] - template_dm.shape[0]//2:position[0] + template_dm.shape[0]//2,position[1] - template_dm.shape[1]//2:position[1] + template_dm.shape[1]//2] += template_dm
+import numpy as np
+import pickle
 
+
+# Ways to get tomogram
+# + generate_tomogram_with_given_candidates
+# + generate_random_tomogram
+# - generate tomogram from svm output - implement in generate_tomogram_with_given_candidates
+# - load tomogram from file
+#   - with known composition
+#   - with unkown composition
+#
+# Ways to get training set (set of tomogrmas)
+# - generate random tomograms from criteria and number
+# - load tomograms from files
 
 def generate_tomogram_with_given_candidates(templates, composition, dimensions=TOMOGRAM_DIMENSIONS_2D):
     """
@@ -20,7 +30,8 @@ def generate_tomogram_with_given_candidates(templates, composition, dimensions=T
     """
     tomogram_dm = np.zeros(dimensions)
     for candidate in composition:
-        put_template(tomogram_dm, templates[candidate.label][candidate.six_position.tilt_id].density_map, candidate.six_position.COM_position)
+        if candidate.label != JUNK_ID:
+            put_template(tomogram_dm, templates[candidate.label][candidate.six_position.tilt_id].density_map, candidate.six_position.COM_position)
     return Tomogram(tomogram_dm, tuple(composition))
 
 

@@ -10,7 +10,7 @@ import TiltFinder
 from AnalyzeTomogram import analyze_tomogram
 
 
-def svm_train(templates_generator, tomogram_generator, return_tomograms=False):
+def svm_train(templates, tomograms, return_tomograms=False):
     """
     Create and return a new SVM trained on the templates and tomograms supplied. If return_toomgram is true then the
     list of the tomograms will also be returned.
@@ -20,14 +20,6 @@ def svm_train(templates_generator, tomogram_generator, return_tomograms=False):
     :return A tuple of the resulting SVM and the templates used to train it. If return_tomograms is true then the tuple
             of the SVM and templates will be within another tuple containing the tomograms as it's second value.
     """
-    # Get the templates
-    templates = list(templates_generator)
-
-    # Get the tomograms. If the tomograms are to be returned then they will be turned to a list here.
-    if return_tomograms:
-        tomograms = list(tomogram_generator)
-    else:
-        tomograms = tomogram_generator
 
     # Initialize variables for the feature vectors and the labels
     feature_vectors = []
@@ -60,7 +52,4 @@ def svm_train(templates_generator, tomogram_generator, return_tomograms=False):
     svm.fit(x, y)
 
     # Return the svm
-    if return_tomograms:
-        return (svm, templates), tomograms
-    else:
-        return (svm, templates)
+    return (svm, templates)

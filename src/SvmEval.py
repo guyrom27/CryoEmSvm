@@ -18,9 +18,6 @@ def svm_eval(svm_and_templates, tomograms, return_tomograms=False):
     svm = svm_and_templates[0]
     templates = svm_and_templates[1]
 
-    if return_tomograms:
-        tomograms = list(tomograms)
-
     tomogram_candidates = []
     labeler = SvmLabeler(svm)
 
@@ -38,7 +35,4 @@ def svm_eval(svm_and_templates, tomograms, return_tomograms=False):
         tomogram_candidates.append(candidates)
 
     # Return the result
-    if return_tomograms:
-        return tomogram_candidates, tomograms
-    else:
-        return tomogram_candidates
+    return tomogram_candidates
