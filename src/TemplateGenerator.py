@@ -8,6 +8,11 @@ from TemplateUtil import align_densitymap_to_COM
 from StringComperableEnum import StringComperableEnum
 
 
+# Ways to get template set
+# + load_templates_3d (from path - chimera output)
+# + generate_tilted_templates_2d
+
+
 #The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
 
 
@@ -50,19 +55,6 @@ def rotate3d(dm, eu_angle):
                    rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2]
 
     return rotated
-
-
-def show3d(dm):
-    import matplotlib
-    matplotlib.use('TkAgg')
-    import matplotlib.pyplot as plt
-    d = int(dm.shape[2]**0.5)+1
-    fig, axarr = plt.subplots(d,d)
-    for z in range(dm.shape[2]):
-        zdm = dm[:,:,z]
-        zdm[0,0] = 2
-        axarr[z//d, z%d].imshow(zdm)
-    plt.show()
 
 
 def load_templates_3d(templates_path):
@@ -154,6 +146,7 @@ def fill_with_rand_shape(dm, n_iterations=10, blur=True):
         dm = Noise.blur_filter(dm)
     return dm
 
+
 def add_random_shape(dm):
     import numpy as np
     from numpy.random import randint as rnd
@@ -174,10 +167,6 @@ def add_random_shape(dm):
                 if check_if_in_bound(s, p,(x, y, z)):
                     dm[x + p[0], y + p[1], z + p[2]] += sub_map[rnd_dim - x, rnd_dim - y, rnd_dim -z]
                     #dm[x + p[0], y + p[1], z + p[2]] += sub_map[x,y,z]
-
-
-
-
 
 
 def rotate2d(dm, theta):
