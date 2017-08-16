@@ -9,7 +9,7 @@ import VisualUtils
 
 # train
 templates = generate_tilted_templates_2d()
-training_tomograms = [generate_random_tomogram(templates, TEMPLATE_DIMENSION, [2,2])]
+training_tomograms = [generate_random_tomogram(templates, TEMPLATE_DIMENSION, [2,2]) for i in range(5)]
 # Using the example generator, we pass the required parameters
 #training_tomograms = tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_tomograms=1)
 svm_and_templates = svm_train(templates, training_tomograms)
