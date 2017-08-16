@@ -1,4 +1,4 @@
-from Constants import TEMPLATE_DIMENSION, JUNK_ID
+from Constants import JUNK_ID
 from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d
 from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates, generate_random_tomogram_set
 from SvmTrain import svm_train
@@ -10,6 +10,7 @@ import VisualUtils
 criteria = [1,2]
 number_of_tomograms = 1
 dim = 3
+seed = 205313050
 
 # create templates
 if dim == 2:
@@ -21,7 +22,7 @@ else:
 
 # train
 print("Training")
-training_tomograms = generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim)
+training_tomograms = generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed)
 svm_and_templates = svm_train(templates, training_tomograms)
 
 # eval

@@ -1,25 +1,23 @@
+from CommonDataTypes import TiltedTemplate, EulerAngle
+from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D
+from TemplateUtil import align_densitymap_to_COM
+from StringComperableEnum import StringComperableEnum
+from TemplatesDataAccessObject import BidimensionalLazyFileDAO
+
 import numpy as np
 import scipy.ndimage.interpolation
 import pickle
 
-from CommonDataTypes import TiltedTemplate, EulerAngle
-from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D
-from TemplateUtil import align_densitymap_to_COM
-from StringComperableEnum import StringComperableEnum
 
-
-# Ways to get template set
-# + load_templates_3d (from path - chimera output)
-# + generate_tilted_templates_2d
-
-
-#The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
-
-
+# importan methods:
+# load_templates_3d(templates_path): load 3d tempaltes produced by chimera bsed code
+# generate_tilted_templates_2d(): create 2d geometric shaped templates
 
 # -------------------------------------------------------------------------------- #
 # --------------------------------------- 3D ------------------------------------- #
 # -------------------------------------------------------------------------------- #
+
+#The non zero density must lie inside a centered sphere of radius TEMPLATE_DIMENSION/2 so that rotations do not exceed the template size
 
 def fill_with_sphere(dm, rad):
     for x in range(2*rad):
@@ -58,22 +56,23 @@ def rotate3d(dm, eu_angle):
 
 
 def load_templates_3d(templates_path):
-    # load pickles
+    """
+    Load templates as created by chimera based template_generator
+    :param templates_path: path containing output of chimera template generation
+    :return: BidimensionalLazyFileDAO containing templates where the first index corresponds
+             to template_id and the second index corresponds to tilt_id
+    """
+
+    # load metadata pickles
     template_metadata = pickle.load(open(templates_path + 'template_ids.p','rb'))
     tilt_metadata = pickle.load(open(templates_path + 'tilt_ids.p','rb'))
     EulerAngle.init_tilts_from_list(tilt_metadata )
 
 
     # load and create tilted template for every tilt_id and template_id
-    #tilted_templates = tuple([tuple([TiltedTemplate(np.load(templates_path + str(template_id) + '_' + str(tilt_id) + '.npy'), tilt_id, template_id) for tilt_id in range(len(tilt_metadata))]) for template_id in range(len(template_metadata))])
-    from TemplatesDataAccessObject import BidimensionalLazyFileDAO
     tilted_templates = BidimensionalLazyFileDAO(templates_path, len(template_metadata) , len(tilt_metadata))
 
     return tilted_templates
-
-
-def generate_tilted_templates_3d(templates_path):
-    return
 
 
 # -------------------------------------------------------------------------------- #
@@ -146,8 +145,6 @@ def fill_with_rand_shape(dm, n_iterations=10, blur=True):
 
 
 def add_random_shape(dm):
-    import numpy as np
-    from numpy.random import randint as rnd
     s = dm.shape
     p = (rnd(s[0]), rnd(s[1]), rnd(s[2])) #pick a random point
 
@@ -213,7 +210,7 @@ def generate_tilted_templates_2d():
 # -------------------------------------------------------------------------------- #
 
 
-def generate_tilted_templates():
+def generate_tilted_templates(): #TODO: remove
     """
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
@@ -276,83 +273,4 @@ def template_generator_3d_load(paths):
 
 
 if __name__ == '__main__':
-    import matplotlib
-    matplotlib.use('TkAgg')
-    import matplotlib.pyplot as plt
-    import VisualUtils
-
-    '''
-    fig1 = plt.figure(1)
-    ax = plt.subplot()
-    ax.imshow(dm[:,:,0])
-    plt.show()
-    '''
-
-    '''
-    templates = generate_tilted_templates()
-    for i in range(len(templates[2])):
-        fig = plt.figure(2)
-        ax = plt.subplot(121)
-        ax.imshow(templates[2][i].density_map[:, :, 0])
-
-        ax = plt.subplot(122)
-        ax.imshow(templates[3][i].density_map[:, :, 0])
-        plt.show()
-  
-    d1 = np.zeros([25, 25, 1])
-    fill_with_L(d1, 11, 7, 3, 3)
-
-    fig, ax = plt.subplots()
-    ax.imshow(d1[:, :, 0])
-    plt.show()
-
-    d1 = np.zeros([25, 25, 1])
-    fill_with_L(d1, 11, 7, 3, 3, True)
-
-    fig, ax = plt.subplots()
-    ax.imshow(d1[:, :, 0])
-    plt.show()
-    '''
-
-    #tilted_templates = load_templates_3d(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\')
-    #print('Done!')
-
-
-    # templates = generate_tilted_templates()
-    #
-    # fig, ax = plt.subplots()
-    # ax.imshow(templates[0][0].density_map)
-    #
-    #
-    # fig, ax = plt.subplots()
-    # ax.imshow(templates[1][3].density_map)
-    #
-    # templates_2d = generate_tilted_templates_2d()
-    # print(templates_2d[0][0].density_map.shape)
-    #
-    # fig, ax = plt.subplots()
-    # ax.imshow(templates_2d[1][3].density_map[:,:,0])
-    #
-    # plt.show()
-
-
-    #square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    #fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION / 2)
-    #show3d(rotate3d(square_dm, EulerAngle(0, 0, 0)))
-    #show3d(rotate3d(square_dm, EulerAngle(0, 0, 0)))
-    #show3d(rotate3d(square_dm, EulerAngle(0, 40, 0)))
-    #cube_dm = fill_with_cube(c, TEMPLATE_DIMENSION / 2)
-    #show3d(rotate3d(cube_dm,EulerAngle(45,30,0)))
-    #sphere_dm = fill_with_sphere(np.zeros(TEMPLATE_DIMENSIONS), TEMPLATE_DIMENSION // 3)
-    #show3d(sphere_dm)
-
-    #a = np.load(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\tmp_330_150_90.npy')
-    #show3d(a)
-    #plt.show()
-
-
-
-
-
-
-
+    pass

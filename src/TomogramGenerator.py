@@ -114,6 +114,7 @@ def generate_random_tomogram(templates, criteria, dim):
 
 def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed=None):
     """
+    Generate random tomogram training set
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
     :param number_of_tomograms: number of tomograms to generate

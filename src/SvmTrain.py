@@ -1,19 +1,16 @@
-from sklearn.svm import SVC
-import numpy as np
-
 from Labeler import PositionLabeler
 from AnalyzeTomogram import analyze_tomogram
 
+from sklearn.svm import SVC
+import numpy as np
 
-def svm_train(templates, tomograms, return_tomograms=False):
+
+def svm_train(templates, tomograms):
     """
-    Create and return a new SVM trained on the templates and tomograms supplied. If return_toomgram is true then the
-    list of the tomograms will also be returned.
-    :param templates_generator  Source of the templates. Can be a list or a generator of the templates.
-    :param tomogram_generator   Source of the tomograms. Can be a list or a generator of the tomograms.
-    :param return_tomograms     Boolean value indicating whether the tomograms used should be returned as well.
-    :return A tuple of the resulting SVM and the templates used to train it. If return_tomograms is true then the tuple
-            of the SVM and templates will be within another tuple containing the tomograms as it's second value.
+    Create and return a new SVM trained on the templates and tomograms supplied
+    :param templates:   Source of the templates - Iterator with random access
+    :param tomograms:   Iterator of training set tomograms
+    :return A tuple of the resulting SVM and the templates used to train it
     """
 
     # Initialize variables for the feature vectors and the labels
@@ -40,5 +37,4 @@ def svm_train(templates, tomograms, return_tomograms=False):
         exit()
     svm.fit(x, y)
 
-    # Return the svm
     return (svm, templates)

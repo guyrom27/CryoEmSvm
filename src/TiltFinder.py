@@ -2,36 +2,16 @@ from Constants import JUNK_ID
 
 class TiltFinder:
     def __init__(self, max_correlations):
+        """
+        :param max_correlations: a data structure of type TemplateMaxCorrelations initialized according to the relevant tomogram and templates
+        """
         self.max_correlations = max_correlations
 
     def find_best_tilt(self, candidate):
         if candidate.label == JUNK_ID:
             return #what should we return in case of junk? does it matter?
         candidate.six_position.tilt_id = self.max_correlations.best_tilt_ids[candidate.label][candidate.six_position.COM_position]
-    #
-    #
-    #
-    # def find_best_tilt(self, tomogram, candidate):
-    #     if candidate.label == JUNK_ID:
-    #         return #what should we return in case of junk? does it matter?
-    #
-    #     template = self.templates[candidate.label]
-    #     max_correlation = 0
-    #     best_tilt = -1
-    #
-    #     for tilted_template in template:
-    #         #correlation = signal.correlate(tomogram.density_map, tilted_template.density_map, mode='same')
-    #         correlation = signal.fftconvolve(tomogram.density_map, tilted_template.density_map, mode='same')
-    #         #can't we just calculate the correlation? We dont need fft since
-    #         #only want one position... seems kind of wasteful
-    #         if max_correlation < correlation[candidate.six_position.COM_position]:
-    #             max_correlation = correlation[candidate.six_position.COM_position]
-    #             best_tilt = tilted_template.tilt_id
-    #     if best_tilt == -1:
-    #         print("weird behaviour in Tilt finder. No good tilt found. Max is smaller than 0")
-    #         return
-    #
-    #     candidate.six_position.tilt_id = best_tilt
+
 
 if __name__ == '__main__':
     from TemplateGenerator import generate_tilted_templates

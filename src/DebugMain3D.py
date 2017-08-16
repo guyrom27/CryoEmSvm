@@ -66,11 +66,11 @@ if __name__ == '__main__':
     svm_tomogram = generate_tomogram_with_given_candidates(templates, svm_candidates, dim)
 
     print("Ground Truth Candidates:")
-    for c in composition:
+    for c in tomogram.composition:
         print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
 
     print("Reconstructed Candidates:")
-    for c in non_junk_candidates:
+    for c in svm_tomogram.composition:
         print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
 
     metric = MetricTester(tomogram.composition,svm_tomogram.composition)

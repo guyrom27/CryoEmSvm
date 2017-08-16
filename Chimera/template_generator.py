@@ -224,12 +224,12 @@ def get_matrix_and_center(matrix, dim):
 
     # expand matrix
     big_matrix = np.zeros(tuple((2*dim*np.ones((1,3)) + matrix.shape)[0]))
-    shape1 = tuple([slice(dim,dim + matrix.shape[i]) for i in range(3)])
+    shape1 = shape_to_slices(matrix.shape, [dim]*3)
     big_matrix[shape1] += matrix
 
     # center and truncate
     com = [int(x) for x in calc_com(big_matrix)]
-    shape2 = tuple([slice(com[i]-dim//2, com[i]-dim//2+dim) for i in range(3)])
+    shape2 = shape_to_slices(np.array([dim]*3),[x-dim//2 for x in com])
     truncated_matrix = big_matrix[shape2]
     #if [int(x) for x in calc_com(truncated_matrix)] != [dim//2]*3:
     #    print("COM error: calced_COM:",calc_com(truncated_matrix), " in shape: ", truncated_matrix.shape)
