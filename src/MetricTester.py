@@ -23,7 +23,9 @@ def short_candidate_print(c, message = None):
         string = message + string
     print(string)
 
-
+#todo: add option to save data to a log
+#maybe add the option to write some of the data to a global log file for statistics?
+#That way we can keep statistics over multiple tomograms
 
 class MetricTester:
     """
@@ -47,6 +49,7 @@ class MetricTester:
 
         for c in reco_composition:
             self.statistics[c] = []
+        self.match_success_rates()
         self.COM_position()
         self.Tilt_comparison()
 
@@ -81,9 +84,41 @@ class MetricTester:
             match = self.matches[c]
             if match is not None:
                 short_candidate_print(c, "Reconstructed:\n")
-                #print("Reconstructed:\nPos = " + str(match.six_position) + "\tLabel = " + str(match.label))
             else:
                 print("No match")
+
+    # TODO:
+    # figure out exactly which cases we are interested in, and which
+    # type of inconsistancy counts towards which case. When calculating
+    # rates, we also need to consider what constitues a false case
+    # (i.e. what do we need to divide by?)
+    # Also consider what to do if we decide to include Junk Id
+    def match_success_rates(self, print_all = False):
+        n_cases = np.zeros((4,))
+        n = 0.0
+        for c in self.reco_comp:
+            match = self.matches[c]
+            n += 1
+            if match is not None:
+                if match.label == c.label:      #matched truth and correct label
+                    n_cases[0] += 1
+                else:
+                    n_cases[1] += 1             #Found a candidate near truth, but it is mislabeled
+            else:
+                n_cases[2] += 1                 #False positive: detected a candidate which does not match the ground truth
+        for c in self.gt_comp:
+            if self.matches[c] is None:
+                n_cases[3] += 1                 #False negetive: ground truth candidate was not detected
+                n += 1                          #Rejected a true candidates does this count as a label error?
+        n_cases *= 100.0/n
+        message = ""
+        message += "match rate = " + str(n_cases[0]) + "%"
+        if print_all:
+            message += "%\n\t" + "mislabel rate = " + str(n_cases[1]) + "%"
+            message += "%\n\t" + "false positive rate = " + str(n_cases[2]) + "%"
+            message += "%\n\t" + "false negative rate = " + str(n_cases[3]) + "%"
+        self.global_statistics.append(message)
+        return
 
     def COM_position(self):
         avg_dist = 0.0
@@ -106,8 +141,12 @@ class MetricTester:
         for c in self.reco_comp:
             match = self.matches[c]
             if match is not None:
-                message = "Candidate Tilt = " + str(EulerAngle.fromTiltId(c.get_tilt_id()))
-                message += " True Tilt = " + str(EulerAngle.fromTiltId(match.get_tilt_id()))
+                a1 = EulerAngle.fromTiltId(c.get_tilt_id())
+                a2 = EulerAngle.fromTiltId(match.get_tilt_id())
+                a3 = (a1.Phi-a2.Phi, a1.Theta-a2.Theta, a1.Psi-a2.Psi)
+                message = "Candidate Tilt = " + str(a1)
+                message += ", True Tilt = " + str(a2)
+                message += ", Difference = " + str(a3)
                 n += 1
                 self.statistics[c].append(message)
                 if c.get_tilt_id() == match.get_tilt_id():
@@ -125,6 +164,8 @@ class MetricTester:
         print("======Global Statistics======")
         for message in self.global_statistics:
             print("\t" + message)
+
+
 
 '''
     def match_success_rate(self):
