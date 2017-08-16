@@ -1,11 +1,15 @@
-from TomogramGenerator import tomogram_generator, tomogram_loader
-from Constants import DEFAULT_COMPOSITION_TUPLES_2D
+from TomogramGenerator import TomogramGenerator, tomogram_generator, tomogram_loader
 
 class TomogramFactory:
-    def __init__(self, templates):
-        self.templates = templates
+    def __init__(self, kind):
+        self.kind = kind
         self.save = False
         self.paths = None
+        self.templates = None
+
+    def set_templates(self, templates):
+        self.templates = templates
+        return self
 
     def set_paths(self, paths):
         self.paths = paths
@@ -17,10 +21,13 @@ class TomogramFactory:
 
     def build(self):
         # Assert that all the required values are set
-        assert self.paths is not None
 
         # build the appropriate generator
-        if self.templates is None:
+        if self.kind == TomogramGenerator.LOAD:
+            assert self.paths is not None
             return tomogram_loader(self.paths, self.save)
+        elif self.kind == TomogramGenerator.OLD_GENERATOR:
+            assert self.templates is not None
+            return tomogram_generator(self.templates)
         else:
-            return tomogram_generator(self.paths, self.templates)
+            raise NotImplementedError('The generator %s is not implemented' % str(self.kind))

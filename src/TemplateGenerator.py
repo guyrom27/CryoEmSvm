@@ -136,6 +136,50 @@ def fill_with_L(dm, h1, w1, h2, w2, flip= False):
     return dm
 
 
+# checks if the inequality:
+# 0 <= p1 + p2 < bound
+# holds for each index
+def check_if_in_bound(bound, p1, p2):
+    for i in range(len(bound)):
+        if bound[i] <= p1[i] + p2[i] or p1[i] + p2[i] < 0:
+            return False
+    return True
+
+
+def fill_with_rand_shape(dm, n_iterations=10, blur=True):
+    for i in range(n_iterations):
+        add_random_shape(dm)
+    if blur:
+        import Noise
+        dm = Noise.blur_filter(dm)
+    return dm
+
+def add_random_shape(dm):
+    import numpy as np
+    from numpy.random import randint as rnd
+    s = dm.shape
+    p = (rnd(s[0]), rnd(s[1]), rnd(s[2])) #pick a random point
+
+    rnd_dim = rnd(2, 5)  #dim must be odd
+    sub_shape = (2*rnd_dim + 1, 2*rnd_dim + 1, 2*rnd_dim + 1)
+    sub_map = np.zeros(sub_shape)
+    if rnd(2) == 0:
+        sub_map = np.ones(sub_shape)  #sub_shape is a cube
+    else:
+        sub_map = fill_with_sphere(sub_map, rnd_dim - 1)
+    #sub_map = np.ones((rnd_dim, rnd_dim, rnd_dim))
+    for x in range(-rnd_dim, rnd_dim):
+        for y in range(-rnd_dim, rnd_dim):
+            for z in range(-rnd_dim, rnd_dim):
+                if check_if_in_bound(s, p,(x, y, z)):
+                    dm[x + p[0], y + p[1], z + p[2]] += sub_map[rnd_dim - x, rnd_dim - y, rnd_dim -z]
+                    #dm[x + p[0], y + p[1], z + p[2]] += sub_map[x,y,z]
+
+
+
+
+
+
 def rotate2d(dm, theta):
     rotated = scipy.ndimage.interpolation.rotate(dm, theta)
     rotated_dim = rotated.shape[0]
@@ -163,7 +207,7 @@ def generate_tilted_templates_2d():
 
     square_templates = []
     square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_square(square_dm[:,:,0], TEMPLATE_DIMENSION/2)
+    fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION/2)
     for tilt in enumerate(EulerAngle.Tilts):
         square_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(square_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 2))
 
@@ -174,13 +218,13 @@ def generate_tilted_templates_2d():
         x = 9
     fill_with_L(L_dm[:,:,0], x , 7, 3, 3)
     for tilt in enumerate(EulerAngle.Tilts):
-        Lshaped_templates.append(TiltedTemplate(rotate(L_dm, tilt[1]), tilt[0], 1))
+        Lshaped_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(L_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 1))
 
     flipped_Lshaped_templates = []
     flipped_L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
     fill_with_L(flipped_L_dm[:, :, 0], x, 7, 3, 3, True)
     for tilt in enumerate(EulerAngle.Tilts):
-        flipped_Lshaped_templates.append(TiltedTemplate(rotate(flipped_L_dm,tilt[1]), tilt[0], 1))
+        flipped_Lshaped_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(flipped_L_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 1))
 
     return (circle_templates, square_templates, Lshaped_templates, flipped_Lshaped_templates)
 
@@ -216,7 +260,7 @@ def normalize_all(self, templates):
 
 # -------------------------------------------------- Generators ------------------------------------------------------ #
 # Enum containing all the supported generators
-class Generator(StringComperableEnum):
+class TemplateGenerator(StringComperableEnum):
     LOAD = 'LOAD'
     SOLID = 'SOLID'
     LOAD_3D = 'LOAD_3D'
@@ -253,7 +297,16 @@ if __name__ == '__main__':
     import matplotlib
     matplotlib.use('TkAgg')
     import matplotlib.pyplot as plt
+    import VisualUtils
 
+    '''
+    fig1 = plt.figure(1)
+    ax = plt.subplot()
+    ax.imshow(dm[:,:,0])
+    plt.show()
+    '''
+
+    '''
     templates = generate_tilted_templates()
     for i in range(len(templates[2])):
         fig = plt.figure(2)
@@ -263,7 +316,7 @@ if __name__ == '__main__':
         ax = plt.subplot(122)
         ax.imshow(templates[3][i].density_map[:, :, 0])
         plt.show()
-    '''
+  
     d1 = np.zeros([25, 25, 1])
     fill_with_L(d1, 11, 7, 3, 3)
 
