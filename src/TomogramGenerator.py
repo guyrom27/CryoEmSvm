@@ -20,15 +20,15 @@ import random
 # - generate random tomograms from criteria and number
 # - load tomograms from files
 
-def generate_tomogram_with_given_candidates(templates, composition, dimensions=TOMOGRAM_DIMENSIONS_2D):
+def generate_tomogram_with_given_candidates(templates, composition, dim):
     """
     3D READY!
     :param templates: list of lists: first dimension is different template_ids second dimension is tilt_id
     :param composition: list of candidates to put in the tomogram
-    :param dimensions: the dimensions of the Tomogram- tuple of sizes e.g. (100,100) for 2D, or (100,100,100) for 3D
+    :param dim 2 for 2D 3 for 3D
     :return: Tomogram object
     """
-    tomogram_dm = np.zeros(dimensions)
+    tomogram_dm = np.zeros(TOMOGRAM_DIMENSIONS_3D if dim == 3 else TOMOGRAM_DIMENSIONS_2D)
     for candidate in composition:
         if candidate.label != JUNK_ID:
             put_template(tomogram_dm, templates[candidate.label][candidate.six_position.tilt_id].density_map, candidate.six_position.COM_position)
@@ -96,7 +96,7 @@ def generate_random_tomogram(templates, criteria, dim=2):
     """
     template_side = templates[0][0].density_map.shape[0]
     candidates = generate_random_candidates(template_side, criteria, dim)
-    return generate_tomogram_with_given_candidates(templates, candidates, TOMOGRAM_DIMENSIONS_3D if dim == 3 else TOMOGRAM_DIMENSIONS_2D )
+    return generate_tomogram_with_given_candidates(templates, candidates, dim)
 
 
 def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim=2, seed=None):
@@ -128,7 +128,7 @@ def tomogram_generator(paths, templates):
     from Constants import DEFAULT_COMPOSITION_TUPLES_2D
     composition = [Candidate.fromTuple(*t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
     for path in paths:
-        tomogram = generate_tomogram_with_given_candidates(templates, composition)
+        tomogram = generate_tomogram_with_given_candidates(templates, composition, dim)
         yield tomogram
 
 

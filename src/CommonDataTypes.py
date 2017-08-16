@@ -1,48 +1,38 @@
 import numpy as np
+import random
 
 class EulerAngle:
     """
     This represents the angles of a rotated rigid body.
     alpha is ...
     """
-    Tilts = []
+    Tilts = None
 
     def __init__(self, Phi, Theta, Psi):
         self.Phi = Phi
         self.Theta = Theta
         self.Psi = Psi
 
+    def __str__(self):
+        return str(tuple([self.Phi, self.Theta, self.Psi]))
+
     @classmethod
-    def init_tilts(cls, phi_n, tht_n, psi_n):
+    def init_tilts_from_list(cls, tuple_list):
         """
-        initialize the Tilts array so that we can associate an ID to a tilt
-        :param x_n: is how many sample points x will have
+
+        :param tuple_list: list of 3-tuples containing (phi,theta,psi)
+        :return:
         """
-        from math import pi
-        from numpy import linspace
-        cls.Tilts = []
-        MAX_PHI = 2*pi
-        MAX_THT = pi
-        MAX_PSI = 2*pi
-        for phi in linspace(0, MAX_PHI, phi_n):
-            for tht in linspace(0, MAX_THT, tht_n):
-                for psi in linspace(0, MAX_PSI, psi_n):
-                    cls.Tilts.append(EulerAngle(phi,tht,psi))
+        cls.Tilts = [EulerAngle(t[0],t[1],t[2]) for t in tuple_list]
 
     @classmethod
     def fromTiltId(cls, tilt_id):
         return cls.Tilts[tilt_id]
 
-    def __str__(self):
-        return str(tuple([self.Phi, self.Theta, self.Psi]))
-
     @classmethod
     def rand_tilt_id(cls):
-        import random
+        assert(cls.Tilts)
         return random.randint(0, len(cls.Tilts)-1 )
-
-#DEFAULT
-EulerAngle.init_tilts(15,15,15)
 
 
 

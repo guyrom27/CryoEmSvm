@@ -63,7 +63,7 @@ if __name__ == '__main__':
     accuracy /= float(len(candidates))
     accuracy *= 100
     print("accuracy is " + str(accuracy) + "%")
-    reco_tomogram = generate_tomogram_with_given_candidates(templates,candidates,TOMOGRAM_DIMENSIONS_2D)
+    reco_tomogram = generate_tomogram_with_given_candidates(templates,candidates, 2)
 
     import DebugMain
     DebugMain.compare_reconstruced_tomogram(reco_tomogram,tomogram,plot_dif_map=True)

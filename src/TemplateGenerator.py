@@ -61,6 +61,7 @@ def load_templates_3d(templates_path):
     # load pickles
     template_metadata = pickle.load(open(templates_path + 'template_ids.p','rb'))
     tilt_metadata = pickle.load(open(templates_path + 'tilt_ids.p','rb'))
+    EulerAngle.init_tilts_from_list(tilt_metadata )
 
 
     # load and create tilted template for every tilt_id and template_id
@@ -68,7 +69,7 @@ def load_templates_3d(templates_path):
     from TemplatesDataAccessObject import BidimensionalLazyFileDAO
     tilted_templates = BidimensionalLazyFileDAO(templates_path, len(template_metadata) , len(tilt_metadata))
 
-    return tilted_templates, template_metadata, tilt_metadata
+    return tilted_templates
 
 
 def generate_tilted_templates_3d(templates_path):
@@ -179,10 +180,7 @@ def generate_tilted_templates_2d():
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
 
-    #TODO use init_tilts instead
-    EulerAngle.Tilts = []
-    for theta in range(0,360,15):
-        EulerAngle.Tilts.append(EulerAngle(theta,0,0))
+    EulerAngle.init_tilts_from_list([(theta,0,0) for theta in range(0,360,15)])
 
 
     circle_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
@@ -323,7 +321,7 @@ if __name__ == '__main__':
     plt.show()
     '''
 
-    #tilted_templates, template_ids, tilt_ids = load_templates_3d(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\')
+    #tilted_templates = load_templates_3d(r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\')
     #print('Done!')
 
 
