@@ -1,13 +1,26 @@
+from Constants import TEMPLATE_DIMENSION
 from TemplateGenerator import template_generator_solid_2d
-from TomogramGenerator import ???
+from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates
 from SvmTrain import svm_train
 from SvmEval import svm_eval
 
+import VisualUtils
 
-template_generator = template_generator_solid_2d('')
-tomogram_geneartor = ???
 
-(svm_and_templates,tomograms) =  svm_train(template_generator, tomogram_generator, True)
+templates = list(template_generator_solid_2d(''))
+training_tomograms = [generate_random_tomogram(templates, TEMPLATE_DIMENSION, [2,2])]
 
-tomogram = ???
-output_candidates, output_tomogram = svm_eval(svm_and_templates, tomogram, True)
+svm_and_templates =  svm_train(templates, training_tomograms)
+
+
+evaultaion_tomograms = [generate_random_tomogram(templates, TEMPLATE_DIMENSION, [2,2])]
+VisualUtils.show_tomogram(evaultaion_tomograms[0],[])
+output_candidates = svm_eval(svm_and_templates, evaultaion_tomograms)
+
+JUNK_ID = -1
+non_junk_candidates = [c for c in output_candidates[0] if c.label != JUNK_ID]
+evaluated_tomogram = generate_tomogram_with_given_candidates(templates, non_junk_candidates)
+VisualUtils.show_tomogram(evaluated_tomogram,[])
+
+
+VisualUtils.plt.show()
