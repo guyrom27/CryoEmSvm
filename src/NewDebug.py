@@ -12,7 +12,7 @@ templates = list(template_generator_solid_2d(''))
 training_tomograms = [generate_random_tomogram(templates, TEMPLATE_DIMENSION, [2,2])]
 
 # Using the example generator, we pass the required parameters
-#training_tomograms = tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_templates=1)
+#training_tomograms = tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_tomograms=1)
 
 svm_and_templates =  svm_train(templates, training_tomograms)
 
@@ -23,7 +23,7 @@ svm_and_templates =  svm_train(templates, training_tomograms)
 evaultaion_tomograms = [generate_random_tomogram(templates, TEMPLATE_DIMENSION, [2,2])]
 # A way in which this could be used is for example
 #evaultaion_tomograms = list(
-#    tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_templates=1))
+#    tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_tomograms=1))
 
 VisualUtils.show_tomogram(evaultaion_tomograms[0],[])
 output_candidates = svm_eval(svm_and_templates, evaultaion_tomograms)
