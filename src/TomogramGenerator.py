@@ -111,5 +111,69 @@ def tomogram_loader(paths, save):
             with open(path, 'wb') as file:
                 yield lambda x: pickle.dump(x, file)
 
+
+# An example for a generator:
+#   The generator is initialized with the various parameters needed to generate the tomograms as well as the number of
+#   tomograms we wish to generate.
+#   In this case we will generate random tomograms using criteria. To do that we need to
+#   supply our generator with the templates we wish to use in the generation, template_side parameter and the criteria
+#   to use in the generation of the tomograms as well as a parameter indicating whether we wish to generate 2D or 3D
+#   tomograms.
+#   A different generator might have been one that only loads the tomograms from files specified by paths.
+#   Note that the generator can be documented as a regular function.
+#   The generator can also be replaced with any thing that is iterable including any custom object designed to be used
+#   as iterable.
+#   ** Enabling usage from shell **
+#   To enable the usage of this generator trough the shell command we need to do the following:
+#       1. Add the generator to the TomogramGenerator enum to let our main know that this generator is available.
+#          This is done by adding a line to the enum, e.g. EXAMPLE = 'EXAMPLE'
+#       2. Add the generator to the TomogramFactory.
+#          This is done by initially adding to the factory all the new values that we wish to receive that it doesn't
+#          already does. In this case, template_side, criteria, dim and num_tomograms.
+#          Then we would like to enable the factory to set those values. We do so by adding a field for eah value within
+#          the __init__ function but not to the header of the function, rather we add the values in the body of the
+#          function with default values of our choise (Most often None to indicate that it is a required variable, i.e.
+#          must be set before our generator can be used).
+#
+#               def __init__(self, kind):
+#                   ...
+#                   self.template_side = 50
+#                   self.criteria = None
+#                   self.dim = 2
+#                   self.num_tomograms = 0  # 0 is asserted to be false so this being set to 0 indicate that it is a
+#                                             required
+#
+#          Then we will add setter functions for each variable (or we could be lazy and set the values directly but this
+#          is a bad practice). Notice than the setters should return the factory itself for then to be chainable (i.e.
+#          tomograms = TomogramFactory(TomogramGenerator.EXAMPLE).set_templates(...)...set_num_tomograms(...).build() )
+#
+#               def set_template_side(template_side)
+#                   self.template_side = template_side
+#                   return self
+#
+#          And so on.
+#          Lastly we add the generator to the switch case (if elif in python) of the factory.
+#
+#               def build():
+#               ...
+#               if self.kind == TomogramGenerator.LOAD:
+#                   ...
+#               elif self.kind == TomogramGenerator.EXAMPLE:
+#                   # Here we assert that everything that we require is present
+#                   assert self.templates is not None
+#                   assert self.tempalte_side > 5
+#                   assert self.criteria
+#                   ...
+#                   return tomogram_example_generator_random(self.templates, ..., self.dim, self.num_tomograms)
+#               else:
+#                   ...
+#       3. Add any new values that the shell command didn't previously accept to the command.
+#          This is done by adding the arguments to the correct parser. For more information about how to add an
+#          argument look up argparse.
+def tomogram_example_generator_random(templates, template_side, criteria, dim, num_tomograms):
+    for _ in range(num_tomograms):
+        yield generate_random_tomogram(templates, template_side, criteria, dim)
+
+
 if __name__ == '__main__':
     pass
