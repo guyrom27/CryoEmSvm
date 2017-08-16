@@ -195,7 +195,7 @@ def generate_tilted_templates_2d():
 
     #TODO use init_tilts instead
     EulerAngle.Tilts = []
-    for theta in range(0,345,15):
+    for theta in range(0,360,15):
         EulerAngle.Tilts.append(EulerAngle(theta,None,None))
 
 
@@ -263,6 +263,7 @@ def normalize_all(self, templates):
 class TemplateGenerator(StringComperableEnum):
     LOAD = 'LOAD'
     SOLID = 'SOLID'
+    SOLID_2D = 'SOLID_2D'
     LOAD_3D = 'LOAD_3D'
 
 
@@ -286,6 +287,10 @@ def template_generator_solid(paths):
             pickle.dump(template, file)
         yield template
 
+
+def template_generator_solid_2d(paths):
+    for template in generate_tilted_templates_2d():
+        yield template
 
 def template_generator_3d_load(paths):
     templates = load_templates_3d(paths[0])
