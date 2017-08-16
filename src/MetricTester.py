@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 from Constants import DISTANCE_THRESHOLD
+from CommonDataTypes import EulerAngle
 
 
 def find_best_match(candidate, compostion):
@@ -39,10 +40,15 @@ class MetricTester:
         #each (value,string) represents a metric
         #where value is the result of the metric
         #and string is the message/name associated to it
+        self.global_statistics = []
+        # a list of metrics that is not tied to a specific candidate
+        # e.g. average center of mass distance, tilt success rate,
+        # number of correct matches ect...
+
         for c in reco_composition:
             self.statistics[c] = []
         self.COM_position()
-
+        self.Tilt_comparison()
 
         #add tomograms if needed
 
@@ -70,31 +76,67 @@ class MetricTester:
 
     def print(self):
         for c in self.gt_comp:
-            short_candidate_print(c,"====\nGround Truth:\n")
+            short_candidate_print(c, "====\nGround Truth:\n")
             print("=====\nGround Truth:\nPos= " + str(c.six_position) + "\tLabel = " + str(c.label))
             match = self.matches[c]
             if match is not None:
-                short_candidate_print(c,"Reconstructed:\n")
+                short_candidate_print(c, "Reconstructed:\n")
                 #print("Reconstructed:\nPos = " + str(match.six_position) + "\tLabel = " + str(match.label))
             else:
                 print("No match")
 
-
     def COM_position(self):
+        avg_dist = 0.0
+        n = 0
         for c in self.reco_comp:
             match = self.matches[c]
             if match is not None:
                 dist = calculate_L2_dist(c, match)
-                self.statistics[c].append((dist, "Distance between centers"))
+                self.statistics[c].append("COM offset distance = " + str(dist))
+                avg_dist += dist
+                n += 1
+        if n > 0:
+            avg_dist /= n
+            self.global_statistics.append("Average COM offset  = " + str(avg_dist))
 
+
+    def Tilt_comparison(self):
+        n_correct = 0
+        n = 0.0
+        for c in self.reco_comp:
+            match = self.matches[c]
+            if match is not None:
+                message = "Candidate Tilt = " + str(EulerAngle.fromTiltId(c.get_tilt_id()))
+                message += " True Tilt = " + str(EulerAngle.fromTiltId(match.get_tilt_id()))
+                n += 1
+                self.statistics[c].append(message)
+                if c.get_tilt_id() == match.get_tilt_id():
+                    n_correct += 1
+        if n > 0:
+            n = 100 * n_correct/n
+            self.global_statistics.append("Tilt Match Rate = " + str(n) + "%")
 
     def print_metrics(self):
         for c in self.reco_comp:
             print("=================")
             short_candidate_print(c, "Metrics for candidate ")
-            for metric in self.statistics[c]:
-                print(metric[1] + " = " + str(metric[0]) + "\t")
+            for message in self.statistics[c]:
+                print("\t" + message)
+        print("======Global Statistics======")
+        for message in self.global_statistics:
+            print("\t" + message)
 
-    def num_matched(self):
-        n_gt = len(self.gt_comp)
-        n_reco = len(self.reco_comp)
+'''
+    def match_success_rate(self):
+        false_positive = 0.0
+        false_negative = 0.0
+        for c in self.reco_comp:
+            if self.matches[c] is None:
+                false_positive += 1
+        for c in self.gt_comp:
+            if self.matches[c] is None:
+                false_negative += 1
+        #if false_positive == 0 and false_negative == 0
+'''
+
+
