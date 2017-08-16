@@ -1,3 +1,5 @@
+import numpy as np
+
 class EulerAngle:
     """
     This represents the angles of a rotated rigid body.
@@ -97,6 +99,10 @@ class TiltedTemplate:
         self.template_id = template_id      # int
         self.density_map = density_map      # numpy 3d array
         self.tilt_id = tilt_id              # EulerAngle
+
+    @classmethod
+    def fromFile(cls, path, tilt_id, template_id):
+        return cls(np.load(path), tilt_id, template_id)
 
 
 
