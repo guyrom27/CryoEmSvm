@@ -1,3 +1,5 @@
+from Constants import JUNK_ID
+
 import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
@@ -5,6 +7,12 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
 # ----------------------- 2d -----------------------------
+def print_candidate_list(candidates):
+    print("There are " + str(len(candidates)) + " candidates")
+    #print true and false seperately? using position labeler?
+    print([c.six_position.COM_position for c in candidates])
+
+
 def candidates2dm(candidates, shape):
     peaks = np.zeros(shape)
     for c in candidates:
@@ -97,7 +105,6 @@ def compare_candidate_COM(truth_candidates, reco_candidates, tomogram):
             map[pos[0], pos[1], 0] -= 1
         else:
             map[pos[0], pos[1], 0] += 1
-    print('This is the generated tomogram for criteria: ' + str(criteria))
     fig = plt.figure(2)
     fig.suptitle("Centers")
     ax = plt.subplot()
