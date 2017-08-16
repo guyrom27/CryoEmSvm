@@ -4,6 +4,107 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
+# ----------------------- 2d -----------------------------
+def candidates2dm(candidates, shape):
+    peaks = np.zeros(shape)
+    for c in candidates:
+        peaks[c.six_position.COM_position] = 1
+    return peaks
+
+
+def show_densitymap(dm, title, subplot=111):
+    ax = plt.subplot(subplot)
+    fig = plt.gcf()
+    fig.suptitle(title)
+    if len(dm.shape) == 3:
+        ax.imshow(dm[:, :, 0])
+    else:
+        ax.imshow(dm)
+
+def show_templates(templates):
+    print("There are " + str(len(templates)) + " templates-")
+    fig = plt.figure(1)
+    fig.suptitle("Templates")
+    SHOW_N_TILTS = 3
+    for i in range(len(templates)):
+        for j in range(SHOW_N_TILTS):
+            #this fits them to len(template) rows each containing SHOW_N_TILTS plots
+            ax = plt.subplot(int(str(len(templates)) + str(SHOW_N_TILTS) + str(i * SHOW_N_TILTS + j + 1)))
+            ax.imshow(templates[i][j].density_map[:, :, 0])
+    plt.show()
+
+def show_tomogram(tomogram, criteria):
+    print('This is the generated tomogram for criteria: ' + str(criteria))
+    print('The tomogram composition is: ' + str(tomogram.composition))
+    fig = plt.figure(2)
+    fig.suptitle("Tomogram")
+    ax = plt.subplot()
+    ax.imshow(tomogram.density_map[:, :, 0])
+    plt.show()
+
+def show_candidates(selector, candidates, tomogram):
+    print_candidate_list(candidates)
+
+    fig = plt.figure(3)
+    fig.suptitle("Candidate selection")
+
+    ax = plt.subplot(221)
+    ax.set_title('Original Tomogram')
+    ax.imshow(tomogram.density_map[:, :, 0])
+
+    ax = plt.subplot(222)
+    ax.set_title('Max Correlation')
+    ax.imshow(selector.max_correlation_per_3loc[:,:,0])
+
+    ax = plt.subplot(223)
+    ax.set_title('Blurred Correlation')
+    ax.imshow(selector.blurred_correlation_array[:,:,0])
+
+    ax = plt.subplot(224)
+    ax.set_title('Selected Candidates')
+    dm = candidates2dm(candidates, tomogram.density_map.shape)
+    ax.imshow(dm[:, :, 0])
+
+    plt.show()
+
+def compare_reconstruced_tomogram(truth_tomogram, recon_tomogram, plot_dif_map = False):
+    fig = plt.figure(2)
+    ax = plt.subplot(121)
+    ax.set_title('Truth Tomogram')
+    ax.imshow(truth_tomogram.density_map[:, :, 0])
+
+    ax = plt.subplot(122)
+    ax.set_title('Reconstructed Tomogram')
+    ax.imshow(recon_tomogram.density_map[:, :, 0])
+    plt.show()
+
+    if not plot_dif_map:
+        return
+    fig = plt.figure(3)
+    ax = plt.subplot()
+    ax.set_title('Overlap')
+    ax.imshow(truth_tomogram.density_map[:, :, 0] - recon_tomogram.density_map[:, :, 0])
+    plt.show()
+
+def compare_candidate_COM(truth_candidates, reco_candidates, tomogram):
+    map = tomogram.density_map
+    for c in truth_candidates:
+        pos = c.six_position.COM_position
+        map[pos[0], pos[1], 0] += 2
+    for c in reco_candidates:
+        pos = c.six_position.COM_position
+        if c.label == JUNK_ID:
+            map[pos[0], pos[1], 0] -= 1
+        else:
+            map[pos[0], pos[1], 0] += 1
+    print('This is the generated tomogram for criteria: ' + str(criteria))
+    fig = plt.figure(2)
+    fig.suptitle("Centers")
+    ax = plt.subplot()
+    ax.imshow(map[:, :, 0])
+    plt.show()
+
+# ----------------------- 3D -----------------------------
 def show3d(dm):
     import matplotlib
     matplotlib.use('TkAgg')
