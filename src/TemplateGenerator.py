@@ -3,7 +3,7 @@ import scipy.ndimage.interpolation
 import pickle
 
 from CommonDataTypes import TiltedTemplate, EulerAngle
-from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D, TEMPLATE_DIMENSIONS_2D_CONTAINER
+from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D, TEMPLATE_DIMENSIONS_3D
 from TemplateUtil import align_densitymap_to_COM
 from StringComperableEnum import StringComperableEnum
 
@@ -184,31 +184,28 @@ def generate_tilted_templates_2d():
 
 
     circle_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_circle(circle_dm[:,:,0], TEMPLATE_DIMENSION/4)
+    fill_with_circle(circle_dm[:,:,0], TEMPLATE_DIMENSION//4)
     circle_templates = []
     for tilt in enumerate(EulerAngle.Tilts):
-         circle_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(circle_dm,tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 1))
+         circle_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(circle_dm,tilt[1]), TEMPLATE_DIMENSIONS_2D), tilt[0], 1))
 
     square_templates = []
     square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION/2)
+    fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION//2)
     for tilt in enumerate(EulerAngle.Tilts):
-        square_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(square_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 2))
+        square_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(square_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D), tilt[0], 2))
 
     Lshaped_templates = []
     L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    x = 11
-    if (TEMPLATE_DIMENSION-1)/2 < 11:
-        x = 9
-    fill_with_L(L_dm[:,:,0], x , 7, 3, 3)
+    fill_with_L(L_dm[:,:,0], TEMPLATE_DIMENSION//2, TEMPLATE_DIMENSION//3, 3, 3)
     for tilt in enumerate(EulerAngle.Tilts):
-        Lshaped_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(L_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 1))
+        Lshaped_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(L_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D), tilt[0], 1))
 
     flipped_Lshaped_templates = []
     flipped_L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_L(flipped_L_dm[:, :, 0], x, 7, 3, 3, True)
+    fill_with_L(flipped_L_dm[:, :, 0], TEMPLATE_DIMENSION // 2, TEMPLATE_DIMENSION // 3, 3, 3, True)
     for tilt in enumerate(EulerAngle.Tilts):
-        flipped_Lshaped_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(flipped_L_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D_CONTAINER), tilt[0], 1))
+        flipped_Lshaped_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(flipped_L_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D), tilt[0], 1))
 
     return (circle_templates, square_templates, Lshaped_templates, flipped_Lshaped_templates)
 
