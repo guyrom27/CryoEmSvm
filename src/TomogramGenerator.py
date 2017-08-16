@@ -93,15 +93,15 @@ def generate_random_candidates(template_side_len, criteria, dim=2, seed=None):
     return [Candidate(SixPosition(pos_id[0], EulerAngle.rand_tilt_id()), label=pos_id[1]) for pos_id in zip(points, flat_ids)]
 
 
-def generate_random_tomogram(templates, template_side, criteria, dim=2, seed=None):
+def generate_random_tomogram(templates, criteria, dim=2, seed=None):
     """
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
-    :param template_side: we assume the templates are square with this side length
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
     :param dim 2 for 2D 3 for 3D
     :param seed use this seed for random initialization
     :return: a random Tomogram according to the criteria
     """
+    template_side = templates[0][0].density_map.shape[0]
     candidates = generate_random_candidates(template_side, criteria, dim, seed)
     return generate_tomogram_with_given_candidates(templates, candidates, TOMOGRAM_DIMENSIONS_3D if dim == 3 else TOMOGRAM_DIMENSIONS_2D )
 
