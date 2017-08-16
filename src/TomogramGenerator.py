@@ -47,11 +47,12 @@ def randomize_spaced_out_points(space, separation, n_points):
     obj = poisson_disk.pds(space[0], space[1], space[2], separation, n_points)
     return obj.randomize_spaced_points()
 
-def generate_random_candidates(template_side_len, criteria, dim=2):
+def generate_random_candidates(template_side_len, criteria, dim=2, seed=None):
     """
     :param template_side_len:  we assume templates are cubes
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
     :param dim 2 for 2D 3 for 3D
+    :param seed seed to use for random generation
     :return: a random list of candidates according to the criteria
     """
     n = sum(criteria)
@@ -75,26 +76,32 @@ def generate_random_candidates(template_side_len, criteria, dim=2):
     if dim==2:
         COM_valid_space[2] = 1
 
+    import random
+    if (seed == None):
+        seed = random.randint(0,2**31-1)
+    print('Using random seed: ', seed)
+    random.seed(seed)
+
     points = randomize_spaced_out_points(COM_valid_space, separation, n)
     #correct base (push away from sides of tomogram)
     points = [[x[0] + x[1] for x in zip(p,gap_shape)] for p in points]
     ids = [[i] * criteria[i] for i in range(len(criteria))]
     import itertools
     flat_ids = list(itertools.chain.from_iterable(ids))
-    import random
     random.shuffle(flat_ids)
     return [Candidate(SixPosition(pos_id[0], EulerAngle.rand_tilt_id()), label=pos_id[1]) for pos_id in zip(points, flat_ids)]
 
 
-def generate_random_tomogram(templates, template_side, criteria, dim=2):
+def generate_random_tomogram(templates, template_side, criteria, dim=2, seed=None):
     """
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
     :param template_side: we assume the templates are square with this side length
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
     :param dim 2 for 2D 3 for 3D
+    :param seed use this seed for random initialization
     :return: a random Tomogram according to the criteria
     """
-    candidates = generate_random_candidates(template_side, criteria, dim)
+    candidates = generate_random_candidates(template_side, criteria, dim, seed)
     return generate_tomogram_with_given_candidates(templates, candidates, TOMOGRAM_DIMENSIONS_3D if dim == 3 else TOMOGRAM_DIMENSIONS_2D )
 
 

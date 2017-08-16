@@ -182,7 +182,7 @@ def generate_tilted_templates_2d():
     #TODO use init_tilts instead
     EulerAngle.Tilts = []
     for theta in range(0,360,15):
-        EulerAngle.Tilts.append(EulerAngle(theta,None,None))
+        EulerAngle.Tilts.append(EulerAngle(theta,0,0))
 
 
     circle_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
