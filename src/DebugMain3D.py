@@ -21,7 +21,7 @@ if __name__ == '__main__':
     #composition = (Candidate.fromTuple(1, 0, 12, 12, 12), Candidate.fromTuple(0, 6, 27, 27, 27))
     #tomogram = generate_tomogram_with_given_candidates(templates, composition, dim)
 
-    criteria = [1,1]
+    criteria = [2,2]
     tomogram = generate_random_tomogram(templates, criteria, 3)
     composition = tomogram.composition
     VisualUtils.slider3d(tomogram.density_map)

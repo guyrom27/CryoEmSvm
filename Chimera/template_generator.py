@@ -292,8 +292,7 @@ def flow(criteria, angle_res, output_path):
 
 def parse_config(template_type, config_path):
     with open(config_path) as f:
-        #return [(template_type, line.split(':')[0], [int(val) for val in line.split(':')[1].split(',')]) for line in f.readlines()]
-        return [(template_type, line.split(':')[0], [int(param) for param in line.split(':')[1].split(',')]) for line in f.readlines()]
+        return [(template_type, line.split('|')[0], [int(param) for param in line.split('|')[1].split(',')]) for line in f.readlines()]
 
 def main(argv):
     # parse arguments
