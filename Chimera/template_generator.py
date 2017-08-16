@@ -146,7 +146,7 @@ def calc_com(matrix):
 
     :param matrix: density map matrix
     """
-    return np.round([np.dot(np.array(range(matrix.shape[i])),np.sum(np.sum(matrix,max((i+1)%3,(i+2)%3)),min((i+1)%3,(i+2)%3))) for i in range(3)] / sum(sum(sum(matrix))))
+    return np.floor([np.dot(np.array(range(matrix.shape[i])),np.sum(np.sum(matrix,max((i+1)%3,(i+2)%3)),min((i+1)%3,(i+2)%3))) for i in range(3)] / sum(sum(sum(matrix))))
 
 def calc_dim(matrix):
     """
@@ -225,13 +225,16 @@ def get_matrix_and_center(matrix, dim):
 
     # expand matrix
     big_matrix = np.zeros(tuple((2*dim*np.ones((1,3)) + matrix.shape)[0]))
-    shape = tuple([slice(dim,dim + matrix.shape[i]) for i in range(3)])
-    big_matrix[shape] += matrix
+    shape1 = tuple([slice(dim,dim + matrix.shape[i]) for i in range(3)])
+    big_matrix[shape1] += matrix
 
     # center and truncate
     com = [int(x) for x in calc_com(big_matrix)]
-    shape = tuple([slice(com[i]-dim//2, com[i]-dim//2+dim) for i in range(3)])
-    truncated_matrix = big_matrix[shape]
+    shape2 = tuple([slice(com[i]-dim//2, com[i]-dim//2+dim) for i in range(3)])
+    truncated_matrix = big_matrix[shape2]
+    #if [int(x) for x in calc_com(truncated_matrix)] != [dim//2]*3:
+    #    print("COM error: calced_COM:",calc_com(truncated_matrix), " in shape: ", truncated_matrix.shape)
+    #    print(com, shape1, shape2, matrix.shape, big_matrix.shape)
     return truncated_matrix
 
 
@@ -322,7 +325,10 @@ def main(argv):
 
     # run
     flow(criteria, args.angle_res[0], args.output_path[0])
+
     print('Done!')
+    sys.stdout.close()
+    sys.stderr.close()
     
 
 if __name__ == '__main__':
