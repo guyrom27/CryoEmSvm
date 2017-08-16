@@ -180,41 +180,37 @@ def generate_tilted_templates_2d():
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
 
-    EulerAngle.init_tilts_from_list([(theta,0,0) for theta in range(0,360,15)])
-
-
+    # create different template density maps
+    # circle
     circle_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_circle(circle_dm[:,:,0], TEMPLATE_DIMENSION//4)
-    circle_templates = []
-    for tilt in enumerate(EulerAngle.Tilts):
-         circle_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(circle_dm,tilt[1]), TEMPLATE_DIMENSIONS_2D), tilt[0], 1))
-
-    square_templates = []
+    fill_with_circle(circle_dm[:, :, 0], TEMPLATE_DIMENSION // 4)
+    # square
     square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION//2)
-    for tilt in enumerate(EulerAngle.Tilts):
-        square_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(square_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D), tilt[0], 2))
-
-    Lshaped_templates = []
+    fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION // 2)
+    # L
     L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_L(L_dm[:,:,0], TEMPLATE_DIMENSION//2, TEMPLATE_DIMENSION//3, 3, 3)
-    for tilt in enumerate(EulerAngle.Tilts):
-        Lshaped_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(L_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D), tilt[0], 1))
-
-    flipped_Lshaped_templates = []
+    fill_with_L(L_dm[:, :, 0], TEMPLATE_DIMENSION // 2, TEMPLATE_DIMENSION // 3, 3, 3)
+    # flipped L
     flipped_L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
     fill_with_L(flipped_L_dm[:, :, 0], TEMPLATE_DIMENSION // 2, TEMPLATE_DIMENSION // 3, 3, 3, True)
-    for tilt in enumerate(EulerAngle.Tilts):
-        flipped_Lshaped_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate(flipped_L_dm, tilt[1]), TEMPLATE_DIMENSIONS_2D), tilt[0], 1))
 
-    return (circle_templates, square_templates, Lshaped_templates, flipped_Lshaped_templates)
+    # create tilts
+    angle_res = 15
+    EulerAngle.init_tilts_from_list([(phi, 0, 0) for phi in range(0, 360, angle_res)])
+
+    # create tilted templates tuple of tuples
+    templates = []
+    for template_id, template_dm in enumerate([circle_dm, square_dm, L_dm, flipped_L_dm]):
+        specific_templates = []
+        for tilt_id , euler_angle in enumerate(EulerAngle.Tilts):
+            specific_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate2d(template_dm, euler_angle.Phi), TEMPLATE_DIMENSIONS_2D), tilt_id, template_id))
+        templates.append(tuple(specific_templates))
+    return tuple(templates)
 
 
 # -------------------------------------------------------------------------------- #
 # ------------------------------------ GENERAL ----------------------------------- #
 # -------------------------------------------------------------------------------- #
-def rotate(dm, eu_angle):
-    return rotate2d(dm, eu_angle.Phi)
 
 
 def generate_tilted_templates():
