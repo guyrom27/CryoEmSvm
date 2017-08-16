@@ -42,7 +42,7 @@ if __name__ == '__main__':
     templates = generate_tilted_templates()
 
     criteria = [0, 2, 2, 1]
-    tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria)
+    tomogram = generate_random_tomogram(templates, criteria)
     show_tomogram(tomogram,None)
     composition = tomogram.composition
     candidates = []

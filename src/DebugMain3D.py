@@ -50,7 +50,7 @@ if __name__ == '__main__':
     #tomogram = generate_tomogram_with_given_candidates(templates, composition, TOMOGRAM_DIMENSIONS_3D)
 
     criteria = [1,1]
-    tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria, 3)
+    tomogram = generate_random_tomogram(templates, criteria, 3)
     composition = tomogram.composition
     show_tomogram(tomogram, criteria)
     VisualUtils.slider3d(tomogram.density_map)

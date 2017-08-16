@@ -6,12 +6,12 @@ from TemplateUtil import put_template
 
 import numpy as np
 import pickle
+import random
 
 
 # Ways to get tomogram
 # + generate_tomogram_with_given_candidates
 # + generate_random_tomogram
-# - generate tomogram from svm output - implement in generate_tomogram_with_given_candidates
 # - load tomogram from file
 #   - with known composition
 #   - with unkown composition
@@ -47,12 +47,12 @@ def randomize_spaced_out_points(space, separation, n_points):
     obj = poisson_disk.pds(space[0], space[1], space[2], separation, n_points)
     return obj.randomize_spaced_points()
 
-def generate_random_candidates(template_side_len, criteria, dim=2, seed=None):
+
+def generate_random_candidates(template_side_len, criteria, dim=2):
     """
     :param template_side_len:  we assume templates are cubes
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
     :param dim 2 for 2D 3 for 3D
-    :param seed seed to use for random generation
     :return: a random list of candidates according to the criteria
     """
     n = sum(criteria)
@@ -77,12 +77,6 @@ def generate_random_candidates(template_side_len, criteria, dim=2, seed=None):
     if dim==2:
         COM_valid_space[2] = 1
 
-    import random
-    if (seed == None):
-        seed = random.randint(0,2**31-1)
-    print('Using random seed: ', seed)
-    random.seed(seed)
-
     points = randomize_spaced_out_points(COM_valid_space, separation, n)
     #correct base (push away from sides of tomogram)
     points = [[x[0] + x[1] for x in zip(p,gap_shape)] for p in points]
@@ -93,17 +87,35 @@ def generate_random_candidates(template_side_len, criteria, dim=2, seed=None):
     return [Candidate(SixPosition(pos_id[0], EulerAngle.rand_tilt_id()), label=pos_id[1]) for pos_id in zip(points, flat_ids)]
 
 
-def generate_random_tomogram(templates, criteria, dim=2, seed=None):
+def generate_random_tomogram(templates, criteria, dim=2):
     """
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
     :param dim 2 for 2D 3 for 3D
-    :param seed use this seed for random initialization
     :return: a random Tomogram according to the criteria
     """
     template_side = templates[0][0].density_map.shape[0]
-    candidates = generate_random_candidates(template_side, criteria, dim, seed)
+    candidates = generate_random_candidates(template_side, criteria, dim)
     return generate_tomogram_with_given_candidates(templates, candidates, TOMOGRAM_DIMENSIONS_3D if dim == 3 else TOMOGRAM_DIMENSIONS_2D )
+
+
+def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim=2, seed=None):
+    """
+    :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
+    :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
+    :param number_of_tomograms: number of tomograms to generate
+    :param dim 2 for 2D 3 for 3D
+    :param seed seed to use for random generation
+    :return:
+    """
+    if (seed == None):
+        seed = random.randint(0, 2 ** 31 - 1)
+    print('Using random seed: ', seed)
+    random.seed(seed)
+
+    for i in range(number_of_tomograms):
+        yield generate_random_tomogram(templates, criteria, dim)
+
 
 
 # -------------------------------------------------- Generators ------------------------------------------------------ #
@@ -191,7 +203,7 @@ def tomogram_loader(paths, save):
 #          argument look up argparse.
 def tomogram_example_generator_random(templates, template_side, criteria, dim, num_tomograms):
     for _ in range(num_tomograms):
-        yield generate_random_tomogram(templates, template_side, criteria, dim)
+        yield generate_random_tomogram(templates, criteria, dim)
 
 
 if __name__ == '__main__':

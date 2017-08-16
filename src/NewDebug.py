@@ -1,7 +1,6 @@
 from Constants import TEMPLATE_DIMENSION, JUNK_ID
 from TemplateGenerator import generate_tilted_templates_2d
-from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates,\
-    tomogram_example_generator_random
+from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates, generate_random_tomogram_set
 from SvmTrain import svm_train
 from SvmEval import svm_eval
 from MetricTester import MetricTester
@@ -9,8 +8,10 @@ from MetricTester import MetricTester
 import VisualUtils
 
 # train
+criteria = [2,2]
+number_of_tomograms = 5
 templates = generate_tilted_templates_2d()
-training_tomograms = [generate_random_tomogram(templates, TEMPLATE_DIMENSION, [2,2]) for i in range(5)]
+training_tomograms = generate_random_tomogram_set(templates, criteria, number_of_tomograms)
 # Using the example generator, we pass the required parameters
 #training_tomograms = tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_tomograms=1)
 svm_and_templates = svm_train(templates, training_tomograms)
@@ -24,7 +25,7 @@ svm_and_templates = svm_train(templates, training_tomograms)
 #    tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_tomograms=1))
 
 # eval
-evaluation_tomograms = [generate_random_tomogram(templates, TEMPLATE_DIMENSION, [2,2])]
+evaluation_tomograms = [generate_random_tomogram(templates, criteria)]
 output_candidates = svm_eval(svm_and_templates, evaluation_tomograms)
 evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0])
 

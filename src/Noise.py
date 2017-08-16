@@ -44,7 +44,7 @@ if __name__ == '__main__':
     templates = generate_tilted_templates()
 
     criteria = [4, 3, 0, 0]
-    tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria)
+    tomogram = generate_random_tomogram(templates, criteria)
     noisy_tomogram = make_noisy_tomogram(tomogram)
 
     compare_reconstruced_tomogram(tomogram, noisy_tomogram, True)
