@@ -1,4 +1,17 @@
-def analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector, tilt_finder, set_labels=False):
+from TemplateMaxCorrelations import TemplateMaxCorrelations
+from CandidateSelector import CandidateSelector
+from FeaturesExtractor import FeaturesExtractor
+from TiltFinder import TiltFinder
+
+def analyze_tomogram(tomogram, templates, labeler, set_labels=False):
+    print('caclualting correlations')
+    max_correlations = TemplateMaxCorrelations(tomogram, templates)
+
+    print('analyzing tomogram')
+    candidate_selector = CandidateSelector(max_correlations)
+    features_extractor = FeaturesExtractor(max_correlations)
+    tilt_finder = TiltFinder(max_correlations)
+
     candidates = candidate_selector.select(tomogram)
     feature_vectors = []
     labels = []
@@ -10,3 +23,5 @@ def analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector, 
         tilt_finder.find_best_tilt(candidate)
 
     return candidates, feature_vectors, labels
+
+

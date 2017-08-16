@@ -30,6 +30,7 @@ def show_densitymap(dm, title, subplot=111):
         ax.imshow(dm)
 
 def show_templates(templates):
+    # TODO: Broken for 4 templates and over (subplot number)
     print("There are " + str(len(templates)) + " templates-")
     fig = plt.figure(1)
     fig.suptitle("Templates")

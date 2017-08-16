@@ -4,7 +4,6 @@ from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_g
 from SvmTrain import svm_train
 from SvmEval import svm_eval
 from MetricTester import MetricTester
-
 import VisualUtils
 
 # train

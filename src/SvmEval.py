@@ -1,8 +1,4 @@
-from TemplateMaxCorrelations import TemplateMaxCorrelations
 from Labeler import SvmLabeler
-from CandidateSelector import CandidateSelector
-from FeaturesExtractor import FeaturesExtractor
-from TiltFinder import TiltFinder
 from AnalyzeTomogram import analyze_tomogram
 
 
@@ -22,16 +18,8 @@ def svm_eval(svm_and_templates, tomograms, return_tomograms=False):
     labeler = SvmLabeler(svm)
 
     for tomogram in tomograms:
-        print('caclualting correlations')
-        max_correlations = TemplateMaxCorrelations(tomogram, templates)
-        candidate_selector = CandidateSelector(max_correlations)
-        features_extractor = FeaturesExtractor(max_correlations)
-        tilt_finder = TiltFinder(max_correlations)
-
         # Analyze the tomogram
-        print('analyzing tomogram')
-        (candidates, feature_vectors, predicted_labels) = analyze_tomogram(tomogram, labeler, features_extractor,
-                                                                           candidate_selector, tilt_finder, set_labels=True)
+        (candidates, feature_vectors, predicted_labels) = analyze_tomogram(tomogram, templates, labeler, set_labels=True)
 
         # Add the candidates to the list of results
         tomogram_candidates.append(candidates)

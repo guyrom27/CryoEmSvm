@@ -1,12 +1,7 @@
 from sklearn.svm import SVC
 import numpy as np
 
-from TemplateMaxCorrelations import TemplateMaxCorrelations
-import CandidateSelector
-import FeaturesExtractor
-import Labeler
-import TiltFinder
-
+from Labeler import PositionLabeler
 from AnalyzeTomogram import analyze_tomogram
 
 
@@ -28,16 +23,9 @@ def svm_train(templates, tomograms, return_tomograms=False):
 
     # Generate the training set
     for tomogram in tomograms:
-        labeler = Labeler.PositionLabeler(tomogram.composition)
-        print('caclualting correlations')
-        max_correlations = TemplateMaxCorrelations(tomogram, templates)
-        candidate_selector = CandidateSelector.CandidateSelector(max_correlations)
-        features_extractor = FeaturesExtractor.FeaturesExtractor(max_correlations)
-        tilt_finder = TiltFinder.TiltFinder(max_correlations)
-
-        print('analyzing tomogram')
+        labeler = PositionLabeler(tomogram.composition)
         (candidates, single_iteration_feature_vectors, single_iteration_labels) = \
-            analyze_tomogram(tomogram, labeler, features_extractor, candidate_selector, tilt_finder)
+            analyze_tomogram(tomogram, templates, labeler)
         feature_vectors.extend(single_iteration_feature_vectors)
         labels.extend(single_iteration_labels)
 
