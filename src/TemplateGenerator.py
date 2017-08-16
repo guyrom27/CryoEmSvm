@@ -62,14 +62,11 @@ def load_templates_3d(templates_path):
     template_metadata = pickle.load(open(templates_path + 'template_ids.p','rb'))
     tilt_metadata = pickle.load(open(templates_path + 'tilt_ids.p','rb'))
 
-    # load and create tilted template for every tilt_id and template_id
-    tilted_templates = tuple([tuple([TiltedTemplate(np.load(templates_path + str(template_id) + '_' + str(tilt_id) + '.npy'), tilt_id, template_id) for tilt_id in range(len(tilt_metadata))]) for template_id in range(len(template_metadata))])
 
-    # assert tilt and template ids match location in tuples
-    for template_id in range(len(tilted_templates)):
-        for tilt_id in range(len(tilted_templates[template_id])):
-            tilted_template = tilted_templates[template_id][tilt_id]
-            assert(tilted_template.template_id == template_id and tilted_template.tilt_id == tilt_id)
+    # load and create tilted template for every tilt_id and template_id
+    #tilted_templates = tuple([tuple([TiltedTemplate(np.load(templates_path + str(template_id) + '_' + str(tilt_id) + '.npy'), tilt_id, template_id) for tilt_id in range(len(tilt_metadata))]) for template_id in range(len(template_metadata))])
+    from TemplatesDataAccessObject import BidimensionalLazyFileDAO
+    tilted_templates = BidimensionalLazyFileDAO(templates_path, len(template_metadata) , len(tilt_metadata))
 
     return tilted_templates, template_metadata, tilt_metadata
 

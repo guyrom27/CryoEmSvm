@@ -118,13 +118,12 @@ def compare_candidate_COM(truth_candidates, reco_candidates, tomogram):
 
 if __name__ == '__main__':
     templates = generate_tilted_templates()
-    templates = (templates[2], templates[3]) #Test only L shaped templates
+    #templates = (templates[2], templates[3]) #Test only L shaped templates
     #show_templates(templates)
 
     #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
     #tomogram = generate_tomogram_with_given_candidates(templates, criteria)
-
-    criteria = [3, 3]
+    criteria = [1, 2, 3, 1]
     truth_tomogram = generate_random_tomogram(templates, templates[0][0].density_map.shape[0], criteria)
     composition = truth_tomogram.composition
     #show_tomogram(tomogram, criteria)
@@ -175,6 +174,10 @@ if __name__ == '__main__':
     print("Reconstructed Candidates:")
     for c in non_junk_candidates:
         print("=====\nPos = " + str(c.six_position) + "\tLabel = " + str(c.label))
+
+    import MetricTester
+    metric = MetricTester.MetricTester(composition,non_junk_candidates)
+    metric.print_metrics()
 
     compare_reconstruced_tomogram(truth_tomogram, svm_tomogram, True) #True = draw the difference map as well
 
