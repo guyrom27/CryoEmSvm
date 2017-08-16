@@ -1,9 +1,10 @@
-from Constants import TEMPLATE_DIMENSION
+from Constants import TEMPLATE_DIMENSION, JUNK_ID
 from TemplateGenerator import generate_tilted_templates_2d
 from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates,\
     tomogram_example_generator_random
 from SvmTrain import svm_train
 from SvmEval import svm_eval
+from MetricTester import MetricTester
 
 import VisualUtils
 
@@ -28,5 +29,9 @@ output_candidates = svm_eval(svm_and_templates, evaluation_tomograms)
 evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0])
 
 # test results
+metrics = MetricTester(evaluation_tomograms[0].composition, [c for c in evaluated_tomogram.composition if c.label != JUNK_ID])
+metrics.print_metrics()
 VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[0], evaluated_tomogram)
 VisualUtils.plt.show()
+
+
