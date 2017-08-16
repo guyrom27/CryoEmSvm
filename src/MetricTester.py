@@ -1,8 +1,6 @@
 import numpy as np
-from scipy.optimize import linear_sum_assignment
 from Constants import DISTANCE_THRESHOLD
 from CommonDataTypes import EulerAngle
-
 
 def find_best_match(candidate, compostion):
     min_dist = DISTANCE_THRESHOLD
@@ -27,14 +25,18 @@ def short_candidate_print(c, message = None):
 #maybe add the option to write some of the data to a global log file for statistics?
 #That way we can keep statistics over multiple tomograms
 
+#Maybe add a mode where we only print the outliers? reletive to some tolerance levels?
+
 class MetricTester:
     """
-    This will compare the ground truth compostion to the reconstucted compostion
+    This will compare the ground truth composition to the reconstructed composition
     and will calculate ....
     """
     def __init__(self, true_composition, reco_composition, gt_tomogram=None, tomogram= None):
         self.gt_comp = true_composition             # The composition of the 'true' tomogram
-        self.reco_comp = reco_composition           # The compostion of the reconstructed tomogram
+        self.reco_comp = reco_composition           # The composition of the reconstructed tomogram
+        self.gt_tomogram = gt_tomogram
+        self.tomogram = tomogram
         self.matches = {}
         self.match_gt_to_reco()
         self.statistics = {}
@@ -52,7 +54,7 @@ class MetricTester:
         self.match_success_rates()
         self.COM_position()
         self.Tilt_comparison()
-
+        self.correlation_comparison()
         #add tomograms if needed
 
 
@@ -112,11 +114,11 @@ class MetricTester:
                 n += 1                          #Rejected a true candidates does this count as a label error?
         n_cases *= 100.0/n
         message = ""
-        message += "match rate = " + str(n_cases[0]) + "%"
+        message += "match rate = {0:.2f}%".format(n_cases[0])
         if print_all:
-            message += "%\n\t" + "mislabel rate = " + str(n_cases[1]) + "%"
-            message += "%\n\t" + "false positive rate = " + str(n_cases[2]) + "%"
-            message += "%\n\t" + "false negative rate = " + str(n_cases[3]) + "%"
+            message += "," + "mislabel rate = {0:.2f}%".format(n_cases[1])
+            message += ", " + "false positive rate = {0:.2f}%".format(n_cases[2])
+            message += ", " + "false negative rate = {0:.2f}%".format(n_cases[3])
         self.global_statistics.append(message)
         return
 
@@ -127,12 +129,25 @@ class MetricTester:
             match = self.matches[c]
             if match is not None:
                 dist = calculate_L2_dist(c, match)
-                self.statistics[c].append("COM offset distance = " + str(dist))
+                self.statistics[c].append("COM offset distance = {0:.3f}".format(dist))
                 avg_dist += dist
                 n += 1
         if n > 0:
             avg_dist /= n
-            self.global_statistics.append("Average COM offset  = " + str(avg_dist))
+            self.global_statistics.append("Average COM offset  = {0:.3f}".format(avg_dist))
+
+    def correlation_comparison(self):
+        from math import sqrt
+        if self.gt_tomogram is None or self.tomogram is None:
+            return
+        dm1 = self.gt_tomogram.density_map.copy()
+        dm2 = self.tomogram.density_map.copy()
+        xcor = np.sum(np.multiply(dm1,dm2))
+        xcor /= sqrt(np.sum(np.square(dm1)))
+        xcor /= sqrt(np.sum(np.square(dm2)))
+        self.global_statistics.append("Normalized xcor = {0:.3f}".format(xcor))
+
+
 
 
     def Tilt_comparison(self):
@@ -153,7 +168,7 @@ class MetricTester:
                     n_correct += 1
         if n > 0:
             n = 100 * n_correct/n
-            self.global_statistics.append("Tilt Match Rate = " + str(n) + "%")
+            self.global_statistics.append("Tilt Match Rate = {0:.2f}%".format(n))
 
     def print_metrics(self):
         for c in self.reco_comp:
@@ -165,7 +180,17 @@ class MetricTester:
         for message in self.global_statistics:
             print("\t" + message)
 
-
+    def print_to_file(self, path="Logger.txt"): #what should the default path be?
+        file = open(path,'w')
+        for c in self.reco_comp:
+            file.write("=================\n")
+            file.write("Metrics for Pos = {} Label = {}\n".format(str(c.get_six_position()),str(c.label)))
+            for message in self.statistics[c]:
+                file.write("\t" + message +"\n")
+        file.write("======Global Statistics======\n")
+        for message in self.global_statistics:
+            file.write("\t" + message + "\n")
+        file.close()
 
 '''
     def match_success_rate(self):
