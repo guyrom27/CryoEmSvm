@@ -60,7 +60,7 @@ if __name__ == '__main__':
     (svm_candidates, feature_vectors, labels) = \
         analyze_tomogram(tomogram, svm_labeler, features_extractor, selector, tilt_finder, True)
 
-    svm_tomogram = generate_tomogram_with_given_candidates(templates, svm_candidates)
+    svm_tomogram = generate_tomogram_with_given_candidates(templates, svm_candidates, 2)
 
     print("Ground Truth Candidates:")
     for c in truth_tomogram.composition:

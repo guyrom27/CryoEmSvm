@@ -23,6 +23,8 @@ def put_template(tomogram_dm, template_dm, position):
     """
     corner = [position[i] - template_dm.shape[i] // 2 for i in range(len(tomogram_dm.shape))]
     shape = tuple([slice(corner[i],corner[i] + template_dm.shape[i]) for i in range(len(corner))])
+    if ([shape[i].start < 0 or shape[i].stop >= template_dm.shape[i] for i in range(len(tomogram_dm.shape))].count(False) > 0):
+        assert(False)
     tomogram_dm[shape] += template_dm
 
 

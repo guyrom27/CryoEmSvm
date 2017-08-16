@@ -41,8 +41,7 @@ def show_candidates(selector, candidates, tomogram):
 
 if __name__ == '__main__':
     #templates = generate_tilted_templates()
-    templates, template_metadata, tilt_metadata = load_templates_3d(r'..\Chimera\Templates' + '\\')
-    EulerAngle.Tilts = tilt_metadata
+    templates = load_templates_3d(r'..\Chimera\Templates' + '\\')
     show_templates(templates)
 
     #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_3D]
@@ -95,7 +94,7 @@ if __name__ == '__main__':
 
     print('generating output tomogram')
     non_junk_candidates = [c for c in svm_candidates if c.label != JUNK_ID]
-    svm_tomogram = generate_tomogram_with_given_candidates(templates, non_junk_candidates, TOMOGRAM_DIMENSIONS_3D)
+    svm_tomogram = generate_tomogram_with_given_candidates(templates, non_junk_candidates, 3)
 
     print("Ground Truth Candidates:")
     for c in composition:
