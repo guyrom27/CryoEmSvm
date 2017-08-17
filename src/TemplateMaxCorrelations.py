@@ -4,6 +4,7 @@ import numpy as np
 from TemplateUtil import shape_to_slices, get_normalize_template_dm
 from Constants import NEIGHBORHOOD_HALF_SIDE_2D, NEIGHBORHOOD_HALF_SIDE_3D
 from CommonDataTypes import SixPosition
+#import CrossCorrelation
 
 class TemplateMaxCorrelations:
     """
@@ -55,6 +56,8 @@ class TemplateMaxCorrelations:
             return SixPosition(best_3pos, corresponding_tilt)
 
     def create_fit_score(self, raw_template, tomogram):
+        #return CrossCorrelation.norm_xcorr(raw_template.density_map, tomogram.density_map, method='fft')
+
         #return signal.fftconvolve(tomogram.density_map, raw_template.density_map, mode='same')
         normalized_dm = get_normalize_template_dm(raw_template)
         return signal.correlate(tomogram.density_map, normalized_dm, mode='same', method='fft')
