@@ -4,14 +4,14 @@ from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_g
 from SvmTrain import svm_train
 from SvmEval import svm_eval
 from MetricTester import MetricTester
+from ResultsMetrics import ResultsMetrics
 import VisualUtils
 
 # train
-criteria = [2,3]
+criteria = [2,3,5,2]
 number_of_tomograms = 1
-dim = 3
-seed = 205313050 # debug metrics
-seed = None
+dim = 2
+seed = 1909615246
 
 # create templates
 if dim == 2:
@@ -36,8 +36,11 @@ evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_c
 print("Results")
 metrics = MetricTester(evaluation_tomograms[0].composition, [c for c in evaluated_tomogram.composition if c.label != JUNK_ID])
 metrics.print_metrics()
+result_metrics = ResultsMetrics(evaluation_tomograms[0].composition, output_candidates[0])
+result_metrics.print_full_stats()
 if dim == 2:
     VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[0], evaluated_tomogram)
     VisualUtils.plt.show()
 
+print("Done")
 
