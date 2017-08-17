@@ -59,18 +59,25 @@ class ResultsMetrics:
     def gt_position_dist(self, candidate):
         return self.position_dist(candidate,candidate.ground_truth_match)
 
+
     def gt_tilt_dist(self, candidate):
         return self.tilt_dist(candidate, candidate.ground_truth_match)
 
+
     def tilts_match(self, c1, c2):
-        #return c1.six_position.tilt_id == c2.six_position.tilt_id
         (rel_angle_3d, rel_psi) = self.tilt_dist(c1,c2)
         return (abs(rel_angle_3d) < TILT_THRESHOLD and abs(rel_psi) < TILT_THRESHOLD)
 
+
     def position_dist(self, c1, c2):
+        if c2 is None:
+            return 0
         return (np.sum((np.array(c1.get_position()) - np.array(c2.get_position()))**2))**0.5
 
+
     def tilt_dist(self, c1, c2):
+        if c2 is None:
+            return (0,0)
         a1 = EulerAngle.Tilts[c1.get_tilt_id()]
         a2 = EulerAngle.Tilts[c2.get_tilt_id()]
         T1 = math.radians(a1.Theta)
