@@ -15,10 +15,14 @@ class TemplateMaxCorrelations:
             max_correlation = np.zeros(tomogram.density_map.shape)
             max_correlation_tilt_id = np.zeros(max_correlation.shape, dtype = int)
             for tilted_template in template_group:
-                correlation = signal.fftconvolve(tomogram.density_map, tilted_template.density_map, mode='same')
+                correlation = self.create_fit_score(tilted_template, tomogram)
                 max_correlation = np.maximum(correlation, max_correlation)
                 max_correlation_tilt_id[max_correlation == correlation] = tilted_template.tilt_id
             self.correlation_values.append(max_correlation)
             self.best_tilt_ids.append(max_correlation_tilt_id)
+
+    def create_fit_score(self, raw_template, tomogram):
+        return signal.fftconvolve(tomogram.density_map, raw_template.density_map, mode='same')
+
 
 
