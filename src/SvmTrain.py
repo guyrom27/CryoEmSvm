@@ -1,5 +1,5 @@
 from Labeler import PositionLabeler
-from AnalyzeTomogram import analyze_tomogram
+from TomogramAnalyzer import TomogramAnalyzer
 
 from sklearn.svm import SVC
 import numpy as np
@@ -21,8 +21,8 @@ def svm_train(templates, tomograms):
     # Generate the training set
     for tomogram in tomograms:
         labeler = PositionLabeler(tomogram.composition)
-        (candidates, single_iteration_feature_vectors, single_iteration_labels) = \
-            analyze_tomogram(tomogram, templates, labeler)
+        analyzer = TomogramAnalyzer(tomogram, templates, labeler)
+        (candidates, single_iteration_feature_vectors, single_iteration_labels) = analyzer.analyze()
         feature_vectors.extend(single_iteration_feature_vectors)
         labels.extend(single_iteration_labels)
 

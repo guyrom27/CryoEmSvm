@@ -5,7 +5,7 @@ from TemplateMaxCorrelations import TemplateMaxCorrelations
 from CandidateSelector import CandidateSelector
 from FeaturesExtractor import FeaturesExtractor
 from TiltFinder import TiltFinder
-from AnalyzeTomogram import analyze_tomogram
+from TomogramAnalyzer import TomogramAnalyzer
 from MetricTester import MetricTester
 import VisualUtils
 
@@ -59,8 +59,8 @@ if __name__ == '__main__':
     tilt_finder = TiltFinder(max_correlations)
 
     print('svm labeling')
-    (svm_candidates, feature_vectors, labels) = \
-        analyze_tomogram(tomogram, templates, svm_labeler, True)
+    analyzer = TomogramAnalyzer(tomogram, templates, svm_labeler)
+    (svm_candidates, feature_vectors, labels) = analyzer.analyze(True)
 
     print('generating output tomogram')
     svm_tomogram = generate_tomogram_with_given_candidates(templates, svm_candidates, dim)

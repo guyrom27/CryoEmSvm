@@ -7,10 +7,11 @@ from MetricTester import MetricTester
 import VisualUtils
 
 # train
-criteria = [1,2]
+criteria = [2,3]
 number_of_tomograms = 1
 dim = 3
-seed = 205313050
+seed = 205313050 # debug metrics
+seed = None
 
 # create templates
 if dim == 2:

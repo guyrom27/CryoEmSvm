@@ -1,5 +1,5 @@
 from Labeler import SvmLabeler
-from AnalyzeTomogram import analyze_tomogram
+from TomogramAnalyzer import TomogramAnalyzer
 
 
 def svm_eval(svm_and_templates, tomograms):
@@ -16,7 +16,8 @@ def svm_eval(svm_and_templates, tomograms):
 
     for tomogram in tomograms:
         # Analyze the tomogram
-        (candidates, feature_vectors, predicted_labels) = analyze_tomogram(tomogram, templates, labeler, set_labels=True)
+        analyzer = TomogramAnalyzer(tomogram, templates, labeler)
+        (candidates, feature_vectors, predicted_labels) = analyzer.analyze(set_labels=True)
 
         # Add the candidates to the list of results
         tomogram_candidates.append(candidates)
