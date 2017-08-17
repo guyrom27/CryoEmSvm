@@ -24,18 +24,21 @@ else:
 # train
 print("Training")
 training_tomograms = generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed)
-svm_and_templates = svm_train(templates, training_tomograms)
+training_analyzers = []
+svm_and_templates = svm_train(templates, training_tomograms, training_analyzers)
 
 # eval
 print("Evaluating")
 evaluation_tomograms = [generate_random_tomogram(templates, criteria, dim)]
-output_candidates = svm_eval(svm_and_templates, evaluation_tomograms)
+evaluation_analyzers = []
+output_candidates = svm_eval(svm_and_templates, evaluation_tomograms, evaluation_analyzers)
 evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
 
 # show results
-print("Results")
+print('Results')
 metrics = MetricTester(evaluation_tomograms[0].composition, [c for c in evaluated_tomogram.composition if c.label != JUNK_ID])
 metrics.print_metrics()
+print('')
 result_metrics = ResultsMetrics(evaluation_tomograms[0].composition, output_candidates[0])
 result_metrics.print_full_stats()
 if dim == 2:
