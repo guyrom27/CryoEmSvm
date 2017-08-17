@@ -28,6 +28,6 @@ class TomogramAnalyzer:
             feature_vectors.append(features_extractor.extract_features(candidate))
             # this sets each candidate's label
             labels.append(self.labeler.label(candidate))
-            tilt_finder.find_best_tilt(candidate)
+            candidate.six_position = self.max_correlations.suggest_best_3pos_and_tilt_in_neighborhood(candidate)
 
         return candidates, feature_vectors, labels
