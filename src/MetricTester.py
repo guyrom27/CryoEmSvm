@@ -107,7 +107,6 @@ class MetricTester:
 
 
     def init_candidate_lists(self):
-        n = 0.0
         for c in self.reco_comp:
             match = self.matches[c]
             if match is not None:
@@ -165,7 +164,7 @@ class MetricTester:
             message += "\n\tsvm false negatives = {}".format(n_svm_fn)
         if n_cd_fn != 0 or print_all:
             message += "\n\tundetected candidates = {}".format(n_cd_fn)
-        self.global_statistics.append(message)
+        self.global_statistics.append(("stat", (n_label_match, n_mislabled, n_svm_fn, n_cd_fn), message))
 
         #wrong_lable_rate = len(self.wrong_label)*100.0/(n_mislabled+n_label_match)
 
@@ -205,12 +204,13 @@ class MetricTester:
             match = self.matches[c]
             if match is not None:
                 dist = calculate_L2_dist(c, match)
-                self.statistics[c].append("COM offset distance = {0:.3f}".format(dist))
+                self.statistics[c].append(("COM_dist", dist, "COM offset distance = {0:.3f}".format(dist)))
                 avg_dist += dist
                 n += 1
         if n > 0:
             avg_dist /= n
-            self.global_statistics.append("Average COM offset  = {0:.3f}".format(avg_dist))
+            if avg_dist != 0:
+                self.global_statistics.append(("COM_dist", avg_dist, "Average COM offset  = {0:.3f}".format(avg_dist)))
 
     def correlation_comparison(self):
         from math import sqrt
@@ -221,7 +221,7 @@ class MetricTester:
         xcor = np.sum(np.multiply(dm1,dm2))
         xcor /= sqrt(np.sum(np.square(dm1)))
         xcor /= sqrt(np.sum(np.square(dm2)))
-        self.global_statistics.append("Normalized xcor = {0:.3f}".format(xcor))
+        self.global_statistics.append(("xcor",xcor , "Normalized xcor = {0:.3f}".format(xcor)))
 
 
 
@@ -239,22 +239,42 @@ class MetricTester:
                 message += ", True Tilt = " + str(a2)
                 message += ", Difference = " + str(a3)
                 n += 1
-                self.statistics[c].append(message)
                 if c.get_tilt_id() == match.get_tilt_id():
                     n_correct += 1
+                self.statistics[c].append(("Tilt", (a1, a2), message))
         if n > 0:
             n = 100 * n_correct/n
-            self.global_statistics.append("Tilt Match Rate = {0:.2f}%".format(n))
+            self.global_statistics.append(("Tilt", n, "Tilt Match Rate = {0:.2f}%".format(n)))
+
+
+    def get_tilt_candidate_list(self, get_tolerated=False, tolerance_function=None):
+        accepted_candidates = []
+        rejected_candidates = []
+        if tolerance_function is None:
+            tolerance_function = lambda x: x[0] == x[1]
+        for c in self.true_label:
+            for metric in self.statistics[c]:
+                if metric[0] == "Tilt":
+                    if tolerance_function(metric[1]):
+                        accepted_candidates.append(c)
+                    else:
+                        rejected_candidates.append(c)
+
+        if get_tolerated:
+            return accepted_candidates
+        return rejected_candidates
+
+
 
     def print_metrics(self):
         for c in self.reco_comp:
             print("=================")
             short_candidate_print(c, "Metrics for candidate ")
-            for message in self.statistics[c]:
-                print("\t" + message)
+            for metric in self.statistics[c]:
+                print("\t" + metric[2])
         print("======Global Statistics======")
-        for message in self.global_statistics:
-            print("\t" + message)
+        for metric in self.global_statistics:
+            print("\t" + metric[2])
 
     def print_to_file(self, path="Logger.txt"): #what should the default path be?
         file = open(path,'w')
