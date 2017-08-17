@@ -90,6 +90,9 @@ class Candidate:
     def get_position(self):
         return self.six_position.COM_position
 
+    def get_euler_angle(self):
+        return EulerAngle.Tilts[self.six_position.tilt_id]
+
 
 class TiltedTemplate:
     def __init__(self, density_map, tilt_id, template_id):

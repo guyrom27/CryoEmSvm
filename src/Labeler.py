@@ -14,16 +14,21 @@ class PositionLabeler:
         #elements of composition who were found during labeling
         self.associated_composition = []
 
-    def label(self, candidate):
-        candidate.set_label(JUNK_ID)
-        candidate.set_ground_truth(None)
+    def label(self, candidate, set_label = True):
+        candidate_label = JUNK_ID
+        ground_truth_candidate = None
 
         for real_candidate in self.composition:
             dist_squared = np.linalg.norm(np.array(candidate.six_position.COM_position) - np.array(real_candidate.six_position.COM_position))
             if dist_squared <= DISTANCE_THRESHOLD**2:
-                candidate.set_label(real_candidate.label)
-                candidate.set_ground_truth(real_candidate)
-        return candidate.label
+                candidate_label = real_candidate.label
+                ground_truth_candidate = real_candidate
+
+        if set_label:
+            candidate.set_label(candidate_label)
+        candidate.set_ground_truth(ground_truth_candidate)
+
+        return candidate_label
 
 
 class SvmLabeler(Labeler):
