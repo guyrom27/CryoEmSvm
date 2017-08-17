@@ -6,8 +6,8 @@ import PeakDetection
 
 # now they are arbitrary values
 KERNEL_GAUSSIAN = 'GAUSSIAN'
-CORRELATION_THRESHOLD = 50
-GAUSSIAN_SIZE = 31
+CORRELATION_THRESHOLD = 30
+GAUSSIAN_SIZE = 10
 GAUSSIAN_STDEV = 3
 
 
@@ -71,7 +71,6 @@ class CandidateSelector:
         :param tomogram: The tomogram to search in
         :return: a list of candidates
         """
-
         self.max_correlation_per_3loc = self.max_correlations.correlation_values[0]
         for correlation_values in self.max_correlations.correlation_values:
             self.max_correlation_per_3loc = np.maximum(self.max_correlation_per_3loc, correlation_values)
