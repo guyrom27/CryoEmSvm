@@ -54,7 +54,7 @@ if __name__ == '__main__':
     svm_labeler = SvmLabeler(svm)
 
     analyzer = TomogramAnalyzer(tomogram, templates, svm_labeler)
-    (svm_candidates, feature_vectors, labels) = analyzer.analyze(True)
+    (svm_candidates, feature_vectors, labels) = analyzer.analyze()
 
     svm_tomogram = generate_tomogram_with_given_candidates(templates, svm_candidates, dim)
 

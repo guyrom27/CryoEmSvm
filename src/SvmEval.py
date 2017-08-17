@@ -17,7 +17,7 @@ def svm_eval(svm_and_templates, tomograms):
     for tomogram in tomograms:
         # Analyze the tomogram
         analyzer = TomogramAnalyzer(tomogram, templates, labeler)
-        (candidates, feature_vectors, predicted_labels) = analyzer.analyze(set_labels=True)
+        (candidates, feature_vectors, predicted_labels) = analyzer.analyze()
 
         # Add the candidates to the list of results
         tomogram_candidates.append(candidates)

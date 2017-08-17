@@ -10,7 +10,7 @@ class TomogramAnalyzer:
         self.labeler = labeler
         self.max_correlations = None
 
-    def analyze(self, set_labels=False):
+    def analyze(self):
         print('\tcaclualting correlations')
         self.max_correlations = TemplateMaxCorrelations(self.tomogram, self.templates)
 
@@ -27,7 +27,7 @@ class TomogramAnalyzer:
         for candidate in candidates:
             feature_vectors.append(features_extractor.extract_features(candidate))
             # this sets each candidate's label
-            labels.append(self.labeler.label(candidate, set_label=set_labels))
+            labels.append(self.labeler.label(candidate))
             tilt_finder.find_best_tilt(candidate)
 
         return candidates, feature_vectors, labels
