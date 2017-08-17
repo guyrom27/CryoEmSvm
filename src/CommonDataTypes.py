@@ -49,8 +49,6 @@ class SixPosition:
         return str(self.COM_position) + " " + str(self.tilt_id)
 
 
-
-
 class Candidate:
     """
     This is a way to associate metadata to a posistion:
@@ -62,6 +60,7 @@ class Candidate:
         self.label = label                          # int
         self.suggested_label = suggested_label      # int
         self.features = None                        # list
+        self.ground_truth_match = None              # candidate
 
     @classmethod
     def fromTuple(cls, label, tilt_id, x, y, z = 0):
@@ -82,12 +81,14 @@ class Candidate:
     def set_label(self, label):
         self.label = label
 
+    def set_ground_truth(self, ground_truth_candidate):
+        self.ground_truth_match = ground_truth_candidate
+
     def get_tilt_id(self):
         return self.six_position.tilt_id
 
     def get_position(self):
         return self.six_position.COM_position
-
 
 
 class TiltedTemplate:
@@ -99,9 +100,6 @@ class TiltedTemplate:
     @classmethod
     def fromFile(cls, path, tilt_id, template_id):
         return cls(np.load(path), tilt_id, template_id)
-
-
-
 
 
 class Tomogram:
