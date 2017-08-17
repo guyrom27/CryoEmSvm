@@ -5,11 +5,12 @@ from sklearn.svm import SVC
 import numpy as np
 
 
-def svm_train(templates, tomograms):
+def svm_train(templates, tomograms, test_list = None):
     """
     Create and return a new SVM trained on the templates and tomograms supplied
     :param templates:   Source of the templates - Iterator with random access
     :param tomograms:   Iterator of training set tomograms
+    :param test_list:           if not None, fills with analyzer objects for debugging
     :return A tuple of the resulting SVM and the templates used to train it
     """
 
@@ -21,10 +22,15 @@ def svm_train(templates, tomograms):
     # Generate the training set
     for tomogram in tomograms:
         labeler = PositionLabeler(tomogram.composition)
+
         analyzer = TomogramAnalyzer(tomogram, templates, labeler)
         (candidates, single_iteration_feature_vectors, single_iteration_labels) = analyzer.analyze()
         feature_vectors.extend(single_iteration_feature_vectors)
         labels.extend(single_iteration_labels)
+
+        # save analyzer object for debugging
+        if test_list is not None:
+            test_list.append(analyzer)
 
     # Create new svm
     svm = SVC()
