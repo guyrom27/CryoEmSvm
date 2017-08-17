@@ -1,7 +1,7 @@
 from scipy import signal
 import numpy as np
 
-from TemplateUtil import shape_to_slices
+from TemplateUtil import shape_to_slices, get_normalize_template_dm
 from Constants import NEIGHBORHOOD_HALF_SIDE_2D, NEIGHBORHOOD_HALF_SIDE_3D
 from CommonDataTypes import SixPosition
 
@@ -56,7 +56,8 @@ class TemplateMaxCorrelations:
 
     def create_fit_score(self, raw_template, tomogram):
         #return signal.fftconvolve(tomogram.density_map, raw_template.density_map, mode='same')
-         return signal.correlate(tomogram.density_map, raw_template.density_map, mode='same', method='fft')
+        normalized_dm = get_normalize_template_dm(raw_template)
+        return signal.correlate(tomogram.density_map, normalized_dm, mode='same', method='fft')
 
 
 

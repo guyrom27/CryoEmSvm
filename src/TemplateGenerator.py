@@ -216,22 +216,6 @@ def generate_tilted_templates(): #TODO: remove
     """
     return generate_tilted_templates_2d()
 
-
-def normalize(self, template):
-    from math import sqrt
-    for tilted_template in template:
-        factor = sqrt(np.sum(np.square(tilted_template.density_map))) #calculate the L2 norm of the template
-        if factor != 0:
-            tilted_template.density_map /= factor
-        else:
-            print("Error normalizing template: L2 norm is zero")
-    return template
-
-
-def normalize_all(self, templates):
-    return [normalize(template) for template in templates]
-
-
 # -------------------------------------------------- Generators ------------------------------------------------------ #
 # Enum containing all the supported generators
 class TemplateGenerator(StringComperableEnum):
