@@ -12,12 +12,12 @@ def shape_to_slices(shape, corner = None):
 
 #I think we should just call this function after generating the tomogram. Should this just be a module?
 #I think we should also consider subtrackting the average first. That would make all the templates unit vectors
-def normalize_template(template):
+def get_normalize_template_dm(template):
     factor = sqrt(np.sum(np.square(template.density_map)))
     if factor != 0:
-        template.density_map /= factor
+        return template.density_map / factor
     else:
-        print("Error normalizing template: L2 norm is zero")
+        raise Exception("Error normalizing template: L2 norm is zero")
 
 
 def put_template(tomogram_dm, template_dm, position):
@@ -79,6 +79,6 @@ if __name__ == '__main__':
     t = templates[1][2]
     norm = sqrt(np.sum(np.square(t.density_map)))
     print("norm before normalizing: " + str(norm))
-    normalize_template(t)
+    get_normalize_template_dm(t)
     norm = sqrt(np.sum(np.square(t.density_map)))
     print("norm after normalizing: " + str(norm))
