@@ -30,7 +30,7 @@ if __name__ == '__main__':
     max_correlations = TemplateMaxCorrelations(tomogram, templates)
 
     print('selecting')
-    selector = CandidateSelector(max_correlations)
+    selector = CandidateSelector(max_correlations, templates[0][0].density_map.shape)
     candidates = selector.select(tomogram)
     #show_candidates(selector, candidates, tomogram)
 

@@ -41,10 +41,12 @@ class CandidateSelector:
     apply a blurring transformation to the max_correlation image (to unite close peaks), and then search for peaks
     """
 
-    def __init__(self, max_correlations, dim=2):
+    def __init__(self, max_correlations, template_shape, dim=2):
         self.max_correlations = max_correlations
         self.dim = dim
         self.kernel = create_kernel(KERNEL_GAUSSIAN, dim=dim)
+
+        self.template_shape = template_shape
 
         # these are for debug
         self.max_correlation_per_3loc = None
@@ -65,6 +67,19 @@ class CandidateSelector:
         res = np.transpose(np.nonzero(PeakDetection.detect_peaks(self.blurred_correlation_array, 3, 3)))
         return [tuple(x) for x in res if self.blurred_correlation_array[tuple(x)] > CORRELATION_THRESHOLD]
 
+    def filter_boundary_positions(self, positions):
+        """
+        remove positions that are too close to the sides- causes problems further down
+        :param positions: a list of 3tuples
+        :return: the filtered list
+        """
+        side = np.array([x//2 + 3 for x in self.template_shape])
+        if self.template_shape[2] == 1:
+            side[2] = 0
+        tom_side = self.max_correlations.correlation_values[0].shape[0]
+        filt = lambda pos: (pos-side >= 0).all() and (pos+side < tom_side).all()
+        return  [pos for pos in positions if filt(np.array(pos))]
+
     def select(self, tomogram):
         """
         Find candidates for the template positions using max correlation.
@@ -75,7 +90,7 @@ class CandidateSelector:
         for correlation_values in self.max_correlations.correlation_values:
             self.max_correlation_per_3loc = np.maximum(self.max_correlation_per_3loc, correlation_values)
         self.positions = self.find_local_maxima(self.max_correlation_per_3loc)
-        return [Candidate(SixPosition(position, None), None) for position in self.positions]
+        return [Candidate(SixPosition(position, None), None) for position in self.filter_boundary_positions(self.positions)]
 
 
 if __name__ == '__main__':

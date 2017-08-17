@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     # prepare for training
     max_correlations = TemplateMaxCorrelations(tomogram, templates)
-    selector = CandidateSelector(max_correlations)
+    selector = CandidateSelector(max_correlations, templates[0][0].density_map.shape)
     features_extractor = FeaturesExtractor(max_correlations)
     tilt_finder = TiltFinder(max_correlations)
     labeler = PositionLabeler(tomogram.composition)

@@ -14,7 +14,7 @@ class TomogramAnalyzer:
         print('\tcaclualting correlations')
         self.max_correlations = TemplateMaxCorrelations(self.tomogram, self.templates)
 
-        candidate_selector = CandidateSelector(self.max_correlations)
+        candidate_selector = CandidateSelector(self.max_correlations, self.templates[0][0].density_map.shape)
         features_extractor = FeaturesExtractor(self.max_correlations)
         tilt_finder = TiltFinder(self.max_correlations)
 
