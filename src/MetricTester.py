@@ -107,7 +107,6 @@ class MetricTester:
 
 
     def init_candidate_lists(self):
-        n_cases = np.zeros((4,))
         n = 0.0
         for c in self.reco_comp:
             match = self.matches[c]
@@ -150,7 +149,27 @@ class MetricTester:
     # rates, we also need to consider what constitues a false case
     # (i.e. what do we need to divide by?)
     # Also consider what to do if we decide to include Junk Id
-    def match_success_rates(self, print_all = True):
+    def match_success_rates(self, print_all=True):
+        n_label_match = len(self.true_label)
+        n_mislabled = len(self.wrong_label)     #how many candidates were detected, but mislabeled
+        n_svm_fn = len(self.false_junk)         #svm false negatives
+        n_cd_fn = len(self.not_detected)        #candidate detector false negatives
+        n_total = n_label_match + n_mislabled + n_svm_fn + n_cd_fn
+
+        svm_success_rate = n_label_match*100.0/n_total
+        message = ''
+        message += "svm sucesss rate = {0:.2f}%".format(svm_success_rate)
+        if n_mislabled != 0 or print_all:
+            message += "\n\tnumber of mislabeled candidates = {}".format(n_mislabled)
+        if n_svm_fn != 0 or print_all:
+            message += "\n\tsvm false negatives = {}".format(n_svm_fn)
+        if n_cd_fn != 0 or print_all:
+            message += "\n\tundetected candidates = {}".format(n_cd_fn)
+        self.global_statistics.append(message)
+
+        #wrong_lable_rate = len(self.wrong_label)*100.0/(n_mislabled+n_label_match)
+
+        '''
         n_cases = np.zeros((4,))
         n = 0.0
         for c in self.reco_comp:
@@ -165,9 +184,10 @@ class MetricTester:
                 n_cases[2] += 1                 #False positive: detected a candidate which does not match the ground truth
         for c in self.gt_comp:
             if self.matches[c] is None:
-                n_cases[3] += 1                 #False negetive: ground truth candidate was not detected
+                n_cases[3] += 1                 #False negative: ground truth candidate was not detected
                 n += 1                          #Rejected a true candidates does this count as a label error?
         n_cases *= 100.0/n
+
         message = ""
         message += "match rate = {0:.2f}%".format(n_cases[0])
         if print_all:
@@ -175,6 +195,7 @@ class MetricTester:
             message += ", " + "false positive rate = {0:.2f}%".format(n_cases[2])
             message += ", " + "false negative rate = {0:.2f}%".format(n_cases[3])
         self.global_statistics.append(message)
+        '''
         return
 
     def COM_position(self):
