@@ -1,5 +1,5 @@
 import numpy as np
-from Constants import DISTANCE_THRESHOLD
+from Constants import DISTANCE_THRESHOLD, JUNK_ID
 from CommonDataTypes import EulerAngle
 
 def find_best_match(candidate, compostion):
@@ -21,6 +21,14 @@ def short_candidate_print(c, message = None):
         string = message + string
     print(string)
 
+
+'''
+eval,global/local, eval_error, name
+'''
+
+
+
+
 #todo: add option to save data to a log
 #maybe add the option to write some of the data to a global log file for statistics?
 #That way we can keep statistics over multiple tomograms
@@ -34,11 +42,16 @@ class MetricTester:
     """
     def __init__(self, true_composition, reco_composition, gt_tomogram=None, tomogram= None):
         self.gt_comp = true_composition             # The composition of the 'true' tomogram
-        self.reco_comp = reco_composition           # The composition of the reconstructed tomogram
-        self.gt_tomogram = gt_tomogram
-        self.tomogram = tomogram
-        self.matches = {}
-        self.match_gt_to_reco()
+        self.reco_comp = []                         # The composition of the reconstructed tomogram
+        self.junk_candidates = []                   #
+
+        self.true_label = []
+        self.wrong_label = []
+        self.false_junk = []
+        self.success_junk = []
+        self.false_existence = []                   #no gt
+        self.not_detected = []                      #gt but no detection in junk or id
+
         self.statistics = {}
         #candidate -> list of (value, string)
         #each (value,string) represents a metric
@@ -49,6 +62,13 @@ class MetricTester:
         # e.g. average center of mass distance, tilt success rate,
         # number of correct matches ect...
 
+        self.gt_tomogram = gt_tomogram
+        self.tomogram = tomogram
+        self.matches = {}
+        self.match_gt_to_reco(reco_composition)
+        self.init_candidate_lists()
+
+
         for c in reco_composition:
             self.statistics[c] = []
         self.match_success_rates()
@@ -58,13 +78,19 @@ class MetricTester:
         #add tomograms if needed
 
 
-    def match_gt_to_reco(self):
+    def match_gt_to_reco(self, reco_candidates):
         #if ambigious matchings are ever a problem, than
         #we can use scipy.optimize_linear_sum_assignment which
-        #solves minimal matching in bipartite graph (n^3 time instead of n^2)
+        #solves minimal matching in bipartite graph (n^3 time instead of n^
+        for c in reco_candidates:
+            if c.label == JUNK_ID:
+                self.junk_candidates.append(c)
+            else:
+                self.reco_comp.append(c)
 
-        for c in self.reco_comp:
+        for c in reco_candidates:
             self.matches[c] = find_best_match(c, self.gt_comp) #None if no match is found
+
         for c in self.gt_comp:
             self.matches[c] = find_best_match(c, self.reco_comp) #None if no match is found
 
@@ -79,10 +105,39 @@ class MetricTester:
             if match is not None and self.matches[match] != c:
                 print("Warning: ambiguous match in Metric Tester")
 
+
+    def init_candidate_lists(self):
+        n_cases = np.zeros((4,))
+        n = 0.0
+        for c in self.reco_comp:
+            match = self.matches[c]
+            if match is not None:
+                if match.label == c.label:
+                    self.true_label.append(c)   #matched truth and correct label
+                else:
+                    self.wrong_label.append(c)  #Found a candidate near truth, but it is mislabeled
+            else:
+                self.false_existence.append(c)  #False positive: detected a candidate which does not match the ground truth
+
+        for c in self.junk_candidates:
+            match = self.matches[c]
+            if match is None:
+                self.success_junk.append(c)     #Junk is not close to any gt
+            elif self.matches[match] != c:
+                self.success_junk.append(c)     #close junk candidate, but there is a closer non-junk candidate
+            else:
+                self.false_junk.append(c)       #False negative on SVM's end
+
+        for c in self.gt_comp:
+            if self.matches[c] is None:
+                self.not_detected.append(c)     #False negetive on detection end:
+                                                # ground truth candidate was not detected
+
+
     def print(self):
         for c in self.gt_comp:
             short_candidate_print(c, "====\nGround Truth:\n")
-            print("=====\nGround Truth:\nPos= " + str(c.six_position) + "\tLabel = " + str(c.label))
+            #print("=====\nGround Truth:\nPos= " + str(c.six_position) + "\tLabel = " + str(c.label))
             match = self.matches[c]
             if match is not None:
                 short_candidate_print(c, "Reconstructed:\n")
@@ -95,7 +150,7 @@ class MetricTester:
     # rates, we also need to consider what constitues a false case
     # (i.e. what do we need to divide by?)
     # Also consider what to do if we decide to include Junk Id
-    def match_success_rates(self, print_all = False):
+    def match_success_rates(self, print_all = True):
         n_cases = np.zeros((4,))
         n = 0.0
         for c in self.reco_comp:
@@ -153,7 +208,7 @@ class MetricTester:
     def Tilt_comparison(self):
         n_correct = 0
         n = 0.0
-        for c in self.reco_comp:
+        for c in self.true_label:
             match = self.matches[c]
             if match is not None:
                 a1 = EulerAngle.fromTiltId(c.get_tilt_id())
@@ -204,5 +259,3 @@ class MetricTester:
                 false_negative += 1
         #if false_positive == 0 and false_negative == 0
 '''
-
-
