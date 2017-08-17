@@ -7,7 +7,8 @@ from TemplateUtil import put_template
 import numpy as np
 import pickle
 import random
-
+import poisson_disk
+import naive_spaced_randomizer
 
 # Ways to get tomogram
 # + generate_tomogram_with_given_candidates
@@ -56,8 +57,8 @@ def randomize_spaced_out_points(space, separation, n_points):
     :param n_points: amount of points to randomize
     :return: list of random positions
     """
-    import poisson_disk
-    obj = poisson_disk.pds(space[0], space[1], space[2], separation, n_points)
+    #obj = poisson_disk.pds(space[0], space[1], space[2], separation, n_points)
+    obj = naive_spaced_randomizer.naive_spaced_randomizer(space[0], space[1], space[2], separation, n_points)
     return obj.randomize_spaced_points()
 
 
