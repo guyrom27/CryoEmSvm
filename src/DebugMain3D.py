@@ -75,3 +75,5 @@ if __name__ == '__main__':
 
     metric = MetricTester(tomogram.composition,svm_tomogram.composition)
     metric.print_metrics()
+
+    VisualUtils.slider3d(svm_tomogram.density_map - tomogram.density_map)
