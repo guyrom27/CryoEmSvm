@@ -6,7 +6,7 @@ import PeakDetection
 
 # now they are arbitrary values
 KERNEL_GAUSSIAN = 'GAUSSIAN'
-CORRELATION_THRESHOLD = 30
+CORRELATION_THRESHOLD = 10
 GAUSSIAN_SIZE = 10
 GAUSSIAN_STDEV = 3
 
