@@ -20,8 +20,11 @@ if __name__ == '__main__':
 
     #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
     #tomogram = generate_tomogram_with_given_candidates(templates, composition, dim)
-    criteria = [1, 2, 3, 1]
-    truth_tomogram = generate_random_tomogram(templates, criteria, dim)
+    criteria = [2, 2, 3, 2]
+    seed = None
+    for tom in generate_random_tomogram_set(templates, criteria, 1, dim, seed):
+        truth_tomogram = tom
+
     # tomogram = Noise.make_noisy_tomogram(truth_tomogram) #TODO: might be broken
     tomogram = truth_tomogram
     #VisualUtils.show_tomogram(tomogram, criteria)
