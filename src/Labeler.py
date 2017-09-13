@@ -1,4 +1,4 @@
-from Constants import JUNK_ID, DISTANCE_THRESHOLD
+from Constants import JUNK_ID, DISTANCE_THRESHOLD, NOISE_THRESHOLD_FACTOR
 
 import numpy as np
 
@@ -10,19 +10,26 @@ class Labeler:
 
 class PositionLabeler:
     def __init__(self, composition):
+        self.threshold2 = DISTANCE_THRESHOLD**2
         self.composition = composition
         #elements of composition who were found during labeling
         self.associated_composition = []
 
+
+
     def label(self, candidate, set_label = True):
         candidate_label = JUNK_ID
         ground_truth_candidate = None
-
+        reals = []
         for real_candidate in self.composition:
             dist_squared = np.linalg.norm(np.array(candidate.six_position.COM_position) - np.array(real_candidate.six_position.COM_position))
-            if dist_squared <= DISTANCE_THRESHOLD**2:
-                candidate_label = real_candidate.label
-                ground_truth_candidate = real_candidate
+            if dist_squared <= self.threshold2:
+                reals.append((dist_squared, real_candidate))
+        if (len(reals) > 0):
+            ground_truth_candidate = min(reals,key=lambda x: x[0])[1]
+
+        if ground_truth_candidate:
+            candidate_label = ground_truth_candidate.label
 
         if set_label:
             candidate.set_label(candidate_label)
