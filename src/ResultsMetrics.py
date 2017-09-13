@@ -11,7 +11,6 @@ class ResultsMetrics:
     def __init__(self, ground_truth_composition, evaluated_composition):
         self.ground_truth_composition = ground_truth_composition
         self.evaluated_composition = evaluated_composition
-
         self.evaluation_results = {'true_label_and_tilt':[],
                                    'true_label_false_tilt':[],
                                    'true_junk':[],
@@ -96,6 +95,7 @@ class ResultsMetrics:
             if len(val) > 0:
                 print(key,'\n===============')
                 for candidate in val:
+
                     if short:
                         self.print_candidate_stats_short(candidate)
                     else:
@@ -106,14 +106,16 @@ class ResultsMetrics:
 
 
     def print_candidate_stats(self, candidate):
-        dist = self.gt_position_dist(candidate)
-        tilt_dist = self.gt_tilt_dist(candidate)
-        print('Template ', candidate.label, '(gt', candidate.ground_truth_match.label,')')
-        print('\tDistance: ',dist,  '\tPos ', candidate.get_position(), '(gt', candidate.ground_truth_match.get_position(),')')
-        print('\tTilt Distance: ', tilt_dist, '\tTilt ', candidate.get_euler_angle(), '(gt', candidate.ground_truth_match.get_euler_angle(),')')
+        if candidate.ground_truth_match:
+            dist = self.gt_position_dist(candidate)
+            tilt_dist = self.gt_tilt_dist(candidate)
+            print('Template ', candidate.label, '(gt', candidate.ground_truth_match.label,')')
+            print('\tDistance: ',dist,  '\tPos ', candidate.get_position(), '(gt', candidate.ground_truth_match.get_position(),')')
+            print('\tTilt Distance: ', tilt_dist, '\tTilt ', candidate.get_euler_angle(), '(gt', candidate.ground_truth_match.get_euler_angle(),')')
 
     def print_candidate_stats_short(self, candidate):
-        dist = self.gt_position_dist(candidate)
-        tilt_dist = self.gt_tilt_dist(candidate)
-        print('Label: ',candidate.label, candidate.ground_truth_match.label, '\tDist: ', dist,
-              '\tPos: ', candidate.get_position() ,'\tTiltDist: ', tilt_dist)
+        if candidate.ground_truth_match:
+            dist = self.gt_position_dist(candidate)
+            tilt_dist = self.gt_tilt_dist(candidate)
+            print('Label: ',candidate.label, candidate.ground_truth_match.label, '\tDist: ', dist,
+                  '\tPos: ', candidate.get_position() ,'\tTiltDist: ', tilt_dist)
