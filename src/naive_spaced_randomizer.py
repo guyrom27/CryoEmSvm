@@ -1,6 +1,9 @@
 import random
 
 class naive_spaced_randomizer:
+    """
+    generates random points that are separated from one another in a given distance using a naive elimination
+    """
     def __init__(self, w, h, d, r, n, max_tries=100000):
         """
         naive randomization- randomize and check if it is separated from all other points

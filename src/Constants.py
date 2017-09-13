@@ -1,6 +1,17 @@
 from math import ceil
 
-DISTANCE_THRESHOLD = 2
+"""
+This is used to determine the distance between a correlation peak and a possible Ground Truth that corresponds to it
+In our typical configurations, this should be 
+2 for non noisy simulations
+12 for noisy 2D
+16 for noisy 3D
+"""
+DISTANCE_THRESHOLD = 16
+
+"""
+The label that corresponds to NOTHING_IS_HERE
+"""
 JUNK_ID = -1
 
 TOMOGRAM_DIMENSION = 120

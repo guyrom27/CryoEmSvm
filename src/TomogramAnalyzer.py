@@ -4,6 +4,13 @@ from FeaturesExtractor import FeaturesExtractor
 from TiltFinder import TiltFinder
 
 class TomogramAnalyzer:
+    """
+    This class encapsulates the entire tomogram analyses process
+     Candidate selection
+     feature extraction
+     labeling
+     improvement using neighborhood
+    """
     def __init__(self, tomogram, templates, labeler):
         self.tomogram = tomogram
         self.templates = templates

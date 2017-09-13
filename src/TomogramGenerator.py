@@ -11,17 +11,20 @@ import random
 import poisson_disk
 import naive_spaced_randomizer
 
-# Ways to get tomogram
-# + generate_tomogram_with_given_candidates
-# + generate_random_tomogram
-# - load tomogram from file
-#   - with known composition
-#   - with unkown composition
-#
-# Ways to get training set (set of tomogrmas)
-# - generate random tomograms from criteria and number
-# - load tomograms from files
 
+"""
+This file contains all the methods that are used to generate and load tomograms (from files)
+ Ways to get tomogram
+ + generate_tomogram_with_given_candidates
+ + generate_random_tomogram
+ - load tomogram from file
+   - with known composition
+   - with unkown composition
+
+ Ways to get training set (set of tomogrmas)
+ - generate random tomograms from criteria and number
+ - load tomograms from files
+"""
 
 def get_tomogram_shape(dim):
     """

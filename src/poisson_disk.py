@@ -4,6 +4,9 @@ import random
 #reference: http://connor-johnson.com/2015/04/08/poisson-disk-sampling/
 #article: http://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
 class pds:
+    """
+    generates random points that are separated from one another in a given distance using a poisson disk process
+    """
 
     def __init__(self, w, h, d, r, n, k=30):
         """

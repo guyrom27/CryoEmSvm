@@ -1,14 +1,20 @@
-from Constants import JUNK_ID, DISTANCE_THRESHOLD, NOISE_THRESHOLD_FACTOR
+from Constants import JUNK_ID, DISTANCE_THRESHOLD
 
 import numpy as np
 
 class Labeler:
-    #make abstract method
-    #find out the appropriate label
+    """
+    An entity that matches a candidate with a label (either using an SVM or a known set of GroundTruth candidates)
+    """
+
     def label(self, candidate):
+
         return None
 
 class PositionLabeler:
+    """
+        An entity that matches a candidate with a label using a known set of GroundTruth candidates
+    """
     def __init__(self, composition):
         self.threshold2 = DISTANCE_THRESHOLD**2
         self.composition = composition
@@ -18,6 +24,9 @@ class PositionLabeler:
 
 
     def label(self, candidate, set_label = True):
+        """
+           label according to proximity to Ground truth
+        """
         candidate_label = JUNK_ID
         ground_truth_candidate = None
         reals = []
@@ -39,6 +48,9 @@ class PositionLabeler:
 
 
 class SvmLabeler(Labeler):
+    """
+    use an already trained SVM to predict the label
+    """
     def __init__(self, svm):
         self.svm = svm
 

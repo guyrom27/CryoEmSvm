@@ -37,6 +37,9 @@ class EulerAngle:
 
 
 class SixPosition:
+    """
+    A Combination of center of mass position and a tilt
+    """
     def __init__(self, COM_position, tilt_id):
         """
         :param COM_position: 3 tuple
@@ -95,6 +98,10 @@ class Candidate:
 
 
 class TiltedTemplate:
+    """
+    Represents a template that is tilted in a specific euler angle
+    contains the density map and the tilt and template metadata
+    """
     def __init__(self, density_map, tilt_id, template_id):
         self.template_id = template_id      # int
         self.density_map = density_map      # numpy 3d array
@@ -108,6 +115,7 @@ class TiltedTemplate:
 class Tomogram:
     """
     composition is a list of labeled candidates, that represents the ground truth
+    contains the actual density map
     """
     def __init__(self, density_map, composition):
         self.density_map = density_map      # numpy 3d array

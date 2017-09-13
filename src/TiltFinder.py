@@ -1,6 +1,11 @@
 from Constants import JUNK_ID
 
+
+
 class TiltFinder:
+    """
+    This class matches a candidate with the best tilt that corresponds to its label
+    """
     def __init__(self, max_correlations):
         """
         :param max_correlations: a data structure of type TemplateMaxCorrelations initialized according to the relevant tomogram and templates

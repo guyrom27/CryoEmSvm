@@ -17,6 +17,9 @@ class HelperIterator:
         return val
 
 class ActionDAO:
+    """
+    This class behaves like a 1D array but reads the elements using the given action
+    """
     def __init__(self, base, dim_size, action):
         """
         This is a DataAccessObject for a 1D array, where each element is accessed using the supplied action

@@ -9,9 +9,12 @@ import scipy.ndimage.interpolation
 import pickle
 
 
-# importan methods:
-# load_templates_3d(templates_path): load 3d tempaltes produced by chimera bsed code
-# generate_tilted_templates_2d(): create 2d geometric shaped templates
+"""
+This file contains all the methods that are used to generate and load templates (from files)
+ important methods:
+ load_templates_3d(templates_path): load 3d tempaltes produced by chimera bsed code
+ generate_tilted_templates_2d(): create 2d geometric shaped templates
+"""
 
 # -------------------------------------------------------------------------------- #
 # --------------------------------------- 3D ------------------------------------- #

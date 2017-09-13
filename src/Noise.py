@@ -1,6 +1,11 @@
 import numpy as np
 import scipy.signal
 
+
+"""
+Add different types  of noise to the density maps 
+"""
+
 def gauss_noise(dmap, sigma = None, mu = 0):
     if sigma is None:
         sigma = 0.3 * dmap.max()

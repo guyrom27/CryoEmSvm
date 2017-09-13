@@ -6,6 +6,11 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
+
+"""
+This file contains utility methods from visualization
+"""
+
 # ----------------------- 2d -----------------------------
 def print_candidate_list(candidates):
     print("There are " + str(len(candidates)) + " candidates")

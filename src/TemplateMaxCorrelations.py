@@ -56,9 +56,6 @@ class TemplateMaxCorrelations:
             return SixPosition(best_3pos, corresponding_tilt)
 
     def create_fit_score(self, raw_template, tomogram):
-        #return CrossCorrelation.norm_xcorr(raw_template.density_map, tomogram.density_map, method='fft')
-
-        #return signal.fftconvolve(tomogram.density_map, raw_template.density_map, mode='same')
         normalized_dm = get_normalize_template_dm(raw_template)
         return signal.correlate(tomogram.density_map, normalized_dm, mode='same', method='fft')
 

@@ -2,6 +2,10 @@ import numpy as np
 from math import sqrt
 from scipy.ndimage import measurements
 
+"""
+Different Template manipulations are collected here
+"""
+
 
 def shape_to_slices(shape, corner = None):
     if not corner:
@@ -10,9 +14,10 @@ def shape_to_slices(shape, corner = None):
     return tuple([slice(corner[i],corner[i]+shape[i]) for i in range(len(shape))])
 
 
-#I think we should just call this function after generating the tomogram. Should this just be a module?
-#I think we should also consider subtrackting the average first. That would make all the templates unit vectors
 def get_normalize_template_dm(template):
+    """
+    normalize the L2 norm of the template density_map
+    """
     factor = sqrt(np.sum(np.square(template.density_map)))
     if factor != 0:
         return template.density_map / factor
