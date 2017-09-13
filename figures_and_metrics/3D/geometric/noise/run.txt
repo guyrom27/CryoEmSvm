@@ -1,0 +1,22 @@
+NewDebug
+
+
+criteria = [3,3,3]
+number_of_tomograms = 3
+dim = 3
+seed = 897652943
+noise = True
+
+
+
+
+
+change because of bug-
+evaluated_tomogram = Tomogram(None, output_candidates[0])
+#evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
+
+
+
+
+Constants:
+DISTANCE_THRESHOLD = 16

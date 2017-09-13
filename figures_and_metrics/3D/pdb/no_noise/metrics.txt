@@ -1,0 +1,97 @@
+Training
+Using random seed:  482721126
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+Evaluating
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+Results
+=================
+Metrics for candidate Pos = (25, 77, 31) 7	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (0, 120, 0), True Tilt = (0, 120, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (31, 21, 26) 55	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (180, 180, 0), True Tilt = (180, 180, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (31, 36, 64) 68	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (240, 120, 300), True Tilt = (240, 120, 300), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (48, 39, 98) 70	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (300, 0, 0), True Tilt = (300, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (51, 98, 70) 81	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (300, 120, 240), True Tilt = (300, 120, 240), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (60, 56, 41) 64	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (240, 120, 60), True Tilt = (240, 120, 60), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (92, 25, 63) 76	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (300, 60, 300), True Tilt = (300, 60, 300), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (94, 78, 97) 33	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (120, 60, 240), True Tilt = (120, 60, 240), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (94, 95, 54) 83	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (300, 180, 0), True Tilt = (300, 180, 0), Difference = (0, 0, 0)
+======Global Statistics======
+	svm sucesss rate = 100.00%
+	number of mislabeled candidates = 0
+	svm false negatives = 0
+	undetected candidates = 0
+	Tilt Match Rate = 100.00%
+
+true_label_and_tilt 
+===============
+Template  2 (gt 2 )
+	Distance:  0.0 	Pos  (25, 77, 31) (gt [25, 77, 31] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (0, 120, 0) (gt (0, 120, 0) )
+Template  1 (gt 1 )
+	Distance:  0.0 	Pos  (31, 21, 26) (gt [31, 21, 26] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (180, 180, 0) (gt (180, 180, 0) )
+Template  0 (gt 0 )
+	Distance:  0.0 	Pos  (31, 36, 64) (gt [31, 36, 64] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (240, 120, 300) (gt (240, 120, 300) )
+Template  0 (gt 0 )
+	Distance:  0.0 	Pos  (48, 39, 98) (gt [48, 39, 98] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (300, 0, 0) (gt (300, 0, 0) )
+Template  2 (gt 2 )
+	Distance:  0.0 	Pos  (51, 98, 70) (gt [51, 98, 70] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (300, 120, 240) (gt (300, 120, 240) )
+Template  2 (gt 2 )
+	Distance:  0.0 	Pos  (60, 56, 41) (gt [60, 56, 41] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (240, 120, 60) (gt (240, 120, 60) )
+Template  1 (gt 1 )
+	Distance:  0.0 	Pos  (92, 25, 63) (gt [92, 25, 63] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (300, 60, 300) (gt (300, 60, 300) )
+Template  1 (gt 1 )
+	Distance:  0.0 	Pos  (94, 78, 97) (gt [94, 78, 97] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (120, 60, 240) (gt (120, 60, 240) )
+Template  0 (gt 0 )
+	Distance:  0.0 	Pos  (94, 95, 54) (gt [94, 95, 54] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (300, 180, 0) (gt (300, 180, 0) )
+
+true_label_and_tilt :	 9
+true_label_false_tilt :	 0
+true_junk :	 0
+wrong_label :	 0
+false_junk :	 0
+false_existenece :	 0
+missing_ground_truth :	 0
+Done

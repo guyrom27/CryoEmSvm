@@ -1,0 +1,30 @@
+NewDebug:
+
+seed = 147351466
+criteria = [3,3,3]
+number_of_tomograms = 3
+dim = 3
+noise = True
+
+
+
+
+#bugfix:
+
+evaluated_tomogram = Tomogram(None, output_candidates[0])
+#evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
+
+
+pdbs.txt:
+C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\1k4c.pdb|30
+C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\1y1v.pdb|30
+C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\5n92.pdb|30
+
+templates_generator.py: main script:
+	tmp = r"C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\template_generator.py -o C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates\ -a 60 -p C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates\pdbs.txt"
+    	main((tmp.split())[1:])
+
+
+Constants.py:
+
+DISTANCE_THRESHOLD = 16

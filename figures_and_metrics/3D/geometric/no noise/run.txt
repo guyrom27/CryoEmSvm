@@ -1,0 +1,13 @@
+NewDebug
+
+criteria = [3,3,3]
+number_of_tomograms = 3
+dim = 3
+seed = 324945419
+noise = False
+
+
+
+in constants.py
+
+change DISTANCE_THRESHOLD = 16

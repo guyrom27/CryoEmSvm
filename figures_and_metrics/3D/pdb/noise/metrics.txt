@@ -1,0 +1,558 @@
+Training
+Using random seed:  147351466
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+Evaluating
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+Results
+Warning: ambiguous match in Metric Tester
+Warning: ambiguous match in Metric Tester
+Warning: ambiguous match in Metric Tester
+Warning: ambiguous match in Metric Tester
+Warning: ambiguous match in Metric Tester
+Warning: ambiguous match in Metric Tester
+Warning: ambiguous match in Metric Tester
+Warning: ambiguous match in Metric Tester
+=================
+Metrics for candidate Pos = (20, 74, 57) 74	Label = 0
+=================
+Metrics for candidate Pos = (16, 81, 67) 25	Label = 2
+=================
+Metrics for candidate Pos = (16, 61, 49) 21	Label = 0
+=================
+Metrics for candidate Pos = (24, 50, 83) 72	Label = 0
+	COM offset distance = 10.050
+	Candidate Tilt = (300, 60, 60), True Tilt = (0, 60, 180), Difference = (300, 0, -120)
+=================
+Metrics for candidate Pos = (23, 59, 87) 20	Label = 0
+	COM offset distance = 1.000
+	Candidate Tilt = (60, 60, 300), True Tilt = (0, 60, 180), Difference = (60, 0, 120)
+=================
+Metrics for candidate Pos = (23, 59, 87) 20	Label = 0
+	COM offset distance = 1.000
+	Candidate Tilt = (60, 60, 300), True Tilt = (0, 60, 180), Difference = (60, 0, 120)
+=================
+Metrics for candidate Pos = (23, 77, 68) 33	Label = 0
+=================
+Metrics for candidate Pos = (29, 60, 38) 74	Label = 0
+=================
+Metrics for candidate Pos = (25, 32, 71) 75	Label = 0
+=================
+Metrics for candidate Pos = (25, 38, 26) 1	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (0, 60, 0), True Tilt = (0, 60, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (30, 24, 54) 32	Label = 0
+=================
+Metrics for candidate Pos = (30, 24, 54) 32	Label = 0
+=================
+Metrics for candidate Pos = (26, 31, 79) 74	Label = 0
+=================
+Metrics for candidate Pos = (27, 90, 81) 37	Label = 0
+=================
+Metrics for candidate Pos = (27, 93, 35) 63	Label = 0
+	COM offset distance = 1.000
+	Candidate Tilt = (240, 120, 0), True Tilt = (60, 0, 0), Difference = (180, 120, 0)
+=================
+Metrics for candidate Pos = (27, 93, 35) 63	Label = 0
+	COM offset distance = 1.000
+	Candidate Tilt = (240, 120, 0), True Tilt = (60, 0, 0), Difference = (180, 120, 0)
+=================
+Metrics for candidate Pos = (30, 55, 55) 62	Label = 0
+=================
+Metrics for candidate Pos = (33, 65, 33) 37	Label = 0
+=================
+Metrics for candidate Pos = (31, 27, 101) 40	Label = 2
+=================
+Metrics for candidate Pos = (25, 42, 98) 25	Label = 2
+=================
+Metrics for candidate Pos = (34, 62, 30) 72	Label = 0
+=================
+Metrics for candidate Pos = (30, 82, 23) 20	Label = 0
+=================
+Metrics for candidate Pos = (33, 61, 28) 37	Label = 0
+=================
+Metrics for candidate Pos = (35, 79, 95) 62	Label = 0
+=================
+Metrics for candidate Pos = (35, 93, 89) 20	Label = 0
+=================
+Metrics for candidate Pos = (36, 63, 71) 74	Label = 0
+=================
+Metrics for candidate Pos = (37, 38, 58) 77	Label = 2
+=================
+Metrics for candidate Pos = (38, 36, 58) 49	Label = 0
+=================
+Metrics for candidate Pos = (41, 51, 71) 61	Label = 0
+=================
+Metrics for candidate Pos = (41, 97, 21) 17	Label = 2
+=================
+Metrics for candidate Pos = (47, 84, 73) 37	Label = 0
+=================
+Metrics for candidate Pos = (48, 90, 65) 21	Label = 0
+=================
+Metrics for candidate Pos = (48, 38, 95) 20	Label = 0
+=================
+Metrics for candidate Pos = (47, 68, 75) 40	Label = 2
+=================
+Metrics for candidate Pos = (46, 71, 84) 20	Label = 0
+=================
+Metrics for candidate Pos = (48, 38, 95) 20	Label = 0
+=================
+Metrics for candidate Pos = (48, 54, 63) 68	Label = 0
+=================
+Metrics for candidate Pos = (49, 67, 51) 74	Label = 0
+=================
+Metrics for candidate Pos = (48, 54, 63) 68	Label = 0
+=================
+Metrics for candidate Pos = (48, 65, 91) 37	Label = 0
+=================
+Metrics for candidate Pos = (54, 57, 24) 79	Label = 0
+=================
+Metrics for candidate Pos = (50, 71, 66) 62	Label = 0
+=================
+Metrics for candidate Pos = (49, 94, 48) 37	Label = 0
+=================
+Metrics for candidate Pos = (53, 30, 38) 63	Label = 0
+=================
+Metrics for candidate Pos = (56, 53, 72) 19	Label = 0
+=================
+Metrics for candidate Pos = (59, 73, 73) 66	Label = 2
+=================
+Metrics for candidate Pos = (56, 21, 81) 47	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (180, 60, 240), True Tilt = (180, 60, 240), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (58, 94, 82) 24	Label = 2
+	COM offset distance = 1.000
+	Candidate Tilt = (60, 120, 180), True Tilt = (300, 180, 0), Difference = (-240, -60, 180)
+=================
+Metrics for candidate Pos = (58, 94, 82) 24	Label = 2
+	COM offset distance = 1.000
+	Candidate Tilt = (60, 120, 180), True Tilt = (300, 180, 0), Difference = (-240, -60, 180)
+=================
+Metrics for candidate Pos = (55, 104, 66) 37	Label = 0
+=================
+Metrics for candidate Pos = (57, 34, 23) 67	Label = 2
+=================
+Metrics for candidate Pos = (58, 42, 51) 64	Label = 0
+	COM offset distance = 1.000
+	Candidate Tilt = (240, 120, 60), True Tilt = (240, 120, 60), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (58, 42, 51) 64	Label = 0
+	COM offset distance = 1.000
+	Candidate Tilt = (240, 120, 60), True Tilt = (240, 120, 60), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (61, 21, 55) 21	Label = 0
+=================
+Metrics for candidate Pos = (58, 34, 58) 25	Label = 0
+	COM offset distance = 9.899
+	Candidate Tilt = (60, 120, 240), True Tilt = (240, 120, 60), Difference = (-180, 0, 180)
+=================
+Metrics for candidate Pos = (58, 61, 43) 33	Label = 0
+=================
+Metrics for candidate Pos = (58, 28, 60) 37	Label = 0
+	COM offset distance = 15.811
+	Candidate Tilt = (120, 120, 120), True Tilt = (240, 120, 60), Difference = (-120, 0, 60)
+=================
+Metrics for candidate Pos = (58, 60, 61) 72	Label = 2
+=================
+Metrics for candidate Pos = (63, 91, 33) 30	Label = 2
+	COM offset distance = 1.000
+	Candidate Tilt = (120, 60, 60), True Tilt = (120, 120, 300), Difference = (0, -60, -240)
+=================
+Metrics for candidate Pos = (63, 91, 33) 30	Label = 2
+	COM offset distance = 1.000
+	Candidate Tilt = (120, 60, 60), True Tilt = (120, 120, 300), Difference = (0, -60, -240)
+=================
+Metrics for candidate Pos = (66, 44, 77) 74	Label = 0
+=================
+Metrics for candidate Pos = (71, 30, 31) 62	Label = 0
+=================
+Metrics for candidate Pos = (74, 28, 67) 74	Label = 0
+=================
+Metrics for candidate Pos = (75, 93, 57) 32	Label = 0
+=================
+Metrics for candidate Pos = (77, 82, 74) 21	Label = 0
+=================
+Metrics for candidate Pos = (76, 64, 87) 25	Label = 2
+	COM offset distance = 1.414
+	Candidate Tilt = (60, 120, 240), True Tilt = (240, 120, 0), Difference = (-180, 0, 240)
+=================
+Metrics for candidate Pos = (75, 77, 54) 64	Label = 0
+=================
+Metrics for candidate Pos = (77, 97, 45) 4	Label = 0
+=================
+Metrics for candidate Pos = (77, 97, 45) 4	Label = 0
+=================
+Metrics for candidate Pos = (80, 26, 74) 21	Label = 0
+=================
+Metrics for candidate Pos = (82, 30, 90) 37	Label = 0
+=================
+Metrics for candidate Pos = (83, 88, 38) 35	Label = 2
+=================
+Metrics for candidate Pos = (83, 68, 42) 77	Label = 2
+=================
+Metrics for candidate Pos = (85, 71, 52) 72	Label = 2
+=================
+Metrics for candidate Pos = (84, 93, 74) 63	Label = 0
+=================
+Metrics for candidate Pos = (83, 57, 55) 49	Label = 0
+=================
+Metrics for candidate Pos = (87, 99, 92) 77	Label = 2
+=================
+Metrics for candidate Pos = (90, 40, 74) 21	Label = 0
+=================
+Metrics for candidate Pos = (82, 95, 38) 32	Label = 0
+=================
+Metrics for candidate Pos = (89, 89, 27) 63	Label = 0
+=================
+Metrics for candidate Pos = (86, 50, 45) 20	Label = 0
+=================
+Metrics for candidate Pos = (87, 69, 21) 32	Label = 1
+	COM offset distance = 1.414
+	Candidate Tilt = (120, 60, 180), True Tilt = (120, 60, 180), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (93, 78, 98) 32	Label = 0
+=================
+Metrics for candidate Pos = (85, 51, 43) 77	Label = 0
+=================
+Metrics for candidate Pos = (91, 26, 31) 79	Label = 0
+=================
+Metrics for candidate Pos = (91, 26, 31) 79	Label = 0
+=================
+Metrics for candidate Pos = (92, 56, 76) 37	Label = 0
+=================
+Metrics for candidate Pos = (93, 78, 98) 32	Label = 0
+=================
+Metrics for candidate Pos = (87, 90, 75) 63	Label = 0
+=================
+Metrics for candidate Pos = (96, 73, 64) 37	Label = 0
+=================
+Metrics for candidate Pos = (94, 26, 42) 21	Label = 0
+=================
+Metrics for candidate Pos = (97, 72, 77) 48	Label = 0
+=================
+Metrics for candidate Pos = (94, 32, 79) 31	Label = 2
+=================
+Metrics for candidate Pos = (94, 95, 39) 66	Label = 2
+=================
+Metrics for candidate Pos = (97, 16, 91) 82	Label = 2
+======Global Statistics======
+	svm sucesss rate = 100.00%
+	number of mislabeled candidates = 0
+	svm false negatives = 0
+	undetected candidates = 0
+	Average COM offset  = 2.858
+	Tilt Match Rate = 29.41%
+
+true_label_and_tilt 
+===============
+Template  1 (gt 1 )
+	Distance:  0.0 	Pos  (25, 38, 26) (gt [25, 38, 26] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (0, 60, 0) (gt (0, 60, 0) )
+Template  0 (gt 0 )
+	Distance:  20.3224014329 	Pos  (48, 54, 63) (gt [58, 41, 51] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (240, 120, 300) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  20.3224014329 	Pos  (48, 54, 63) (gt [58, 41, 51] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (240, 120, 300) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  17.7482393493 	Pos  (53, 30, 38) (gt [58, 41, 51] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (240, 120, 0) (gt (240, 120, 60) )
+Template  1 (gt 1 )
+	Distance:  0.0 	Pos  (56, 21, 81) (gt [56, 21, 81] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (180, 60, 240) (gt (180, 60, 240) )
+Template  0 (gt 0 )
+	Distance:  1.0 	Pos  (58, 42, 51) (gt [58, 41, 51] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (240, 120, 60) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  1.0 	Pos  (58, 42, 51) (gt [58, 41, 51] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (240, 120, 60) (gt (240, 120, 60) )
+Template  2 (gt 2 )
+	Distance:  21.7944947177 	Pos  (83, 88, 38) (gt [62, 91, 33] )
+	Tilt Distance:  (1.2074182697257333e-06, 0) 	Tilt  (120, 120, 0) (gt (120, 120, 300) )
+Template  1 (gt 1 )
+	Distance:  1.41421356237 	Pos  (87, 69, 21) (gt [86, 68, 21] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (120, 60, 180) (gt (120, 60, 180) )
+
+true_label_false_tilt 
+===============
+Template  0 (gt 0 )
+	Distance:  29.6816441593 	Pos  (20, 74, 57) (gt [26, 93, 35] )
+	Tilt Distance:  (59.99999999999999, -180) 	Tilt  (300, 60, 180) (gt (60, 0, 0) )
+Template  0 (gt 0 )
+	Distance:  10.0498756211 	Pos  (24, 50, 83) (gt [22, 59, 87] )
+	Tilt Distance:  (51.31781254651055, 120) 	Tilt  (300, 60, 60) (gt (0, 60, 180) )
+Template  0 (gt 0 )
+	Distance:  1.0 	Pos  (23, 59, 87) (gt [22, 59, 87] )
+	Tilt Distance:  (51.31781254651055, -120) 	Tilt  (60, 60, 300) (gt (0, 60, 180) )
+Template  0 (gt 0 )
+	Distance:  1.0 	Pos  (23, 59, 87) (gt [22, 59, 87] )
+	Tilt Distance:  (51.31781254651055, -120) 	Tilt  (60, 60, 300) (gt (0, 60, 180) )
+Template  0 (gt 0 )
+	Distance:  26.1916017074 	Pos  (23, 77, 68) (gt [22, 59, 87] )
+	Tilt Distance:  (97.18075578145826, -60) 	Tilt  (120, 60, 240) (gt (0, 60, 180) )
+Template  0 (gt 0 )
+	Distance:  31.5277655409 	Pos  (25, 32, 71) (gt [22, 59, 87] )
+	Tilt Distance:  (51.31781254651055, -60) 	Tilt  (300, 60, 240) (gt (0, 60, 180) )
+Template  0 (gt 0 )
+	Distance:  29.3938769134 	Pos  (26, 31, 79) (gt [22, 59, 87] )
+	Tilt Distance:  (51.31781254651055, 0) 	Tilt  (300, 60, 180) (gt (0, 60, 180) )
+Template  0 (gt 0 )
+	Distance:  1.0 	Pos  (27, 93, 35) (gt [26, 93, 35] )
+	Tilt Distance:  (119.99999999999999, 0) 	Tilt  (240, 120, 0) (gt (60, 0, 0) )
+Template  0 (gt 0 )
+	Distance:  1.0 	Pos  (27, 93, 35) (gt [26, 93, 35] )
+	Tilt Distance:  (119.99999999999999, 0) 	Tilt  (240, 120, 0) (gt (60, 0, 0) )
+Template  0 (gt 0 )
+	Distance:  31.5594676761 	Pos  (30, 55, 55) (gt [58, 41, 51] )
+	Tilt Distance:  (60.00000000000001, -240) 	Tilt  (240, 60, 300) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  28.930952283 	Pos  (33, 65, 33) (gt [26, 93, 35] )
+	Tilt Distance:  (119.99999999999999, -120) 	Tilt  (120, 120, 120) (gt (60, 0, 0) )
+Template  0 (gt 0 )
+	Distance:  16.7630546142 	Pos  (30, 82, 23) (gt [26, 93, 35] )
+	Tilt Distance:  (59.99999999999999, -300) 	Tilt  (60, 60, 300) (gt (60, 0, 0) )
+Template  0 (gt 0 )
+	Distance:  25.1594912508 	Pos  (35, 79, 95) (gt [22, 59, 87] )
+	Tilt Distance:  (97.1807557814583, -120) 	Tilt  (240, 60, 300) (gt (0, 60, 180) )
+Template  0 (gt 0 )
+	Distance:  21.6333076528 	Pos  (36, 63, 71) (gt [22, 59, 87] )
+	Tilt Distance:  (51.31781254651055, 0) 	Tilt  (300, 60, 180) (gt (0, 60, 180) )
+Template  0 (gt 0 )
+	Distance:  21.7715410571 	Pos  (38, 36, 58) (gt [58, 41, 51] )
+	Tilt Distance:  (51.31781254651055, 60) 	Tilt  (180, 120, 0) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  26.0959767014 	Pos  (41, 51, 71) (gt [22, 59, 87] )
+	Tilt Distance:  (97.1807557814583, -60) 	Tilt  (240, 60, 240) (gt (0, 60, 180) )
+Template  2 (gt 2 )
+	Distance:  28.7228132327 	Pos  (47, 68, 75) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000002, -300) 	Tilt  (120, 120, 300) (gt (300, 180, 0) )
+Template  0 (gt 0 )
+	Distance:  27.5136329844 	Pos  (49, 67, 51) (gt [58, 41, 51] )
+	Tilt Distance:  (82.81924421854174, -120) 	Tilt  (300, 60, 180) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  26.9814751265 	Pos  (48, 65, 91) (gt [22, 59, 87] )
+	Tilt Distance:  (128.68218745348943, 60) 	Tilt  (120, 120, 120) (gt (0, 60, 180) )
+Template  0 (gt 0 )
+	Distance:  31.6385840391 	Pos  (54, 57, 24) (gt [58, 41, 51] )
+	Tilt Distance:  (51.3178125465106, -60) 	Tilt  (300, 120, 120) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  24.269322199 	Pos  (56, 53, 72) (gt [58, 41, 51] )
+	Tilt Distance:  (180.0, -180) 	Tilt  (60, 60, 240) (gt (240, 120, 60) )
+Template  2 (gt 2 )
+	Distance:  22.9346898824 	Pos  (59, 73, 73) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000001, -180) 	Tilt  (240, 120, 180) (gt (300, 180, 0) )
+Template  2 (gt 2 )
+	Distance:  1.0 	Pos  (58, 94, 82) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000002, -180) 	Tilt  (60, 120, 180) (gt (300, 180, 0) )
+Template  2 (gt 2 )
+	Distance:  1.0 	Pos  (58, 94, 82) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000002, -180) 	Tilt  (60, 120, 180) (gt (300, 180, 0) )
+Template  0 (gt 0 )
+	Distance:  20.6155281281 	Pos  (61, 21, 55) (gt [58, 41, 51] )
+	Tilt Distance:  (120.00000000000001, 60) 	Tilt  (60, 120, 0) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  9.89949493661 	Pos  (58, 34, 58) (gt [58, 41, 51] )
+	Tilt Distance:  (120.00000000000001, -180) 	Tilt  (60, 120, 240) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  21.5406592285 	Pos  (58, 61, 43) (gt [58, 41, 51] )
+	Tilt Distance:  (128.68218745348943, -180) 	Tilt  (120, 60, 240) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  15.8113883008 	Pos  (58, 28, 60) (gt [58, 41, 51] )
+	Tilt Distance:  (97.18075578145829, -60) 	Tilt  (120, 120, 120) (gt (240, 120, 60) )
+Template  2 (gt 2 )
+	Distance:  1.0 	Pos  (63, 91, 33) (gt [62, 91, 33] )
+	Tilt Distance:  (60.00000000000001, 240) 	Tilt  (120, 60, 60) (gt (120, 120, 300) )
+Template  2 (gt 2 )
+	Distance:  1.0 	Pos  (63, 91, 33) (gt [62, 91, 33] )
+	Tilt Distance:  (60.00000000000001, 240) 	Tilt  (120, 60, 60) (gt (120, 120, 300) )
+Template  0 (gt 0 )
+	Distance:  26.2678510731 	Pos  (71, 30, 31) (gt [58, 41, 51] )
+	Tilt Distance:  (60.00000000000001, -240) 	Tilt  (240, 60, 300) (gt (240, 120, 60) )
+Template  2 (gt 2 )
+	Distance:  1.41421356237 	Pos  (76, 64, 87) (gt [75, 64, 88] )
+	Tilt Distance:  (120.00000000000001, -240) 	Tilt  (60, 120, 240) (gt (240, 120, 0) )
+Template  0 (gt 0 )
+	Distance:  29.9499582637 	Pos  (83, 57, 55) (gt [58, 41, 51] )
+	Tilt Distance:  (51.31781254651055, 60) 	Tilt  (180, 120, 0) (gt (240, 120, 60) )
+Template  2 (gt 2 )
+	Distance:  32.0156211872 	Pos  (87, 99, 92) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000001, 0) 	Tilt  (300, 120, 0) (gt (300, 180, 0) )
+Template  0 (gt 0 )
+	Distance:  41.400483089 	Pos  (91, 26, 31) (gt [58, 41, 51] )
+	Tilt Distance:  (51.3178125465106, -60) 	Tilt  (300, 120, 120) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  41.400483089 	Pos  (91, 26, 31) (gt [58, 41, 51] )
+	Tilt Distance:  (51.3178125465106, -60) 	Tilt  (300, 120, 120) (gt (240, 120, 60) )
+Template  0 (gt 0 )
+	Distance:  40.0249921924 	Pos  (94, 26, 42) (gt [58, 41, 51] )
+	Tilt Distance:  (120.00000000000001, 60) 	Tilt  (60, 120, 0) (gt (240, 120, 60) )
+Template  2 (gt 2 )
+	Distance:  38.2883794382 	Pos  (94, 32, 79) (gt [75, 64, 88] )
+	Tilt Distance:  (128.68218745348943, -120) 	Tilt  (120, 60, 120) (gt (240, 120, 0) )
+Template  2 (gt 2 )
+	Distance:  32.8024389337 	Pos  (94, 95, 39) (gt [62, 91, 33] )
+	Tilt Distance:  (97.18075578145829, 120) 	Tilt  (240, 120, 180) (gt (120, 120, 300) )
+
+wrong_label 
+===============
+Template  2 (gt 0 )
+	Distance:  30.3315017762 	Pos  (16, 81, 67) (gt [22, 59, 87] )
+	Tilt Distance:  (82.81924421854171, -60) 	Tilt  (60, 120, 240) (gt (0, 60, 180) )
+Template  0 (gt 1 )
+	Distance:  33.7490740614 	Pos  (16, 61, 49) (gt [25, 38, 26] )
+	Tilt Distance:  (82.81924421854171, 0) 	Tilt  (60, 120, 0) (gt (0, 60, 0) )
+Template  0 (gt 1 )
+	Distance:  25.3771550809 	Pos  (29, 60, 38) (gt [25, 38, 26] )
+	Tilt Distance:  (51.31781254651055, -180) 	Tilt  (300, 60, 180) (gt (0, 60, 0) )
+Template  0 (gt 1 )
+	Distance:  31.7017349683 	Pos  (30, 24, 54) (gt [25, 38, 26] )
+	Tilt Distance:  (97.18075578145826, -180) 	Tilt  (120, 60, 180) (gt (0, 60, 0) )
+Template  0 (gt 1 )
+	Distance:  31.7017349683 	Pos  (30, 24, 54) (gt [25, 38, 26] )
+	Tilt Distance:  (97.18075578145826, -180) 	Tilt  (120, 60, 180) (gt (0, 60, 0) )
+Template  0 (gt 2 )
+	Distance:  30.2820078595 	Pos  (27, 90, 81) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000002, -120) 	Tilt  (120, 120, 120) (gt (300, 180, 0) )
+Template  2 (gt 1 )
+	Distance:  32.5729949498 	Pos  (31, 27, 101) (gt [56, 21, 81] )
+	Tilt Distance:  (82.81924421854173, -60) 	Tilt  (120, 120, 300) (gt (180, 60, 240) )
+Template  2 (gt 0 )
+	Distance:  20.4694894905 	Pos  (25, 42, 98) (gt [22, 59, 87] )
+	Tilt Distance:  (82.81924421854171, -60) 	Tilt  (60, 120, 240) (gt (0, 60, 180) )
+Template  0 (gt 1 )
+	Distance:  25.9422435421 	Pos  (34, 62, 30) (gt [25, 38, 26] )
+	Tilt Distance:  (51.31781254651055, -60) 	Tilt  (300, 60, 60) (gt (0, 60, 0) )
+Template  0 (gt 1 )
+	Distance:  24.4335834457 	Pos  (33, 61, 28) (gt [25, 38, 26] )
+	Tilt Distance:  (128.68218745348943, -120) 	Tilt  (120, 120, 120) (gt (0, 60, 0) )
+Template  0 (gt 2 )
+	Distance:  23.1084400166 	Pos  (35, 93, 89) (gt [57, 94, 82] )
+	Tilt Distance:  (120.00000000000001, -300) 	Tilt  (60, 60, 300) (gt (300, 180, 0) )
+Template  2 (gt 0 )
+	Distance:  22.3383079037 	Pos  (37, 38, 58) (gt [58, 41, 51] )
+	Tilt Distance:  (51.3178125465106, 60) 	Tilt  (300, 120, 0) (gt (240, 120, 60) )
+Template  2 (gt 0 )
+	Distance:  20.9045449604 	Pos  (41, 97, 21) (gt [26, 93, 35] )
+	Tilt Distance:  (59.99999999999999, -120) 	Tilt  (60, 60, 120) (gt (60, 0, 0) )
+Template  0 (gt 2 )
+	Distance:  16.7630546142 	Pos  (47, 84, 73) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000002, -120) 	Tilt  (120, 120, 120) (gt (300, 180, 0) )
+Template  0 (gt 2 )
+	Distance:  19.6468827044 	Pos  (48, 90, 65) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000002, 0) 	Tilt  (60, 120, 0) (gt (300, 180, 0) )
+Template  0 (gt 1 )
+	Distance:  23.4307490277 	Pos  (48, 38, 95) (gt [56, 21, 81] )
+	Tilt Distance:  (97.18075578145827, -60) 	Tilt  (60, 60, 300) (gt (180, 60, 240) )
+Template  0 (gt 2 )
+	Distance:  25.5734237051 	Pos  (46, 71, 84) (gt [57, 94, 82] )
+	Tilt Distance:  (120.00000000000001, -300) 	Tilt  (60, 60, 300) (gt (300, 180, 0) )
+Template  0 (gt 1 )
+	Distance:  23.4307490277 	Pos  (48, 38, 95) (gt [56, 21, 81] )
+	Tilt Distance:  (97.18075578145827, -60) 	Tilt  (60, 60, 300) (gt (180, 60, 240) )
+Template  0 (gt 2 )
+	Distance:  28.8790581564 	Pos  (50, 71, 66) (gt [57, 94, 82] )
+	Tilt Distance:  (120.00000000000001, -300) 	Tilt  (240, 60, 300) (gt (300, 180, 0) )
+Template  0 (gt 2 )
+	Distance:  20.0748598999 	Pos  (49, 94, 48) (gt [62, 91, 33] )
+	Tilt Distance:  (1.2074182697257333e-06, 0) 	Tilt  (120, 120, 120) (gt (120, 120, 300) )
+Template  0 (gt 2 )
+	Distance:  18.973665961 	Pos  (55, 104, 66) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000002, -120) 	Tilt  (120, 120, 120) (gt (300, 180, 0) )
+Template  2 (gt 0 )
+	Distance:  28.8790581564 	Pos  (57, 34, 23) (gt [58, 41, 51] )
+	Tilt Distance:  (8.537736462515939e-07, 0) 	Tilt  (240, 120, 240) (gt (240, 120, 60) )
+Template  2 (gt 0 )
+	Distance:  21.4709105536 	Pos  (58, 60, 61) (gt [58, 41, 51] )
+	Tilt Distance:  (82.81924421854174, 0) 	Tilt  (300, 60, 60) (gt (240, 120, 60) )
+Template  0 (gt 2 )
+	Distance:  24.5356882928 	Pos  (66, 44, 77) (gt [75, 64, 88] )
+	Tilt Distance:  (82.81924421854174, -180) 	Tilt  (300, 60, 180) (gt (240, 120, 0) )
+Template  0 (gt 1 )
+	Distance:  23.8537208838 	Pos  (74, 28, 67) (gt [56, 21, 81] )
+	Tilt Distance:  (97.18075578145829, 60) 	Tilt  (300, 60, 180) (gt (180, 60, 240) )
+Template  0 (gt 2 )
+	Distance:  27.3678643668 	Pos  (75, 93, 57) (gt [62, 91, 33] )
+	Tilt Distance:  (60.00000000000001, 120) 	Tilt  (120, 60, 180) (gt (120, 120, 300) )
+Template  0 (gt 2 )
+	Distance:  22.8910462845 	Pos  (77, 82, 74) (gt [75, 64, 88] )
+	Tilt Distance:  (120.00000000000001, 0) 	Tilt  (60, 120, 0) (gt (240, 120, 0) )
+Template  0 (gt 2 )
+	Distance:  28.3901391332 	Pos  (75, 77, 54) (gt [62, 91, 33] )
+	Tilt Distance:  (97.18075578145829, 240) 	Tilt  (240, 120, 60) (gt (120, 120, 300) )
+Template  0 (gt 2 )
+	Distance:  20.1246117975 	Pos  (77, 97, 45) (gt [62, 91, 33] )
+	Tilt Distance:  (128.68218745348943, 120) 	Tilt  (0, 60, 180) (gt (120, 120, 300) )
+Template  0 (gt 2 )
+	Distance:  20.1246117975 	Pos  (77, 97, 45) (gt [62, 91, 33] )
+	Tilt Distance:  (128.68218745348943, 120) 	Tilt  (0, 60, 180) (gt (120, 120, 300) )
+Template  0 (gt 1 )
+	Distance:  25.495097568 	Pos  (80, 26, 74) (gt [56, 21, 81] )
+	Tilt Distance:  (128.68218745348943, 240) 	Tilt  (60, 120, 0) (gt (180, 60, 240) )
+Template  0 (gt 1 )
+	Distance:  28.9482296523 	Pos  (82, 30, 90) (gt [56, 21, 81] )
+	Tilt Distance:  (82.81924421854173, 120) 	Tilt  (120, 120, 120) (gt (180, 60, 240) )
+Template  2 (gt 1 )
+	Distance:  21.2132034356 	Pos  (83, 68, 42) (gt [86, 68, 21] )
+	Tilt Distance:  (180.0, 180) 	Tilt  (300, 120, 0) (gt (120, 60, 180) )
+Template  2 (gt 1 )
+	Distance:  31.1608729018 	Pos  (85, 71, 52) (gt [86, 68, 21] )
+	Tilt Distance:  (119.99999999999999, 120) 	Tilt  (300, 60, 60) (gt (120, 60, 180) )
+Template  0 (gt 2 )
+	Distance:  28.1780056072 	Pos  (84, 93, 74) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000001, 0) 	Tilt  (240, 120, 0) (gt (300, 180, 0) )
+Template  0 (gt 2 )
+	Distance:  31.5753068077 	Pos  (90, 40, 74) (gt [75, 64, 88] )
+	Tilt Distance:  (120.00000000000001, 0) 	Tilt  (60, 120, 0) (gt (240, 120, 0) )
+Template  0 (gt 2 )
+	Distance:  21.0 	Pos  (82, 95, 38) (gt [62, 91, 33] )
+	Tilt Distance:  (60.00000000000001, 120) 	Tilt  (120, 60, 180) (gt (120, 120, 300) )
+Template  0 (gt 1 )
+	Distance:  22.045407685 	Pos  (89, 89, 27) (gt [86, 68, 21] )
+	Tilt Distance:  (128.68218745348943, 180) 	Tilt  (240, 120, 0) (gt (120, 60, 180) )
+Template  0 (gt 1 )
+	Distance:  30.0 	Pos  (86, 50, 45) (gt [86, 68, 21] )
+	Tilt Distance:  (51.31781254651057, -120) 	Tilt  (60, 60, 300) (gt (120, 60, 180) )
+Template  0 (gt 2 )
+	Distance:  24.899799196 	Pos  (93, 78, 98) (gt [75, 64, 88] )
+	Tilt Distance:  (128.68218745348943, -180) 	Tilt  (120, 60, 180) (gt (240, 120, 0) )
+Template  0 (gt 1 )
+	Distance:  27.8208554865 	Pos  (85, 51, 43) (gt [86, 68, 21] )
+	Tilt Distance:  (180.0, 180) 	Tilt  (300, 120, 0) (gt (120, 60, 180) )
+Template  0 (gt 2 )
+	Distance:  22.2934968096 	Pos  (92, 56, 76) (gt [75, 64, 88] )
+	Tilt Distance:  (97.18075578145829, -120) 	Tilt  (120, 120, 120) (gt (240, 120, 0) )
+Template  0 (gt 2 )
+	Distance:  24.899799196 	Pos  (93, 78, 98) (gt [75, 64, 88] )
+	Tilt Distance:  (128.68218745348943, -180) 	Tilt  (120, 60, 180) (gt (240, 120, 0) )
+Template  0 (gt 2 )
+	Distance:  31.064449134 	Pos  (87, 90, 75) (gt [57, 94, 82] )
+	Tilt Distance:  (60.00000000000001, 0) 	Tilt  (240, 120, 0) (gt (300, 180, 0) )
+Template  0 (gt 2 )
+	Distance:  33.1360830516 	Pos  (96, 73, 64) (gt [75, 64, 88] )
+	Tilt Distance:  (97.18075578145829, -120) 	Tilt  (120, 120, 120) (gt (240, 120, 0) )
+Template  0 (gt 2 )
+	Distance:  25.8650343128 	Pos  (97, 72, 77) (gt [75, 64, 88] )
+	Tilt Distance:  (82.8192442185417, -300) 	Tilt  (180, 60, 300) (gt (240, 120, 0) )
+Template  2 (gt 1 )
+	Distance:  42.4970587218 	Pos  (97, 16, 91) (gt [56, 21, 81] )
+	Tilt Distance:  (128.68218745348943, -60) 	Tilt  (300, 120, 300) (gt (180, 60, 240) )
+
+true_label_and_tilt :	 9
+true_label_false_tilt :	 39
+true_junk :	 0
+wrong_label :	 47
+false_junk :	 0
+false_existenece :	 0
+missing_ground_truth :	 0
+Done
