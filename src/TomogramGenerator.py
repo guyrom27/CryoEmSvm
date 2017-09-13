@@ -3,6 +3,7 @@ from CommonDataTypes import Tomogram, Candidate, SixPosition, EulerAngle
 from Constants import TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSIONS_2D, TOMOGRAM_DIMENSIONS_3D
 from StringComperableEnum import StringComperableEnum
 from TemplateUtil import put_template
+import Noise
 
 import numpy as np
 import pickle
@@ -101,7 +102,7 @@ def generate_random_candidates(template_side_len, criteria, dim):
     return [Candidate(SixPosition(pos_id[0], EulerAngle.rand_tilt_id()), label=pos_id[1]) for pos_id in zip(points, flat_ids)]
 
 
-def generate_random_tomogram(templates, criteria, dim):
+def generate_random_tomogram(templates, criteria, dim, noise = False):
     """
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
@@ -110,10 +111,14 @@ def generate_random_tomogram(templates, criteria, dim):
     """
     template_side = templates[0][0].density_map.shape[0]
     candidates = generate_random_candidates(template_side, criteria, dim)
-    return generate_tomogram_with_given_candidates(templates, candidates, dim)
+    tom = generate_tomogram_with_given_candidates(templates, candidates, dim)
+    if noise:
+        return Noise.make_noisy_tomogram(tom)
+    else:
+        return tom
 
 
-def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed=None):
+def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed=None, noise = False):
     """
     Generate random tomogram training set
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
@@ -129,7 +134,7 @@ def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, 
     random.seed(seed)
 
     for i in range(number_of_tomograms):
-        yield generate_random_tomogram(templates, criteria, dim)
+        yield generate_random_tomogram(templates, criteria, dim, noise)
 
 
 

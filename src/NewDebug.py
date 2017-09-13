@@ -12,6 +12,7 @@ criteria = [2,3,5,2]
 number_of_tomograms = 1
 dim = 2
 seed = 1909615246
+noise = True
 
 # create templates
 if dim == 2:
@@ -23,13 +24,13 @@ else:
 
 # train
 print("Training")
-training_tomograms = generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed)
+training_tomograms = generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed, noise)
 training_analyzers = []
 svm_and_templates = svm_train(templates, training_tomograms, training_analyzers)
 
 # eval
 print("Evaluating")
-evaluation_tomograms = [generate_random_tomogram(templates, criteria, dim)]
+evaluation_tomograms = [generate_random_tomogram(templates, criteria, dim, noise)]
 evaluation_analyzers = []
 output_candidates = svm_eval(svm_and_templates, evaluation_tomograms, evaluation_analyzers)
 evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
@@ -40,7 +41,7 @@ metrics = MetricTester(evaluation_tomograms[0].composition, [c for c in evaluate
 metrics.print_metrics()
 print('')
 result_metrics = ResultsMetrics(evaluation_tomograms[0].composition, output_candidates[0])
-result_metrics.print_full_stats()
+result_metrics.print_full_stats(short = False)
 if dim == 2:
     VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[0], evaluated_tomogram)
     VisualUtils.plt.show()
