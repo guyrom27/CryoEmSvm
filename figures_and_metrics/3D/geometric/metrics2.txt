@@ -1,0 +1,264 @@
+Using random seed:  918129920
+calculating correlations
+selecting
+labeling
+extracting features
+training
+svm labeling
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+generating output tomogram
+Ground Truth Candidates:
+=====
+Pos = [64, 61, 83] 38
+Label = 0
+=====
+Pos = [19, 80, 53] 38
+Label = 0
+=====
+Pos = [92, 43, 66] 59
+Label = 2
+=====
+Pos = [102, 91, 86] 50
+Label = 2
+=====
+Pos = [47, 30, 34] 39
+Label = 1
+=====
+Pos = [57, 63, 43] 80
+Label = 1
+=====
+Pos = [80, 103, 73] 11
+Label = 2
+=====
+Pos = [93, 93, 22] 7
+Label = 2
+=====
+Pos = [33, 57, 67] 52
+Label = 2
+=====
+Pos = [78, 43, 31] 56
+Label = 1
+=====
+Pos = [67, 102, 48] 2
+Label = 0
+Reconstructed Candidates:
+=====
+Pos = (12, 74, 21) 0
+Label = -1
+=====
+Pos = (22, 49, 37) 0
+Label = -1
+=====
+Pos = (18, 71, 35) 0
+Label = -1
+=====
+Pos = (19, 12, 44) 0
+Label = -1
+=====
+Pos = (19, 50, 78) 0
+Label = -1
+=====
+Pos = (19, 80, 53) 35
+Label = 0
+=====
+Pos = (20, 77, 86) 0
+Label = -1
+=====
+Pos = (18, 99, 97) 0
+Label = -1
+=====
+Pos = (18, 28, 43) 0
+Label = -1
+=====
+Pos = (20, 56, 53) 0
+Label = -1
+=====
+Pos = (26, 38, 83) 0
+Label = -1
+=====
+Pos = (25, 79, 90) 0
+Label = -1
+=====
+Pos = (33, 67, 18) 0
+Label = -1
+=====
+Pos = (34, 58, 67) 42
+Label = 2
+=====
+Pos = (34, 58, 67) 42
+Label = 2
+=====
+Pos = (32, 22, 72) 0
+Label = -1
+=====
+Pos = (36, 104, 40) 0
+Label = -1
+=====
+Pos = (34, 29, 61) 0
+Label = -1
+=====
+Pos = (39, 81, 18) 0
+Label = -1
+=====
+Pos = (38, 53, 87) 0
+Label = -1
+=====
+Pos = (36, 83, 20) 0
+Label = -1
+=====
+Pos = (37, 69, 102) 0
+Label = -1
+=====
+Pos = (37, 69, 102) 0
+Label = -1
+=====
+Pos = (36, 30, 100) 0
+Label = -1
+=====
+Pos = (43, 89, 73) 0
+Label = -1
+=====
+Pos = (48, 41, 96) 0
+Label = -1
+=====
+Pos = (48, 99, 31) 0
+Label = -1
+=====
+Pos = (48, 99, 31) 0
+Label = -1
+=====
+Pos = (48, 99, 31) 0
+Label = -1
+=====
+Pos = (50, 79, 79) 0
+Label = -1
+=====
+Pos = (48, 31, 34) 40
+Label = 1
+=====
+Pos = (58, 64, 43) 32
+Label = 1
+=====
+Pos = (57, 24, 82) 0
+Label = -1
+=====
+Pos = (66, 29, 66) 0
+Label = -1
+=====
+Pos = (64, 61, 83) 35
+Label = 0
+=====
+Pos = (68, 102, 48) 54
+Label = 0
+=====
+Pos = (78, 39, 91) 0
+Label = -1
+=====
+Pos = (79, 44, 31) 63
+Label = 1
+=====
+Pos = (80, 79, 13) 0
+Label = -1
+=====
+Pos = (81, 69, 57) 0
+Label = -1
+=====
+Pos = (81, 104, 73) 0
+Label = -1
+=====
+Pos = (88, 17, 84) 0
+Label = -1
+=====
+Pos = (86, 69, 93) 0
+Label = -1
+=====
+Pos = (94, 91, 41) 0
+Label = -1
+=====
+Pos = (87, 28, 83) 0
+Label = -1
+=====
+Pos = (88, 15, 66) 0
+Label = -1
+=====
+Pos = (87, 28, 83) 0
+Label = -1
+=====
+Pos = (92, 45, 66) 0
+Label = 2
+=====
+Pos = (93, 93, 22) 13
+Label = 2
+=====
+Pos = (93, 93, 22) 13
+Label = -1
+=====
+Pos = (94, 103, 67) 0
+Label = -1
+=====
+Pos = (98, 71, 95) 0
+Label = -1
+=====
+Pos = (102, 29, 22) 0
+Label = -1
+=====
+Pos = (98, 71, 95) 0
+Label = -1
+=====
+Pos = (102, 92, 86) 0
+Label = -1
+=====
+Pos = (102, 92, 86) 0
+Label = 2
+Warning: ambiguous match in Metric Tester
+=================
+Metrics for candidate Pos = (19, 80, 53) 35	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (120, 120, 0), True Tilt = (120, 120, 180), Difference = (0, 0, -180)
+=================
+Metrics for candidate Pos = (34, 58, 67) 42	Label = 2
+	COM offset distance = 1.414
+	Candidate Tilt = (180, 0, 0), True Tilt = (180, 120, 180), Difference = (0, -120, -180)
+=================
+Metrics for candidate Pos = (34, 58, 67) 42	Label = 2
+	COM offset distance = 1.414
+	Candidate Tilt = (180, 0, 0), True Tilt = (180, 120, 180), Difference = (0, -120, -180)
+=================
+Metrics for candidate Pos = (48, 31, 34) 40	Label = 1
+	COM offset distance = 1.414
+	Candidate Tilt = (120, 120, 300), True Tilt = (120, 120, 240), Difference = (0, 0, 60)
+=================
+Metrics for candidate Pos = (58, 64, 43) 32	Label = 1
+	COM offset distance = 1.414
+	Candidate Tilt = (120, 60, 180), True Tilt = (300, 120, 180), Difference = (-180, -60, 0)
+=================
+Metrics for candidate Pos = (64, 61, 83) 35	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (120, 120, 0), True Tilt = (120, 120, 180), Difference = (0, 0, -180)
+=================
+Metrics for candidate Pos = (68, 102, 48) 54	Label = 0
+	COM offset distance = 1.000
+	Candidate Tilt = (180, 120, 300), True Tilt = (0, 60, 60), Difference = (180, 60, 240)
+=================
+Metrics for candidate Pos = (79, 44, 31) 63	Label = 1
+	COM offset distance = 1.414
+	Candidate Tilt = (240, 120, 0), True Tilt = (240, 0, 0), Difference = (0, 120, 0)
+=================
+Metrics for candidate Pos = (92, 45, 66) 0	Label = 2
+=================
+Metrics for candidate Pos = (93, 93, 22) 13	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (0, 180, 0), True Tilt = (0, 120, 0), Difference = (0, 60, 0)
+=================
+Metrics for candidate Pos = (102, 92, 86) 0	Label = 2
+	COM offset distance = 1.000
+	Candidate Tilt = (0, 0, 0), True Tilt = (180, 120, 60), Difference = (-180, -120, -60)
+======Global Statistics======
+	svm sucesss rate = 83.33%
+	number of mislabeled candidates = 0
+	svm false negatives = 0
+	undetected candidates = 2
+	Average COM offset  = 0.907
+	Tilt Match Rate = 0.00%

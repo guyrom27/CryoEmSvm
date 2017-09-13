@@ -1,0 +1,188 @@
+Training
+Using random seed:  960915189
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+Evaluating
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+Results
+=================
+Metrics for candidate Pos = (15, 45, 0) 19	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (285, 0, 0), True Tilt = (285, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (17, 16, 0) 2	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (30, 0, 0), True Tilt = (30, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (36, 69, 0) 13	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (195, 0, 0), True Tilt = (195, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (39, 98, 0) 7	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (105, 0, 0), True Tilt = (105, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (41, 41, 0) 21	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (315, 0, 0), True Tilt = (315, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (68, 20, 0) 2	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (30, 0, 0), True Tilt = (30, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (69, 98, 0) 17	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (255, 0, 0), True Tilt = (255, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (79, 57, 0) 11	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (165, 0, 0), True Tilt = (165, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (103, 43, 0) 23	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (345, 0, 0), True Tilt = (345, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (103, 103, 0) 18	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (270, 0, 0), True Tilt = (0, 0, 0), Difference = (270, 0, 0)
+======Global Statistics======
+	svm sucesss rate = 100.00%
+	number of mislabeled candidates = 0
+	svm false negatives = 0
+	undetected candidates = 0
+	Tilt Match Rate = 90.00%
+
+true_label_and_tilt 
+===============
+Template  0 (gt 0 )
+	Distance:  0.0 	Pos  (15, 45, 0) (gt [15, 45, 0] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (285, 0, 0) (gt (285, 0, 0) )
+Template  2 (gt 2 )
+	Distance:  0.0 	Pos  (17, 16, 0) (gt [17, 16, 0] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (30, 0, 0) (gt (30, 0, 0) )
+Template  0 (gt 0 )
+	Distance:  0.0 	Pos  (36, 69, 0) (gt [36, 69, 0] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (195, 0, 0) (gt (195, 0, 0) )
+Template  2 (gt 2 )
+	Distance:  0.0 	Pos  (39, 98, 0) (gt [39, 98, 0] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (105, 0, 0) (gt (105, 0, 0) )
+Template  2 (gt 2 )
+	Distance:  0.0 	Pos  (41, 41, 0) (gt [41, 41, 0] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (315, 0, 0) (gt (315, 0, 0) )
+Template  0 (gt 0 )
+	Distance:  0.0 	Pos  (68, 20, 0) (gt [68, 20, 0] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (30, 0, 0) (gt (30, 0, 0) )
+Template  2 (gt 2 )
+	Distance:  0.0 	Pos  (69, 98, 0) (gt [69, 98, 0] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (255, 0, 0) (gt (255, 0, 0) )
+Template  1 (gt 1 )
+	Distance:  0.0 	Pos  (79, 57, 0) (gt [79, 57, 0] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (165, 0, 0) (gt (165, 0, 0) )
+Template  1 (gt 1 )
+	Distance:  0.0 	Pos  (103, 43, 0) (gt [103, 43, 0] )
+	Tilt Distance:  (0.0, 0) 	Tilt  (345, 0, 0) (gt (345, 0, 0) )
+
+true_label_false_tilt 
+===============
+Template  1 (gt 1 )
+	Distance:  0.0 	Pos  (103, 103, 0) (gt [103, 103, 0] )
+	Tilt Distance:  (0.0, -270) 	Tilt  (270, 0, 0) (gt (0, 0, 0) )
+
+true_label_and_tilt :	 9
+true_label_false_tilt :	 1
+true_junk :	 0
+wrong_label :	 0
+false_junk :	 0
+false_existenece :	 0
+missing_ground_truth :	 0
+Done

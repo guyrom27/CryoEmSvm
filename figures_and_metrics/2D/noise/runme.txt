@@ -1,0 +1,11 @@
+NewDebug.py
+
+
+change top config to :
+
+
+
+criteria = [3,3,4]
+number_of_tomograms = 30
+dim = 2
+seed = 705256948

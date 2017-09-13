@@ -1,0 +1,19 @@
+in template_generator.py main script:
+    tmp = r'C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\template_generator.py -o C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates -a 60 -g C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates\geometric.txt'
+    main((tmp.split())[1])
+
+geometric.txt:
+cube|10
+sphere|10
+L|5,2,9,3,4
+
+
+open template_generator.py from idle in chimera and run
+ 
+
+
+in DebugMain3D.py
+
+#seed = 158345426	run1    [3,3]
+#seed = 918129920      	run2    [3,3,3]
+criteria = ...

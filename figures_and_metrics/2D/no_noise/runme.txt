@@ -1,0 +1,19 @@
+NewDebug.py
+
+
+
+criteria = [3,3,4]
+number_of_tomograms = 30
+dim = 2
+seed=960915189
+
+
+
+
+
+TomogramGenerator.py
+
+replace:
+return Noise.make_noisy_tomogram(generate_tomogram_with_given_candidates(templates, candidates, dim))
+with:
+return generate_tomogram_with_given_candidates(templates, candidates, dim)

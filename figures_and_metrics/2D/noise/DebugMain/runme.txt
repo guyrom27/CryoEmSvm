@@ -1,0 +1,5 @@
+DebugMain
+
+
+criteria = [2, 2, 3, 2]
+seed = 1249816806

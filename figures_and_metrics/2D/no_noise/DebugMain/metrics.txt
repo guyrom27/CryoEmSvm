@@ -1,0 +1,86 @@
+Using random seed:  1128971473
+There are 9 candidates
+[(29, 21, 0), (30, 95, 0), (31, 70, 0), (54, 56, 0), (59, 26, 0), (63, 102, 0), (75, 73, 0), (93, 54, 0), (104, 20, 0)]
+	caclualting correlations
+	selecting candidates
+	labeling and extracting features
+Ground Truth Candidates:
+=====
+Pos = [74, 72, 0] 17	Label = 1
+=====
+Pos = [28, 21, 0] 14	Label = 3
+=====
+Pos = [92, 53, 0] 20	Label = 2
+=====
+Pos = [104, 19, 0] 19	Label = 2
+=====
+Pos = [58, 25, 0] 20	Label = 3
+=====
+Pos = [31, 69, 0] 11	Label = 0
+=====
+Pos = [29, 95, 0] 21	Label = 0
+=====
+Pos = [53, 55, 0] 6	Label = 1
+=====
+Pos = [63, 102, 0] 5	Label = 2
+Reconstructed Candidates:
+=====
+Pos = (28, 21, 0) 14	Label = 3
+=====
+Pos = (29, 95, 0) 21	Label = 0
+=====
+Pos = (31, 69, 0) 11	Label = 0
+=====
+Pos = (53, 55, 0) 18	Label = 1
+=====
+Pos = (58, 25, 0) 20	Label = 3
+=====
+Pos = (63, 102, 0) 5	Label = 2
+=====
+Pos = (74, 72, 0) 17	Label = 1
+=====
+Pos = (92, 53, 0) 20	Label = 2
+=====
+Pos = (104, 19, 0) 19	Label = 2
+=================
+Metrics for candidate Pos = (28, 21, 0) 14	Label = 3
+	COM offset distance = 0.000
+	Candidate Tilt = (210, 0, 0), True Tilt = (210, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (29, 95, 0) 21	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (315, 0, 0), True Tilt = (315, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (31, 69, 0) 11	Label = 0
+	COM offset distance = 0.000
+	Candidate Tilt = (165, 0, 0), True Tilt = (165, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (53, 55, 0) 18	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (270, 0, 0), True Tilt = (90, 0, 0), Difference = (180, 0, 0)
+=================
+Metrics for candidate Pos = (58, 25, 0) 20	Label = 3
+	COM offset distance = 0.000
+	Candidate Tilt = (300, 0, 0), True Tilt = (300, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (63, 102, 0) 5	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (75, 0, 0), True Tilt = (75, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (74, 72, 0) 17	Label = 1
+	COM offset distance = 0.000
+	Candidate Tilt = (255, 0, 0), True Tilt = (255, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (92, 53, 0) 20	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (300, 0, 0), True Tilt = (300, 0, 0), Difference = (0, 0, 0)
+=================
+Metrics for candidate Pos = (104, 19, 0) 19	Label = 2
+	COM offset distance = 0.000
+	Candidate Tilt = (285, 0, 0), True Tilt = (285, 0, 0), Difference = (0, 0, 0)
+======Global Statistics======
+	svm sucesss rate = 100.00%
+	number of mislabeled candidates = 0
+	svm false negatives = 0
+	undetected candidates = 0
+	Tilt Match Rate = 88.89%
