@@ -16,7 +16,7 @@ class TemplateMaxCorrelations:
         self.correlation_values = []
         self.best_tilt_ids = []
         for template_group in templates:
-            max_correlation = np.zeros(tomogram.density_map.shape)
+            max_correlation = -np.ones(tomogram.density_map.shape)
             max_correlation_tilt_id = np.zeros(max_correlation.shape, dtype = int)
             for tilted_template in template_group:
                 correlation = self.create_fit_score(tilted_template, tomogram)

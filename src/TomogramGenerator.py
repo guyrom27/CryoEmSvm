@@ -3,33 +3,29 @@ from CommonDataTypes import Tomogram, Candidate, SixPosition, EulerAngle
 from Constants import TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSIONS_2D, TOMOGRAM_DIMENSIONS_3D
 from StringComperableEnum import StringComperableEnum
 from TemplateUtil import put_template
-import Noise
-
+from Noise import make_noisy_tomogram
 import numpy as np
 import pickle
 import random
 import poisson_disk
 import naive_spaced_randomizer
 
+# Ways to get tomogram
+# + generate_tomogram_with_given_candidates
+# + generate_random_tomogram
+# - load tomogram from file
+#   - with known composition
+#   - with unkown composition
+#
+# Ways to get training set (set of tomogrmas)
+# - generate random tomograms from criteria and number
+# - load tomograms from files
 
-"""
-This file contains all the methods that are used to generate and load tomograms (from files)
- Ways to get tomogram
- + generate_tomogram_with_given_candidates
- + generate_random_tomogram
- - load tomogram from file
-   - with known composition
-   - with unkown composition
-
- Ways to get training set (set of tomogrmas)
- - generate random tomograms from criteria and number
- - load tomograms from files
-"""
 
 def get_tomogram_shape(dim):
     """
     :param dim 2 for 2D 3 for 3D:
-    :return: tomogram required shape (according to dimension)
+        :return: tomogram required shape (according to dimension)
     """
     if dim == 2:
         return TOMOGRAM_DIMENSIONS_2D
@@ -90,7 +86,7 @@ def generate_random_candidates(template_side_len, criteria, dim):
     else:
         assert(dim == 3)
 
-    COM_valid_space = [TOMOGRAM_DIMENSION - 2*x for x in gap_shape]
+    COM_valid_space = [TOMOGRAM_DIMENSION - 2*x - 2 for x in gap_shape]
 
     if dim==2:
         COM_valid_space[2] = 1
@@ -105,7 +101,7 @@ def generate_random_candidates(template_side_len, criteria, dim):
     return [Candidate(SixPosition(pos_id[0], EulerAngle.rand_tilt_id()), label=pos_id[1]) for pos_id in zip(points, flat_ids)]
 
 
-def generate_random_tomogram(templates, criteria, dim, noise = False):
+def generate_random_tomogram(templates, criteria, dim, noise=False):
     """
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
@@ -114,14 +110,12 @@ def generate_random_tomogram(templates, criteria, dim, noise = False):
     """
     template_side = templates[0][0].density_map.shape[0]
     candidates = generate_random_candidates(template_side, criteria, dim)
-    tom = generate_tomogram_with_given_candidates(templates, candidates, dim)
     if noise:
-        return Noise.make_noisy_tomogram(tom)
-    else:
-        return tom
+        return make_noisy_tomogram(generate_tomogram_with_given_candidates(templates, candidates, dim), dim)
+    return generate_tomogram_with_given_candidates(templates, candidates, dim)
 
 
-def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed=None, noise = False):
+def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed=None, noise=False):
     """
     Generate random tomogram training set
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id

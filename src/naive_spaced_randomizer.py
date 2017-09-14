@@ -1,10 +1,7 @@
 import random
 
 class naive_spaced_randomizer:
-    """
-    generates random points that are separated from one another in a given distance using a naive elimination
-    """
-    def __init__(self, w, h, d, r, n, max_tries=100000):
+    def __init__(self, w, h, d, r, n, max_tries=10000, max_iterations=10):
         """
         naive randomization- randomize and check if it is separated from all other points
         :param w: x dim size
@@ -20,8 +17,22 @@ class naive_spaced_randomizer:
         self.r2=r**2
         self.n=n
         self.max_tries = max_tries
+        self.max_iterations = max_iterations
+
 
     def randomize_spaced_points(self):
+        iterations = 0
+        while iterations < self.max_iterations:
+            points = self.distribute_points()
+            if len(points) != 0:
+                break
+            iterations += 1
+        if iterations == self.max_iterations:
+            raise Exception("Randomization hit max tries and failed")
+        return points
+
+
+    def distribute_points(self):
         points = []
         for i in range(self.n):
             for j in range(self.max_tries):
@@ -38,7 +49,8 @@ class naive_spaced_randomizer:
                     points.append(point)
                     break
                 if j==self.max_tries-1:
-                    raise Exception("Randomization hit max tries and failed")
+                    points = []
+                    return points
         return points
 
 

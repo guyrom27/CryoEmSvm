@@ -1,6 +1,30 @@
 import numpy as np
+import math
 from Constants import DISTANCE_THRESHOLD, JUNK_ID
 from CommonDataTypes import EulerAngle
+
+TILT_THRESHOLD = 15
+
+def tilt_dist(a1, a2):
+    T1 = math.radians(a1.Theta)
+    T2 = math.radians(a2.Theta)
+    P1 = math.radians(a1.Phi)
+    P2 = math.radians(a2.Phi)
+    rel_angle_3d = math.acos(math.sin(T1)*math.sin(T2) * (math.cos(P1)*math.cos(P2) + math.sin(P1)*math.sin(P2)) + math.cos(T1)*math.cos(T2))
+
+    rel_psi = a2.Psi-a1.Psi
+    if abs(rel_angle_3d) < 1e-7: # for 2d
+        rel_psi =+ a2.Phi-a1.Phi
+
+    return (math.degrees(rel_angle_3d), rel_psi)
+
+def tilts_match(c1, c2):
+    (rel_angle_3d, rel_psi) = tilt_dist(c1,c2)
+    return (abs(rel_angle_3d) < TILT_THRESHOLD and abs(rel_psi) < TILT_THRESHOLD)
+
+
+
+
 
 def find_best_match(candidate, compostion):
     min_dist = DISTANCE_THRESHOLD
@@ -22,17 +46,10 @@ def short_candidate_print(c, message = None):
     print(string)
 
 
-'''
-eval,global/local, eval_error, name
-'''
-
-
-
-
 #todo: add option to save data to a log
 #maybe add the option to write some of the data to a global log file for statistics?
 #That way we can keep statistics over multiple tomograms
-
+#TODO correctly labeled junk id's vv incorrectly labeled junk?
 #Maybe add a mode where we only print the outliers? reletive to some tolerance levels?
 
 class MetricTester:
@@ -51,7 +68,6 @@ class MetricTester:
         self.success_junk = []
         self.false_existence = []                   #no gt
         self.not_detected = []                      #gt but no detection in junk or id
-
         self.statistics = {}
         #candidate -> list of (value, string)
         #each (value,string) represents a metric
@@ -61,9 +77,6 @@ class MetricTester:
         # a list of metrics that is not tied to a specific candidate
         # e.g. average center of mass distance, tilt success rate,
         # number of correct matches ect...
-
-        self.gt_tomogram = gt_tomogram
-        self.tomogram = tomogram
         self.matches = {}
         self.match_gt_to_reco(reco_composition)
         self.init_candidate_lists()
@@ -74,7 +87,8 @@ class MetricTester:
         self.match_success_rates()
         self.COM_position()
         self.Tilt_comparison()
-        self.correlation_comparison()
+        self.correlation_comparison(gt_tomogram, tomogram)
+        self.tilt_mismatch_list = self.get_tilt_candidate_list()
         #add tomograms if needed
 
 
@@ -167,34 +181,6 @@ class MetricTester:
         self.global_statistics.append(("stat", (n_label_match, n_mislabled, n_svm_fn, n_cd_fn), message))
 
         #wrong_lable_rate = len(self.wrong_label)*100.0/(n_mislabled+n_label_match)
-
-        '''
-        n_cases = np.zeros((4,))
-        n = 0.0
-        for c in self.reco_comp:
-            match = self.matches[c]
-            n += 1
-            if match is not None:
-                if match.label == c.label:      #matched truth and correct label
-                    n_cases[0] += 1
-                else:
-                    n_cases[1] += 1             #Found a candidate near truth, but it is mislabeled
-            else:
-                n_cases[2] += 1                 #False positive: detected a candidate which does not match the ground truth
-        for c in self.gt_comp:
-            if self.matches[c] is None:
-                n_cases[3] += 1                 #False negative: ground truth candidate was not detected
-                n += 1                          #Rejected a true candidates does this count as a label error?
-        n_cases *= 100.0/n
-
-        message = ""
-        message += "match rate = {0:.2f}%".format(n_cases[0])
-        if print_all:
-            message += "," + "mislabel rate = {0:.2f}%".format(n_cases[1])
-            message += ", " + "false positive rate = {0:.2f}%".format(n_cases[2])
-            message += ", " + "false negative rate = {0:.2f}%".format(n_cases[3])
-        self.global_statistics.append(message)
-        '''
         return
 
     def COM_position(self):
@@ -204,7 +190,7 @@ class MetricTester:
             match = self.matches[c]
             if match is not None:
                 dist = calculate_L2_dist(c, match)
-                self.statistics[c].append(("COM_dist", dist, "COM offset distance = {0:.3f}".format(dist)))
+                self.statistics[c].append(("COM_dist", dist, "dist = {0:.3f}".format(dist)))
                 avg_dist += dist
                 n += 1
         if n > 0:
@@ -212,19 +198,16 @@ class MetricTester:
             if avg_dist != 0:
                 self.global_statistics.append(("COM_dist", avg_dist, "Average COM offset  = {0:.3f}".format(avg_dist)))
 
-    def correlation_comparison(self):
+    def correlation_comparison(self, gt_tomogram, tomogram):
         from math import sqrt
-        if self.gt_tomogram is None or self.tomogram is None:
+        if gt_tomogram is None or tomogram is None:
             return
-        dm1 = self.gt_tomogram.density_map.copy()
-        dm2 = self.tomogram.density_map.copy()
+        dm1 = gt_tomogram.density_map.copy()
+        dm2 = tomogram.density_map.copy()
         xcor = np.sum(np.multiply(dm1,dm2))
         xcor /= sqrt(np.sum(np.square(dm1)))
         xcor /= sqrt(np.sum(np.square(dm2)))
         self.global_statistics.append(("xcor",xcor , "Normalized xcor = {0:.3f}".format(xcor)))
-
-
-
 
     def Tilt_comparison(self):
         n_correct = 0
@@ -235,11 +218,11 @@ class MetricTester:
                 a1 = EulerAngle.fromTiltId(c.get_tilt_id())
                 a2 = EulerAngle.fromTiltId(match.get_tilt_id())
                 a3 = (a1.Phi-a2.Phi, a1.Theta-a2.Theta, a1.Psi-a2.Psi)
-                message = "Candidate Tilt = " + str(a1)
+                message = "Cand Tilt = " + str(a1)
                 message += ", True Tilt = " + str(a2)
-                message += ", Difference = " + str(a3)
+                message += ", Diff = " + str(a3)
                 n += 1
-                if c.get_tilt_id() == match.get_tilt_id():
+                if tilts_match(a1,a2):
                     n_correct += 1
                 self.statistics[c].append(("Tilt", (a1, a2), message))
         if n > 0:
@@ -251,7 +234,7 @@ class MetricTester:
         accepted_candidates = []
         rejected_candidates = []
         if tolerance_function is None:
-            tolerance_function = lambda x: x[0] == x[1]
+            tolerance_function = lambda x: tilts_match(x[0], x[1])
         for c in self.true_label:
             for metric in self.statistics[c]:
                 if metric[0] == "Tilt":
@@ -275,28 +258,3 @@ class MetricTester:
         print("======Global Statistics======")
         for metric in self.global_statistics:
             print("\t" + metric[2])
-
-    def print_to_file(self, path="Logger.txt"): #what should the default path be?
-        file = open(path,'w')
-        for c in self.reco_comp:
-            file.write("=================\n")
-            file.write("Metrics for Pos = {} Label = {}\n".format(str(c.get_six_position()),str(c.label)))
-            for message in self.statistics[c]:
-                file.write("\t" + message +"\n")
-        file.write("======Global Statistics======\n")
-        for message in self.global_statistics:
-            file.write("\t" + message + "\n")
-        file.close()
-
-'''
-    def match_success_rate(self):
-        false_positive = 0.0
-        false_negative = 0.0
-        for c in self.reco_comp:
-            if self.matches[c] is None:
-                false_positive += 1
-        for c in self.gt_comp:
-            if self.matches[c] is None:
-                false_negative += 1
-        #if false_positive == 0 and false_negative == 0
-'''

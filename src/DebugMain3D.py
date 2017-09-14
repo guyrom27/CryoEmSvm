@@ -1,4 +1,4 @@
-from TomogramGenerator import generate_tomogram_with_given_candidates, generate_random_tomogram, TOMOGRAM_DIMENSIONS_3D, generate_random_tomogram_set
+from TomogramGenerator import generate_tomogram_with_given_candidates, generate_random_tomogram, TOMOGRAM_DIMENSIONS_3D
 from TemplateGenerator import generate_tilted_templates, load_templates_3d
 from Labeler import PositionLabeler, SvmLabeler
 from TemplateMaxCorrelations import TemplateMaxCorrelations
@@ -8,6 +8,8 @@ from TiltFinder import TiltFinder
 from TomogramAnalyzer import TomogramAnalyzer
 from MetricTester import MetricTester
 import VisualUtils
+from Noise import make_noisy_tomogram
+
 
 import numpy as np
 from sklearn.svm import SVC
@@ -20,12 +22,12 @@ if __name__ == '__main__':
     #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_3D]
     #composition = (Candidate.fromTuple(1, 0, 12, 12, 12), Candidate.fromTuple(0, 6, 27, 27, 27))
     #tomogram = generate_tomogram_with_given_candidates(templates, composition, dim)
-    seed = None
-    criteria = [3,3,5]
-    tomograms = [x for x in generate_random_tomogram_set(templates, criteria, 2, 3, seed)]
-    tomogram = tomograms[0]
+
+    criteria = [3, 3]
+    true_tomogram = generate_random_tomogram(templates, criteria, 3)
+    tomogram = make_noisy_tomogram(true_tomogram, 3)
     composition = tomogram.composition
-    #VisualUtils.slider3d(tomogram.density_map)
+    VisualUtils.slider3d(tomogram.density_map)
 
     print('calculating correlations')
     max_correlations = TemplateMaxCorrelations(tomogram, templates)
@@ -50,7 +52,7 @@ if __name__ == '__main__':
     Ylist = [c.label for c in candidates]
     svm = SVC()
     x = np.array(Xlist)
-    y = np.array(Ylist).astype(int)
+    y = np.array(Ylist)
     if (len(np.unique(y)) == 1):
         print("SVM training must contain more than one label type (all candidates are the same label)")
         exit()
@@ -60,7 +62,6 @@ if __name__ == '__main__':
     tilt_finder = TiltFinder(max_correlations)
 
     print('svm labeling')
-    tomogram = tomograms[1]
     analyzer = TomogramAnalyzer(tomogram, templates, svm_labeler)
     (svm_candidates, feature_vectors, labels) = analyzer.analyze()
 
@@ -75,7 +76,7 @@ if __name__ == '__main__':
     for c in svm_tomogram.composition:
         print("=====\nPos = " + str(c.six_position) + "\nLabel = " + str(c.label))
 
-    metric = MetricTester(tomogram.composition,svm_tomogram.composition)
+    metric = MetricTester(tomogram.composition,svm_tomogram.composition, tomogram, svm_tomogram)
     metric.print_metrics()
 
-    VisualUtils.slider3d(svm_tomogram.density_map - tomogram.density_map)
+    VisualUtils.slider3d(svm_tomogram.density_map - true_tomogram.density_map)

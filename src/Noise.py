@@ -36,6 +36,7 @@ def add_noise(dmap, dim = 2):
     noise = gauss_noise(dmap)
     noise = linear_noise(noise)
     noise = blur_filter(noise, dim)
+    noise = linear_noise(noise)
     return noise
 
 def make_noisy_tomogram(tomogram, dim = 2):
@@ -56,7 +57,7 @@ if __name__ == '__main__':
     templates = generate_tilted_templates()
 
     criteria = [4, 3, 0, 0]
-    tomogram = generate_random_tomogram(templates, criteria)
+    tomogram = generate_random_tomogram(templates, criteria, 2)
     noisy_tomogram = make_noisy_tomogram(tomogram)
 
     compare_reconstruced_tomogram(tomogram, noisy_tomogram, True)
