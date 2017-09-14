@@ -1,6 +1,6 @@
 from Constants import JUNK_ID
 from CommonDataTypes import Tomogram, Candidate, SixPosition, EulerAngle
-from Constants import TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSIONS_2D, TOMOGRAM_DIMENSIONS_3D
+from Constants import TOMOGRAM_DIMENSION
 from StringComperableEnum import StringComperableEnum
 from TemplateUtil import put_template
 import Noise
@@ -32,9 +32,9 @@ def get_tomogram_shape(dim):
     :return: tomogram required shape (according to dimension)
     """
     if dim == 2:
-        return TOMOGRAM_DIMENSIONS_2D
+        return tuple([TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION,1])
     elif dim == 3:
-        return TOMOGRAM_DIMENSIONS_3D
+        return tuple([TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION])
     else:
         assert(False)
 

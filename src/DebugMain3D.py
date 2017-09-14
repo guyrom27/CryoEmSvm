@@ -1,5 +1,5 @@
 from TomogramGenerator import generate_tomogram_with_given_candidates, generate_random_tomogram, TOMOGRAM_DIMENSIONS_3D, generate_random_tomogram_set
-from TemplateGenerator import generate_tilted_templates, load_templates_3d
+from TemplateGenerator import load_templates_3d
 from Labeler import PositionLabeler, SvmLabeler
 from TemplateMaxCorrelations import TemplateMaxCorrelations
 from CandidateSelector import CandidateSelector
@@ -14,7 +14,6 @@ from sklearn.svm import SVC
 
 if __name__ == '__main__':
     dim = 3
-    #templates = generate_tilted_templates()
     templates = load_templates_3d(r'..\Chimera\Templates' + '\\')
 
     #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_3D]

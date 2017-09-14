@@ -1,15 +1,12 @@
+from CommonDataTypes import Candidate, SixPosition
+from Constants import CORRELATION_THRESHOLD, GAUSSIAN_SIZE, GAUSSIAN_STDEV
+import PeakDetection
+
 from scipy import signal
 import numpy as np
 
-from CommonDataTypes import Candidate, SixPosition
-import PeakDetection
 
-# now they are arbitrary values
 KERNEL_GAUSSIAN = 'GAUSSIAN'
-CORRELATION_THRESHOLD = 10
-GAUSSIAN_SIZE = 10
-GAUSSIAN_STDEV = 3
-
 
 def create_kernel(name, dim):
     """

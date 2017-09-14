@@ -74,16 +74,4 @@ def align_densitymap_to_COM(densitymap, container_size_3D):
 
 
 if __name__ == '__main__':
-    from TemplateGenerator import generate_tilted_templates
-
-    dm = np.array([[0, 0, 1], [0, 0, 0], [0, 0, 0]])
-    t= align_densitymap_to_COM(dm, (9,9))
-    assert((np.array(measurements.center_of_mass(t)) == np.floor(np.array(t.shape)/2)).all())
-
-    templates = generate_tilted_templates()
-    t = templates[1][2]
-    norm = sqrt(np.sum(np.square(t.density_map)))
-    print("norm before normalizing: " + str(norm))
-    get_normalize_template_dm(t)
-    norm = sqrt(np.sum(np.square(t.density_map)))
-    print("norm after normalizing: " + str(norm))
+    pass
