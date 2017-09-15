@@ -1,6 +1,9 @@
 import numpy as np
 from math import sqrt
 from scipy.ndimage import measurements
+from scipy import signal
+
+KERNEL_GAUSSIAN = 'GAUSSIAN'
 
 """
 Different Template manipulations are collected here
@@ -71,6 +74,31 @@ def align_densitymap_to_COM(densitymap, container_size_3D):
     truncated_matrix = big_container[shape]
 
     return truncated_matrix.reshape(container_size_3D)
+
+
+def create_kernel(name, dim, gaussian_size, gaussian_stdev):
+    """
+    Creats a kernel of the specified kind and dimension.
+    :param name: Kind of kernel to create. Only KERNEL_GAUSSIAN at the moment.
+    :param dim: Dimension of the kernel. Only 2 of 3.
+    :param gaussian_size: size of gaussian
+    :param gaussian_stdev: standard deviation of gaussian
+    :return: 3 dimensional ndarray where the third dimension is of size 1 for the 2D case.
+    """
+    if KERNEL_GAUSSIAN == name:
+        base = signal.gaussian(gaussian_size, gaussian_stdev)
+        if 2 == dim:
+            return np.outer(base, base).reshape(len(base), len(base), 1)
+        elif 3 == dim:
+            plane = np.outer(base, base).reshape(len(base), len(base), 1)
+            kernel = np.outer(base, plane[0]).reshape(len(base), len(base), 1)
+            for row in plane[1:]:
+                kernel = np.concatenate((kernel, np.outer(base, row).reshape(len(base), len(base), 1)), 2)
+            return kernel
+        else:
+            raise NotImplementedError('Dimension can\'t be %d! (only 2 or 3)' % dim)
+    else:
+        raise NotImplementedError('No kernel option %s!' % name)
 
 
 if __name__ == '__main__':

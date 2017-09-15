@@ -1,5 +1,6 @@
 import numpy as np
-from Constants import DISTANCE_THRESHOLD, JUNK_ID
+from Constants import DISTANCE_THRESHOLD
+from Labeler import JUNK_ID
 from CommonDataTypes import EulerAngle
 
 def find_best_match(candidate, compostion):

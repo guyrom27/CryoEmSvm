@@ -1,4 +1,4 @@
-from Constants import JUNK_ID
+from Labeler import JUNK_ID
 
 
 class TiltFinder:

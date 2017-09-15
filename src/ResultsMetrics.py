@@ -1,5 +1,5 @@
-from Labeler import PositionLabeler
-from Constants import JUNK_ID, TILT_THRESHOLD
+from Labeler import PositionLabeler, JUNK_ID
+from Constants import TILT_THRESHOLD
 from CommonDataTypes import EulerAngle
 
 import numpy as np

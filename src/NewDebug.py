@@ -1,4 +1,4 @@
-from Constants import JUNK_ID
+from Labeler import JUNK_ID
 from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d
 from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates, generate_random_tomogram_set
 from SvmTrain import svm_train

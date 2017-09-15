@@ -1,34 +1,11 @@
 from CommonDataTypes import Candidate, SixPosition
 from Constants import CORRELATION_THRESHOLD, GAUSSIAN_SIZE, GAUSSIAN_STDEV
+from TemplateUtil import create_kernel, KERNEL_GAUSSIAN
 import PeakDetection
 
 from scipy import signal
 import numpy as np
 
-
-KERNEL_GAUSSIAN = 'GAUSSIAN'
-
-def create_kernel(name, dim):
-    """
-    Creats a kernel of the specified kind and dimension.
-    :param name: Kind of kernel to create. Only KERNEL_GAUSSIAN at the moment.
-    :param dim: Dimension of the kernel. Only 2 of 3.
-    :return: 3 dimensional ndarray where the third dimension is of size 1 for the 2D case.
-    """
-    if KERNEL_GAUSSIAN == name:
-        base = signal.gaussian(GAUSSIAN_SIZE, GAUSSIAN_STDEV)
-        if 2 == dim:
-            return np.outer(base, base).reshape(len(base), len(base), 1)
-        elif 3 == dim:
-            plane = np.outer(base, base).reshape(len(base), len(base), 1)
-            kernel = np.outer(base, plane[0]).reshape(len(base), len(base), 1)
-            for row in plane[1:]:
-                kernel = np.concatenate((kernel, np.outer(base, row).reshape(len(base), len(base), 1)), 2)
-            return kernel
-        else:
-            raise NotImplementedError('Dimension can\'t be %d! (only 2 or 3)' % dim)
-    else:
-        raise NotImplementedError('No kernel option %s!' % name)
 
 
 class CandidateSelector:
@@ -41,7 +18,7 @@ class CandidateSelector:
     def __init__(self, max_correlations, template_shape, dim=2):
         self.max_correlations = max_correlations
         self.dim = dim
-        self.kernel = create_kernel(KERNEL_GAUSSIAN, dim=dim)
+        self.kernel = create_kernel(KERNEL_GAUSSIAN, dim, GAUSSIAN_SIZE, GAUSSIAN_STDEV)
 
         self.template_shape = template_shape
 

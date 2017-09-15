@@ -1,4 +1,4 @@
-from Constants import JUNK_ID
+from Labeler import JUNK_ID
 from CommonDataTypes import Tomogram, Candidate, SixPosition, EulerAngle
 from Constants import TOMOGRAM_DIMENSION
 from StringComperableEnum import StringComperableEnum

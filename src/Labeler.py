@@ -1,6 +1,9 @@
-from Constants import JUNK_ID, DISTANCE_THRESHOLD
+from Constants import DISTANCE_THRESHOLD
 
 import numpy as np
+
+# The label that corresponds to NOTHING_IS_HERE
+JUNK_ID = -1
 
 class Labeler:
     """

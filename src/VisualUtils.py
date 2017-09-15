@@ -1,4 +1,5 @@
-from Constants import JUNK_ID
+from Labeler import JUNK_ID
+
 
 import numpy as np
 import matplotlib
