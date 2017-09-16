@@ -118,6 +118,14 @@ def compare_candidate_COM(truth_candidates, reco_candidates, tomogram):
     ax.imshow(map[:, :, 0])
     plt.show()
 
+
+def analyzer_max_correltations(analyzer):
+    maxmax = analyzer.max_correlations.correlation_values[0]
+    for cv in analyzer.max_correlations.correlation_values:
+        maxmax = np.maximum(maxmax, cv)
+    show_densitymap(maxmax, 'max correlations')
+
+
 # ----------------------- 3D -----------------------------
 def show3d(dm):
     import matplotlib
