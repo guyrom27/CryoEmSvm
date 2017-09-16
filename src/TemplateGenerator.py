@@ -1,5 +1,5 @@
 from CommonDataTypes import TiltedTemplate, EulerAngle
-from Constants import TEMPLATE_DIMENSION, CHIMERA_UTILS_PATH, CHIMERA_PATH
+from Configuration import CONFIG
 from TemplateUtil import align_densitymap_to_COM
 from StringComperableEnum import StringComperableEnum
 from TemplatesDataAccessObject import BidimensionalLazyFileDAO
@@ -60,7 +60,7 @@ def generate_templates_3d(output_path, angular_resolution, templates_type):
 
     # prepare command
     script_name = '.\chimera_template_generator.py'
-    cmnd = format(r'"%s" --debug --nogui --script "%s -o %s -a %d'%(CHIMERA_PATH,script_name,output_path,angular_resolution))
+    cmnd = format(r'"%s" --debug --nogui --script "%s -o %s -a %d'%(CONFIG.CHIMERA_PATH,script_name,output_path,angular_resolution))
     if templates_type in (GEOMETRIC_3D, ALL_3D):
         cmnd += ' -g ' + r'.\geometric.txt'
     if templates_type in (PDBS_3D, ALL_3D):
@@ -71,7 +71,7 @@ def generate_templates_3d(output_path, angular_resolution, templates_type):
 
     # run chimera process
     print('Running command:\n\t' + cmnd)
-    subprocess.Popen(cmnd, cwd = CHIMERA_UTILS_PATH)
+    subprocess.Popen(cmnd, cwd = CONFIG.CHIMERA_UTILS_PATH)
 
     # wait while files are being created
     time.sleep(5)
@@ -209,20 +209,20 @@ def generate_tilted_templates_2d():
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
 
-    template_dimensions_2d = tuple([TEMPLATE_DIMENSION, TEMPLATE_DIMENSION,1])
+    template_dimensions_2d = tuple([CONFIG.TEMPLATE_DIMENSION, CONFIG.TEMPLATE_DIMENSION,1])
     # create different template density maps
     # circle
     circle_dm = np.zeros(template_dimensions_2d )
-    fill_with_circle(circle_dm[:, :, 0], TEMPLATE_DIMENSION // 4)
+    fill_with_circle(circle_dm[:, :, 0], CONFIG.TEMPLATE_DIMENSION // 4)
     # square
     square_dm = np.zeros(template_dimensions_2d)
-    fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION // 2)
+    fill_with_square(square_dm[:, :, 0], CONFIG.TEMPLATE_DIMENSION // 2)
     # L
     L_dm = np.zeros(template_dimensions_2d)
-    fill_with_L(L_dm[:, :, 0], TEMPLATE_DIMENSION // 2, TEMPLATE_DIMENSION // 3, 3, 3)
+    fill_with_L(L_dm[:, :, 0], CONFIG.TEMPLATE_DIMENSION // 2, CONFIG.TEMPLATE_DIMENSION // 3, 3, 3)
     # flipped L
     flipped_L_dm = np.zeros(template_dimensions_2d)
-    fill_with_L(flipped_L_dm[:, :, 0], TEMPLATE_DIMENSION // 2, TEMPLATE_DIMENSION // 3, 3, 3, True)
+    fill_with_L(flipped_L_dm[:, :, 0], CONFIG.TEMPLATE_DIMENSION // 2, CONFIG.TEMPLATE_DIMENSION // 3, 3, 3, True)
 
     # create tilts
     angle_res = 15

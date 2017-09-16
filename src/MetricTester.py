@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from Constants import DISTANCE_THRESHOLD
+from Configuration import CONFIG
 from Labeler import JUNK_ID
 from CommonDataTypes import EulerAngle
 
@@ -28,7 +28,7 @@ def tilts_match(c1, c2):
 
 
 def find_best_match(candidate, compostion):
-    min_dist = DISTANCE_THRESHOLD
+    min_dist = CONFIG.DISTANCE_THRESHOLD
     match = None
     for c in compostion:
         dist2 = calculate_L2_dist(c, candidate)

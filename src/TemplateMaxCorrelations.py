@@ -1,10 +1,9 @@
+from TemplateUtil import shape_to_slices, get_normalize_template_dm
+from Configuration import CONFIG
+from CommonDataTypes import SixPosition
+
 from scipy import signal
 import numpy as np
-
-from TemplateUtil import shape_to_slices, get_normalize_template_dm
-from Constants import NEIGHBORHOOD_HALF_SIDE
-from CommonDataTypes import SixPosition
-#import CrossCorrelation
 
 class TemplateMaxCorrelations:
     """
@@ -39,9 +38,9 @@ class TemplateMaxCorrelations:
         else:
             dim = 2 if (self.correlation_values[0].shape[2] == 1) else 3
             if dim == 2:
-                neighborhood_half_side = tuple([NEIGHBORHOOD_HALF_SIDE,NEIGHBORHOOD_HALF_SIDE,0])
+                neighborhood_half_side = tuple([CONFIG.NEIGHBORHOOD_HALF_SIDE,CONFIG.NEIGHBORHOOD_HALF_SIDE,0])
             else:
-                neighborhood_half_side = tuple([NEIGHBORHOOD_HALF_SIDE,NEIGHBORHOOD_HALF_SIDE,NEIGHBORHOOD_HALF_SIDE])
+                neighborhood_half_side = tuple([CONFIG.NEIGHBORHOOD_HALF_SIDE,CONFIG.NEIGHBORHOOD_HALF_SIDE,CONFIG.NEIGHBORHOOD_HALF_SIDE])
 
             cor_for_label = self.correlation_values[candidate.label]
             corner = [x[0] - x[1] for x in zip(candidate.get_position(),neighborhood_half_side)]

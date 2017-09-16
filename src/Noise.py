@@ -1,5 +1,5 @@
-from Constants import NOISE_GAUSS_PARAM, NOISE_LINEAR_PARAM, NOISE_GAUSSIAN_SIZE, NOISE_GAUSSIAN_STDEV
 from CommonDataTypes import Tomogram
+from Configuration import CONFIG
 from TemplateUtil import create_kernel, KERNEL_GAUSSIAN
 
 import numpy as np
@@ -13,10 +13,10 @@ Add different types  of noise to the density maps
 def gauss_noise(dmap, sigma = None, mu = 0):
     if sigma is None:
         sigma = 0.3 * dmap.max()
-    noisy = dmap + NOISE_GAUSS_PARAM * sigma * np.random.randn(*dmap.shape) + mu
+    noisy = dmap + CONFIG.NOISE_GAUSS_PARAM * sigma * np.random.randn(*dmap.shape) + mu
     return noisy
 
-def linear_noise(dmap, a = NOISE_LINEAR_PARAM):
+def linear_noise(dmap, a = CONFIG.NOISE_LINEAR_PARAM):
     noisy = dmap + a * dmap.std() * np.random.random(dmap.shape)
     return noisy
 
@@ -29,7 +29,7 @@ def blur_filter(dmap, dim, gauss_size = 1, stdev = 1):
     :return:
     """
 
-    kernel = create_kernel(KERNEL_GAUSSIAN, dim, NOISE_GAUSSIAN_SIZE, NOISE_GAUSSIAN_STDEV)
+    kernel = create_kernel(KERNEL_GAUSSIAN, dim, CONFIG.NOISE_GAUSSIAN_SIZE, CONFIG.NOISE_GAUSSIAN_STDEV)
     dm = scipy.signal.fftconvolve(dmap, kernel, mode='same')
     return dm
 

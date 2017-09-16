@@ -1,5 +1,5 @@
 from CommonDataTypes import Candidate, SixPosition
-from Constants import CORRELATION_THRESHOLD, GAUSSIAN_SIZE, GAUSSIAN_STDEV
+from Configuration import CONFIG
 from TemplateUtil import create_kernel, KERNEL_GAUSSIAN
 import PeakDetection
 
@@ -18,7 +18,7 @@ class CandidateSelector:
     def __init__(self, max_correlations, template_shape, dim=2):
         self.max_correlations = max_correlations
         self.dim = dim
-        self.kernel = create_kernel(KERNEL_GAUSSIAN, dim, GAUSSIAN_SIZE, GAUSSIAN_STDEV)
+        self.kernel = create_kernel(KERNEL_GAUSSIAN, dim, CONFIG.GAUSSIAN_SIZE, CONFIG.GAUSSIAN_STDEV)
 
         self.template_shape = template_shape
 
@@ -39,7 +39,7 @@ class CandidateSelector:
 
         # Return all the peaks that are more than the threshold
         res = np.transpose(np.nonzero(PeakDetection.detect_peaks(self.blurred_correlation_array, 3, 3)))
-        return [tuple(x) for x in res if self.blurred_correlation_array[tuple(x)] > CORRELATION_THRESHOLD]
+        return [tuple(x) for x in res if self.blurred_correlation_array[tuple(x)] > CONFIG.CORRELATION_THRESHOLD]
 
     def filter_boundary_positions(self, positions):
         """

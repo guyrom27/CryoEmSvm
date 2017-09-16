@@ -1,4 +1,4 @@
-from TomogramGenerator import generate_tomogram_with_given_candidates, generate_random_tomogram, TOMOGRAM_DIMENSIONS_3D
+from TomogramGenerator import generate_tomogram_with_given_candidates, generate_random_tomogram
 from TemplateGenerator import generate_tilted_templates, load_templates_3d
 from Labeler import PositionLabeler, SvmLabeler
 from TemplateMaxCorrelations import TemplateMaxCorrelations

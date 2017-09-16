@@ -1,6 +1,6 @@
 from Labeler import JUNK_ID
 from CommonDataTypes import Tomogram, Candidate, SixPosition, EulerAngle
-from Constants import TOMOGRAM_DIMENSION
+from Configuration import CONFIG
 from StringComperableEnum import StringComperableEnum
 from TemplateUtil import put_template
 from Noise import make_noisy_tomogram
@@ -31,9 +31,9 @@ def get_tomogram_shape(dim):
     :return: tomogram required shape (according to dimension)
     """
     if dim == 2:
-        return tuple([TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION,1])
+        return tuple([CONFIG.TOMOGRAM_DIMENSION,CONFIG.TOMOGRAM_DIMENSION,1])
     elif dim == 3:
-        return tuple([TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION])
+        return tuple([CONFIG.TOMOGRAM_DIMENSION,CONFIG.TOMOGRAM_DIMENSION,CONFIG.TOMOGRAM_DIMENSION])
     else:
         assert(False)
 
@@ -89,7 +89,7 @@ def generate_random_candidates(template_side_len, criteria, dim):
     else:
         assert(dim == 3)
 
-    COM_valid_space = [TOMOGRAM_DIMENSION - 2*x - 2 for x in gap_shape]
+    COM_valid_space = [CONFIG.TOMOGRAM_DIMENSION - 2*x - 2 for x in gap_shape]
 
     if dim==2:
         COM_valid_space[2] = 1
@@ -145,12 +145,14 @@ class TomogramGenerator(StringComperableEnum):
     OLD_GENERATOR = 'OLD_GENERATOR'
 
 # TODO: place holders for the tomogram generators
+# Broken!!!
 def tomogram_generator(paths, templates):
-    from Constants import DEFAULT_COMPOSITION_TUPLES_2D
-    composition = [Candidate.fromTuple(*t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
-    for path in paths:
-        tomogram = generate_tomogram_with_given_candidates(templates, composition, dim)
-        yield tomogram
+    pass
+#     from Constants import DEFAULT_COMPOSITION_TUPLES_2D
+#     composition = [Candidate.fromTuple(*t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
+#     for path in paths:
+#         tomogram = generate_tomogram_with_given_candidates(templates, composition, dim)
+#         yield tomogram
 
 
 def tomogram_loader(paths, save):

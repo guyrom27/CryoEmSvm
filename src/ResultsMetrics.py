@@ -1,5 +1,5 @@
 from Labeler import PositionLabeler, JUNK_ID
-from Constants import TILT_THRESHOLD
+from Configuration import CONFIG
 from CommonDataTypes import EulerAngle
 
 import numpy as np
@@ -64,7 +64,7 @@ class ResultsMetrics:
 
     def tilts_match(self, c1, c2):
         (rel_angle_3d, rel_psi) = self.tilt_dist(c1,c2)
-        return (abs(rel_angle_3d) < TILT_THRESHOLD and abs(rel_psi) < TILT_THRESHOLD)
+        return (abs(rel_angle_3d) < CONFIG.TILT_THRESHOLD and abs(rel_psi) < CONFIG.TILT_THRESHOLD)
 
 
     def position_dist(self, c1, c2):
