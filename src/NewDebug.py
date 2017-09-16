@@ -1,5 +1,6 @@
 from Labeler import JUNK_ID
-from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d
+from Constants import CHIMERA_UTILS_PATH
+from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d, generate_tilted_templates_3d, GEOMETRIC_3D, PDBS_3D, ALL_3D
 from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates, generate_random_tomogram_set
 from SvmTrain import svm_train
 from SvmEval import svm_eval
@@ -10,15 +11,20 @@ import VisualUtils
 # train
 criteria = [2,3,5,2]
 number_of_tomograms = 1
-dim = 2
+dim = 3
 seed = 1909615246
 noise = True
+generate_3D_tempaltes_type = GEOMETRIC_3D # None if we do not want to generate
+template_path = CHIMERA_UTILS_PATH + 'Templates\\'
 
 # create templates
 if dim == 2:
     templates = generate_tilted_templates_2d()
 elif dim == 3:
-    templates = load_templates_3d(r'..\Chimera\Templates' + '\\')
+    if generate_3D_tempaltes_type:
+        generate_tilted_templates_3d(template_path,60, generate_3D_tempaltes_type)
+        exit(0)
+    templates = load_templates_3d(template_path)
 else:
     assert(False)
 

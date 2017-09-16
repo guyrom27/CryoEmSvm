@@ -1,5 +1,5 @@
 from CommonDataTypes import TiltedTemplate, EulerAngle
-from Constants import TEMPLATE_DIMENSION
+from Constants import TEMPLATE_DIMENSION, CHIMERA_UTILS_PATH, CHIMERA_PATH
 from TemplateUtil import align_densitymap_to_COM
 from StringComperableEnum import StringComperableEnum
 from TemplatesDataAccessObject import BidimensionalLazyFileDAO
@@ -7,7 +7,12 @@ from TemplatesDataAccessObject import BidimensionalLazyFileDAO
 import numpy as np
 import scipy.ndimage.interpolation
 import pickle
+import subprocess
 
+
+GEOMETRIC_3D = 'GEOMETRIC_3D'
+PDBS_3D = 'PDBS_3D'
+ALL_3D = 'ALL_3D'
 
 """
 This file contains all the methods that are used to generate and load templates (from files)
@@ -29,6 +34,34 @@ def fill_with_sphere(dm, rad):
                 if (x-rad)**2 + (y-rad)**2 + (z-rad)**2 <= rad**2:
                     dm[x,y,z] = 1
     return dm
+
+
+def generate_tilted_templates_3d(output_path, angular_resolution, templates_type):
+    """
+    Generates 3D tilted templates density maps by calling chimera script.
+    Path to chimera.exe (chimera instalation) and to ChimeraUtils (part of project)
+    must be specified in the configuration
+
+    :param output_path: directory where output templates and meta data are saved.
+           Must exist before call, path must contain / at the end
+    :param angular_resolution: discrete resolution for tilts generated
+    :param templates_type: supports GEOMETRIC_3D, PDBS_3D, ALL_3D
+
+    TODO: Add makedir
+    """
+
+    script_name = '.\chimera_template_generator.py'
+    cmnd = format(r'"%s" --debug --nogui --script "%s -o %s -a %d'%(CHIMERA_PATH,script_name,output_path,angular_resolution))
+    if templates_type in (GEOMETRIC_3D, ALL_3D):
+        cmnd += ' -g ' + r'.\geometric.txt'
+    if templates_type in (PDBS_3D, ALL_3D):
+        cmnd += ' -p ' + r'.\pdbs.txt'
+    if templates_type not in (GEOMETRIC_3D, PDBS_3D, ALL_3D):
+        assert() # unkown template group
+    cmnd += '"'
+
+    print('Running command:\n' + cmnd)
+    subprocess.Popen(cmnd, cwd = CHIMERA_UTILS_PATH)
 
 
 def load_templates_3d(templates_path):
