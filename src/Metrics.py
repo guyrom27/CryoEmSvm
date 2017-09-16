@@ -24,7 +24,6 @@ class Metrics:
         self.n_mislabled    += other_metric.n_mislabled
         self.n_svm_fn       += other_metric.n_svm_fn
         self.n_cd_fn        += other_metric.n_cd_fn
-        self.n_gt_miss      += other_metric.n_gt_miss
         self.n_fp           += other_metric.n_fp
         self.n_tilt_match   += other_metric.n_tilt_match
         self.n_tomograms    += other_metric.n_tomograms
@@ -34,10 +33,11 @@ class Metrics:
         svm_success_rate = self.n_label_match*100.0/n_total
         print("total number of tomograms tested: {}".format(self.n_tomograms))
         print("total number of templates reconstucted: {}".format(n_total))
-        print("svm success rate = {0:.2f}%".format(svm_success_rate))
-        print("mislabeled templates = {} ({0:.2f}%)".format(self.n_mislabled,self.n_mislabled*100.0/n_total))
-        print("svm false negative = {} ({0:.2f}%)".format(self.n_svm_fn, self.n_svm_fn*100.0/n_total))
-        print("undetected candidates = {} ({0:.2f}%)".format(self.n_cd_fn, self.n_cd_fn*100.0/n_total))
+        print("svm success rate = {:.2f}%".format(svm_success_rate))
+        print("mislabeled templates = {} ({:.2f}%)".format(self.n_mislabled, self.n_mislabled*100.0/n_total))
+        print("svm false negative = {} ({:.2f}%)".format(self.n_svm_fn, self.n_svm_fn*100.0/n_total))
+        print("undetected candidates = {} ({:.2f}%)".format(self.n_cd_fn, self.n_cd_fn*100.0/n_total))
         print("number of false positives = {}".format(self.n_fp))
-        print("tilt match rate = {0:.2f}%".format(self.n_tilt_match*100.0/self.n_label_match))
+        if self.n_label_match != 0:
+            print("tilt match rate = {0:.2f}%".format(self.n_tilt_match*100.0/self.n_label_match))
         
