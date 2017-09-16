@@ -1,11 +1,10 @@
-from Labeler import PositionLabeler
-from Constants import JUNK_ID
+from Labeler import PositionLabeler, JUNK_ID
+from Constants import TILT_THRESHOLD
 from CommonDataTypes import EulerAngle
+
 import numpy as np
 import math
 
-
-TILT_THRESHOLD = 15
 
 class ResultsMetrics:
     def __init__(self, ground_truth_composition, evaluated_composition):
@@ -27,11 +26,11 @@ class ResultsMetrics:
             labeler.label(candidate, set_label = False)
             if candidate.label != JUNK_ID: # not identified as junk
                 if candidate.ground_truth_match is not None and \
-                    candidate.ground_truth_match.label == candidate.label: # true match
-                        if self.tilts_match(candidate.ground_truth_match, candidate): #true tilt
-                            self.evaluation_results['true_label_and_tilt'].append(candidate)
-                        else: # false tilt
-                            self.evaluation_results['true_label_false_tilt'].append(candidate)
+                                candidate.ground_truth_match.label == candidate.label: # true match
+                    if self.tilts_match(candidate.ground_truth_match, candidate): # true tilt
+                        self.evaluation_results['true_label_and_tilt'].append(candidate)
+                    else: # false tilt
+                        self.evaluation_results['true_label_false_tilt'].append(candidate)
                 elif candidate.ground_truth_match is not None: # has matching ground truth but wrong label
                     self.evaluation_results['wrong_label'].append(candidate)
                 else: # does not have matching ground truth

@@ -1,6 +1,3 @@
-from scipy import signal
-
-
 class FeaturesExtractor:
     """
     Uses the max correlation data structure to create the feature vectors-

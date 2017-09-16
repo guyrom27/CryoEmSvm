@@ -1,6 +1,9 @@
 import numpy as np
 from math import sqrt
 from scipy.ndimage import measurements
+from scipy import signal
+
+KERNEL_GAUSSIAN = 'GAUSSIAN'
 
 """
 Different Template manipulations are collected here
@@ -73,17 +76,30 @@ def align_densitymap_to_COM(densitymap, container_size_3D):
     return truncated_matrix.reshape(container_size_3D)
 
 
+def create_kernel(name, dim, gaussian_size, gaussian_stdev):
+    """
+    Creats a kernel of the specified kind and dimension.
+    :param name: Kind of kernel to create. Only KERNEL_GAUSSIAN at the moment.
+    :param dim: Dimension of the kernel. Only 2 of 3.
+    :param gaussian_size: size of gaussian
+    :param gaussian_stdev: standard deviation of gaussian
+    :return: 3 dimensional ndarray where the third dimension is of size 1 for the 2D case.
+    """
+    if KERNEL_GAUSSIAN == name:
+        base = signal.gaussian(gaussian_size, gaussian_stdev)
+        if 2 == dim:
+            return np.outer(base, base).reshape(len(base), len(base), 1)
+        elif 3 == dim:
+            plane = np.outer(base, base).reshape(len(base), len(base), 1)
+            kernel = np.outer(base, plane[0]).reshape(len(base), len(base), 1)
+            for row in plane[1:]:
+                kernel = np.concatenate((kernel, np.outer(base, row).reshape(len(base), len(base), 1)), 2)
+            return kernel
+        else:
+            raise NotImplementedError('Dimension can\'t be %d! (only 2 or 3)' % dim)
+    else:
+        raise NotImplementedError('No kernel option %s!' % name)
+
+
 if __name__ == '__main__':
-    from TemplateGenerator import generate_tilted_templates
-
-    dm = np.array([[0, 0, 1], [0, 0, 0], [0, 0, 0]])
-    t= align_densitymap_to_COM(dm, (9,9))
-    assert((np.array(measurements.center_of_mass(t)) == np.floor(np.array(t.shape)/2)).all())
-
-    templates = generate_tilted_templates()
-    t = templates[1][2]
-    norm = sqrt(np.sum(np.square(t.density_map)))
-    print("norm before normalizing: " + str(norm))
-    get_normalize_template_dm(t)
-    norm = sqrt(np.sum(np.square(t.density_map)))
-    print("norm after normalizing: " + str(norm))
+    pass

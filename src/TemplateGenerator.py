@@ -1,5 +1,5 @@
 from CommonDataTypes import TiltedTemplate, EulerAngle
-from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D
+from Constants import TEMPLATE_DIMENSION
 from TemplateUtil import align_densitymap_to_COM
 from StringComperableEnum import StringComperableEnum
 from TemplatesDataAccessObject import BidimensionalLazyFileDAO
@@ -29,33 +29,6 @@ def fill_with_sphere(dm, rad):
                 if (x-rad)**2 + (y-rad)**2 + (z-rad)**2 <= rad**2:
                     dm[x,y,z] = 1
     return dm
-
-
-def fill_with_cube(dm, side):
-    dim = dm.shape[0]
-    top_left = int(dim/2-side/2)
-    for x in range(int(side)):
-        for y in range(int(side)):
-            for z in range(int(side)):
-                dm[top_left+x,top_left+y, top_left+z] = 1
-    return dm
-
-
-def rotate3d(dm, eu_angle):
-    # rotate euler angles
-    rotated = scipy.ndimage.interpolation.rotate(dm, eu_angle.Phi, (0, 1))
-    rotated = scipy.ndimage.interpolation.rotate(rotated, eu_angle.Theta, (0, 2))
-    rotated = scipy.ndimage.interpolation.rotate(rotated, eu_angle.Psi, (0, 1))
-
-    # truncate
-    rotated_dim = rotated.shape[0]
-    original_dim = dm.shape[0]
-
-    return rotated[rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2,
-                   rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2,
-                   rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2]
-
-    return rotated
 
 
 def load_templates_3d(templates_path):
@@ -180,18 +153,19 @@ def generate_tilted_templates_2d():
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
 
+    template_dimensions_2d = tuple([TEMPLATE_DIMENSION, TEMPLATE_DIMENSION,1])
     # create different template density maps
     # circle
-    circle_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
+    circle_dm = np.zeros(template_dimensions_2d )
     fill_with_circle(circle_dm[:, :, 0], TEMPLATE_DIMENSION // 4)
     # square
-    square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
+    square_dm = np.zeros(template_dimensions_2d)
     fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION // 2)
     # L
-    L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
+    L_dm = np.zeros(template_dimensions_2d)
     fill_with_L(L_dm[:, :, 0], TEMPLATE_DIMENSION // 2, TEMPLATE_DIMENSION // 3, 3, 3)
     # flipped L
-    flipped_L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
+    flipped_L_dm = np.zeros(template_dimensions_2d)
     fill_with_L(flipped_L_dm[:, :, 0], TEMPLATE_DIMENSION // 2, TEMPLATE_DIMENSION // 3, 3, 3, True)
 
     # create tilts
@@ -203,7 +177,7 @@ def generate_tilted_templates_2d():
     for template_id, template_dm in enumerate([circle_dm, square_dm, L_dm, flipped_L_dm]):
         specific_templates = []
         for tilt_id , euler_angle in enumerate(EulerAngle.Tilts):
-            specific_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate2d(template_dm, euler_angle.Phi), TEMPLATE_DIMENSIONS_2D), tilt_id, template_id))
+            specific_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate2d(template_dm, euler_angle.Phi), template_dimensions_2d), tilt_id, template_id))
         templates.append(tuple(specific_templates))
     return tuple(templates)
 
