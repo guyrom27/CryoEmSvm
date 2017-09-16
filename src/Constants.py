@@ -1,3 +1,5 @@
+CHIMERA_PATH = r'C:\Program Files\Chimera 1.11.2\bin\chimera'
+CHIMERA_UTILS_PATH = r'C:\Users\Matan\PycharmProjects\Workshop\src\ChimeraUtils' + '\\'
 
 TEMPLATE_DIMENSION = 25
 TOMOGRAM_DIMENSION = 120

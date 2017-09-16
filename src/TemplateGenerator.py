@@ -1,5 +1,5 @@
 from CommonDataTypes import TiltedTemplate, EulerAngle
-from Constants import TEMPLATE_DIMENSION
+from Constants import TEMPLATE_DIMENSION, CHIMERA_UTILS_PATH, CHIMERA_PATH
 from TemplateUtil import align_densitymap_to_COM
 from StringComperableEnum import StringComperableEnum
 from TemplatesDataAccessObject import BidimensionalLazyFileDAO
@@ -7,7 +7,12 @@ from TemplatesDataAccessObject import BidimensionalLazyFileDAO
 import numpy as np
 import scipy.ndimage.interpolation
 import pickle
+import os, shutil, subprocess, time
 
+
+GEOMETRIC_3D = 'GEOMETRIC_3D'
+PDBS_3D = 'PDBS_3D'
+ALL_3D = 'ALL_3D'
 
 """
 This file contains all the methods that are used to generate and load templates (from files)
@@ -31,6 +36,59 @@ def fill_with_sphere(dm, rad):
     return dm
 
 
+def generate_templates_3d(output_path, angular_resolution, templates_type):
+    """
+    Generates 3D tilted templates density maps by calling chimera script.
+    Path to chimera.exe (chimera instalation) and to ChimeraUtils (part of project)
+    must be specified in the configuration.
+
+    :param output_path: directory where output templates and meta data are saved.
+           Wipes content, creates if does not exist
+    :param angular_resolution: discrete resolution for tilts generated
+    :param templates_type: supports GEOMETRIC_3D, PDBS_3D, ALL_3D
+
+    :return tilted_templates object - refer to load_tempaltes_3d
+    """
+
+    # check output directory exists and clean it, if doesn't exist then create it
+    if output_path[-1] != '\\':
+        output_path += '\\'
+    if os.path.isdir(output_path):
+        shutil.rmtree(output_path)
+    os.makedirs(output_path)
+
+
+    # prepare command
+    script_name = '.\chimera_template_generator.py'
+    cmnd = format(r'"%s" --debug --nogui --script "%s -o %s -a %d'%(CHIMERA_PATH,script_name,output_path,angular_resolution))
+    if templates_type in (GEOMETRIC_3D, ALL_3D):
+        cmnd += ' -g ' + r'.\geometric.txt'
+    if templates_type in (PDBS_3D, ALL_3D):
+        cmnd += ' -p ' + r'.\pdbs.txt'
+    if templates_type not in (GEOMETRIC_3D, PDBS_3D, ALL_3D):
+        raise Exception('Template generation failed - unkown templates type') # unkown template group
+    cmnd += '"'
+
+    # run chimera process
+    print('Running command:\n\t' + cmnd)
+    subprocess.Popen(cmnd, cwd = CHIMERA_UTILS_PATH)
+
+    # wait while files are being created
+    time.sleep(5)
+    prev_numfiles = 0
+    numfiles = len(os.listdir(output_path))
+    while numfiles > prev_numfiles: # as long as files are created, wait
+        prev_numfiles = numfiles
+        time.sleep(2)
+        numfiles = len(os.listdir(output_path))
+    if numfiles <= 0:
+        raise Exception('Template generation failed')
+
+    # load generated templates
+    tilted_templates = load_templates_3d(output_path)
+    return tilted_templates
+
+
 def load_templates_3d(templates_path):
     """
     Load templates as created by chimera based template_generator
@@ -44,10 +102,8 @@ def load_templates_3d(templates_path):
     tilt_metadata = pickle.load(open(templates_path + 'tilt_ids.p','rb'))
     EulerAngle.init_tilts_from_list(tilt_metadata )
 
-
     # load and create tilted template for every tilt_id and template_id
     tilted_templates = BidimensionalLazyFileDAO(templates_path, len(template_metadata) , len(tilt_metadata))
-
     return tilted_templates
 
 

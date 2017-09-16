@@ -36,11 +36,31 @@ def put_template(tomogram_dm, template_dm, position):
     :param position: center of cube/square position
     :return:
     """
-    corner = [position[i] - template_dm.shape[i] // 2 for i in range(len(tomogram_dm.shape))]
-    shape = tuple([slice(corner[i],corner[i] + template_dm.shape[i]) for i in range(len(corner))])
-    if ([shape[i].start < 0 or shape[i].stop > tomogram_dm.shape[i] for i in range(len(tomogram_dm.shape))].count(True) > 0):
-        assert(False)
-    tomogram_dm[shape] += template_dm
+
+    # find corner position of template
+    corner = [position[i] - side // 2 for i,side in enumerate(template_dm.shape)]
+    # slice matchng positions in template and tomogram
+    template_slice = [slice(0, side) for side in template_dm.shape]
+    tomogram_slice = [slice(corner[i], corner[i] + side) for i,side in enumerate(template_dm.shape)]
+
+    # if template sticks out of tomogram edges, trim slices so it fits
+    for i in range(len((tomogram_slice))):
+        if (tomogram_slice[i].start < 0): # tempale starts before tomogram
+            template_slice[i] = slice(-tomogram_slice[i].start,template_slice[i].stop)
+            tomogram_slice[i] = slice(0,tomogram_slice[i].stop)
+        if (tomogram_slice[i].stop > tomogram_dm.shape[i]):  # template ends after tomogram
+            template_slice[i] = slice(template_slice[i].start,template_slice[i].stop + tomogram_dm.shape[i] - tomogram_slice[i].stop)
+            tomogram_slice[i] = slice(tomogram_slice[i].start, tomogram_dm.shape[i])
+
+    # place template in tomogram
+    tomogram_dm[tuple(tomogram_slice)] += template_dm[tuple(template_slice)]
+
+
+    #shape = tuple([slice(corner[i],corner[i] + template_dm.shape[i]) for i in range(len(corner))])
+    #if ([shape[i].start < 0 or shape[i].stop > tomogram_dm.shape[i] for i in range(len(tomogram_dm.shape))].count(True) > 0):
+    #    assert(False)
+    #tomogram_dm[shape] += template_dm
+
 
 
 
