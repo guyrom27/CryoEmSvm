@@ -142,10 +142,10 @@ def show3d(dm):
 def slider3d(dm):
     ax = plt.subplot()
     plt.subplots_adjust(left=0.25, bottom=0.25)
-
+    plt.subplots_adjust()
     zdm = np.copy(dm[:, :, 0])
     zdm[0, 0] = 1
-    l = plt.imshow(zdm)
+    l = plt.imshow(zdm, vmax=dm.max(), vmin=dm.min())
 
     axframe = plt.axes([0.25, 0.1, 0.65, 0.03])
     sframe = Slider(axframe, 'Frame', 0, dm.shape[0]-1, valinit=0)
@@ -157,3 +157,25 @@ def slider3d(dm):
 
     sframe.on_changed(update)
     plt.show()
+
+
+def show_candidates3D(selector, candidates, tomogram):
+    print_candidate_list(candidates)
+
+    slider3d(tomogram.density_map)
+
+    slider3d(selector.max_correlation_per_3loc)
+
+    slider3d(selector.blurred_correlation_array)
+
+    dm = candidates2dm3D(candidates, tomogram.density_map.shape)
+    slider3d(dm)
+
+def candidates2dm3D(candidates, shape):
+    peaks = np.zeros(shape)
+    for c in candidates:
+        for i in range(-2,2):
+            for j in range(-2,2):
+                for k in range(-2,2):
+                    peaks[c.six_position.COM_position] += 1
+    return peaks

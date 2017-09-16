@@ -19,7 +19,7 @@ number_of_test_tomograms = 1
 dim = 3
 #seed = 1909615246
 seed = 897652943
-train = True
+train = False
 add_noise = True
 svm_path = r'..\TrainedSVM\15_Noise_Geo_3D_333.pkl'
 metrics_input_file = None
@@ -71,13 +71,15 @@ if metrics_input_file is not None:
     with open(metrics_input_file, 'rb') as file:
         aggregated_metrics = pickle.load(file)
 
-print_each_event = True
+print_each_event = False
 
 for i in range(number_of_test_tomograms):
     evaluation_tomograms = [generate_random_tomogram(templates, criteria, dim, noise=add_noise)]
     output_candidates = svm_eval(svm_and_templates, evaluation_tomograms)
-    #evaluated_tomogram = Tomogram(None, output_candidates[0])
-    evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
+    if dim == 3:  #accoding to guy generate tomogram with given candidates is bugged in 3D for some reason
+        evaluated_tomogram = Tomogram(None, output_candidates[0])
+    else:
+        evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
     metric_tester = MetricTester(evaluation_tomograms[0].composition, evaluated_tomogram.composition)
     event_metrics.init_from_tester(metric_tester)
     if print_each_event:
