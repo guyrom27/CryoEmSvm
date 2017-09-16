@@ -1,6 +1,7 @@
 import numpy as np
 import math
-from Constants import DISTANCE_THRESHOLD, JUNK_ID
+from Constants import DISTANCE_THRESHOLD
+from Labeler import JUNK_ID
 from CommonDataTypes import EulerAngle
 
 TILT_THRESHOLD = 15

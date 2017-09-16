@@ -10,22 +10,25 @@ import random
 import poisson_disk
 import naive_spaced_randomizer
 
-# Ways to get tomogram
-# + generate_tomogram_with_given_candidates
-# + generate_random_tomogram
-# - load tomogram from file
-#   - with known composition
-#   - with unkown composition
-#
-# Ways to get training set (set of tomogrmas)
-# - generate random tomograms from criteria and number
-# - load tomograms from files
+"""
+This file contains all the methods that are used to generate and load tomograms (from files)
+ Ways to get tomogram
+ + generate_tomogram_with_given_candidates
+ + generate_random_tomogram
+ - load tomogram from file
+   - with known composition
+   - with unkown composition
+
+ Ways to get training set (set of tomogrmas)
+ - generate random tomograms from criteria and number
+ - load tomograms from files
+"""
 
 
 def get_tomogram_shape(dim):
     """
     :param dim 2 for 2D 3 for 3D:
-        :return: tomogram required shape (according to dimension)
+    :return: tomogram required shape (according to dimension)
     """
     if dim == 2:
         return tuple([TOMOGRAM_DIMENSION,TOMOGRAM_DIMENSION,1])
@@ -110,9 +113,10 @@ def generate_random_tomogram(templates, criteria, dim, noise=False):
     """
     template_side = templates[0][0].density_map.shape[0]
     candidates = generate_random_candidates(template_side, criteria, dim)
+    tom = generate_tomogram_with_given_candidates(templates, candidates, dim)
     if noise:
-        return make_noisy_tomogram(generate_tomogram_with_given_candidates(templates, candidates, dim), dim)
-    return generate_tomogram_with_given_candidates(templates, candidates, dim)
+        tom = make_noisy_tomogram(tom, dim)
+    return tom
 
 
 def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, seed=None, noise=False):

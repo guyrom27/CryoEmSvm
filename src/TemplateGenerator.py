@@ -167,12 +167,12 @@ def check_if_in_bound(bound, p1, p2):
     return True
 
 
-def fill_with_rand_shape(dm, n_iterations=10, blur=True):
+def fill_with_rand_shape(dm, dim, n_iterations=10, blur=True):
     for i in range(n_iterations):
         add_random_shape(dm)
     if blur:
         import Noise
-        dm = Noise.blur_filter(dm)
+        dm = Noise.blur_filter(dm, dim)
     return dm
 
 

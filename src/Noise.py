@@ -20,7 +20,7 @@ def linear_noise(dmap, a = NOISE_LINEAR_PARAM):
     noisy = dmap + a * dmap.std() * np.random.random(dmap.shape)
     return noisy
 
-def blur_filter(dmap, gauss_size = 1, stdev = 1, dim= 2 ):
+def blur_filter(dmap, dim, gauss_size = 1, stdev = 1):
     """
     :param dmap:
     :param gauss_size:
@@ -33,20 +33,16 @@ def blur_filter(dmap, gauss_size = 1, stdev = 1, dim= 2 ):
     dm = scipy.signal.fftconvolve(dmap, kernel, mode='same')
     return dm
 
-
-
-def add_noise(dmap, dim = 2):
+def add_noise(dmap, dim):
     noise = gauss_noise(dmap)
     noise = linear_noise(noise)
     noise = blur_filter(noise, dim)
     return noise
 
-def make_noisy_tomogram(tomogram, dim = 2):
+def make_noisy_tomogram(tomogram, dim):
     noisy_dmap = add_noise(tomogram.density_map, dim)
     noisy_tomogram = Tomogram(noisy_dmap, tomogram.composition)
     return noisy_tomogram
-
-
 
 
 if __name__ == '__main__':
@@ -59,7 +55,7 @@ if __name__ == '__main__':
 
     criteria = [4, 3, 0, 0]
     tomogram = generate_random_tomogram(templates, criteria, 2)
-    noisy_tomogram = make_noisy_tomogram(tomogram)
+    noisy_tomogram = make_noisy_tomogram(tomogram, 2)
 
     compare_reconstruced_tomogram(tomogram, noisy_tomogram, True)
 
