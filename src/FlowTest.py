@@ -13,7 +13,7 @@ import pickle
 import configparser
 
 # load configuration
-config_path = 'testing_2d.config'
+config_path = 'testing_3d.config'
 config = configparser.ConfigParser()
 config.read(config_path)
 to_int_list = lambda string: [int(val) for val in string.replace('[','').replace(']','').split(',')]
@@ -91,11 +91,8 @@ print_each_event = False
 for i in range(number_of_test_tomograms):
     evaluation_tomograms = [generate_random_tomogram(templates, test_criteria, dim, noise=add_noise)]
     output_candidates = svm_eval(svm_and_templates, evaluation_tomograms)
-    if dim == 3:  #accoding to guy generate tomogram with given candidates is bugged in 3D for some reason
-        evaluated_tomogram = Tomogram(None, output_candidates[0])
-    else:
-        evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
-    metric_tester = MetricTester(evaluation_tomograms[0].composition, evaluated_tomogram.composition)
+    evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
+    metric_tester = MetricTester(evaluation_tomograms[0].composition, output_candidates[0])
     event_metrics.init_from_tester(metric_tester)
     if print_each_event:
         print("===================")
@@ -141,5 +138,8 @@ print('')
 if dim == 2:
     VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[0], evaluated_tomogram)
     VisualUtils.plt.show()
-
+else:
+    VisualUtils.slider3d(evaluated_tomogram.density_map)
+    VisualUtils.slider3d(evaluation_tomograms[0].density_map)
+    VisualUtils.slider3d(evaluation_tomograms[0].density_map - evaluated_tomogram.density_map)
 print("Done")
