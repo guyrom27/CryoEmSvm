@@ -11,7 +11,7 @@ def svm_train(templates, tomograms, test_list = None):
     Create and return a new SVM trained on the templates and tomograms supplied
     :param templates:   Source of the templates - Iterator with random access
     :param tomograms:   Iterator of training set tomograms
-    :param test_list:           if not None, fills with analyzer objects for debugging
+    :param test_list:   If not None, fills with analyzer objects for debugging
     :return A tuple of the resulting SVM and the templates used to train it
     """
 

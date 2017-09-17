@@ -7,7 +7,7 @@ def svm_eval(svm_and_templates, tomograms, test_list = None):
     Evaluate the tomograms the supplied SVM and templates (As returned from svm_train).
     :param svm_and_templates:   SVM and templates as returned from svm_train.
     :param tomograms:           Iterator of the tomograms to be evaluated.
-    :param test_list:           if not None, fills with analyzer objects for debugging
+    :param test_list:           If not None, fills with analyzer objects for debugging
     :return A list of lists of the candidates for each tomogram.
     """
 

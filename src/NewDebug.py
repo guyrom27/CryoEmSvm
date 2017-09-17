@@ -1,6 +1,6 @@
 from Labeler import JUNK_ID
 from Configuration import CONFIG
-from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d, generate_templates_3d, GEOMETRIC_3D, PDBS_3D, ALL_3D
+from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d, generate_templates_3d, TemplatesType
 from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates, generate_random_tomogram_set
 from SvmTrain import svm_train
 from SvmEval import svm_eval
@@ -11,7 +11,7 @@ import VisualUtils
 # general settings
 dim = 2
 angle_res = 60
-generate_3D_tempaltes_type = GEOMETRIC_3D # None if we do not want to generate
+generate_3D_tempaltes_type = TemplatesType.GEOMETRIC_3D # None if we do not want to generate
 template_path = CONFIG.CHIMERA_UTILS_PATH + 'Templates\\'
 
 
