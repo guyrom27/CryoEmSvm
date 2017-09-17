@@ -1,7 +1,7 @@
 from Labeler import JUNK_ID
 from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d, generate_templates_3d
 from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates, generate_random_tomogram_set
-from CommonDataTypes import Tomogram
+from CommonDataTypes import EulerAngle
 from SvmTrain import svm_train
 from SvmEval import svm_eval
 from Noise import make_noisy_tomogram
@@ -13,7 +13,7 @@ import pickle
 import configparser
 
 # load configuration
-config_path = 'testing_3d.config'
+config_path = 'testing_2d.config'
 config = configparser.ConfigParser()
 config.read(config_path)
 to_int_list = lambda string: [int(val) for val in string.replace('[','').replace(']','').split(',')]
@@ -58,23 +58,17 @@ print("Training")
 training_tomograms = generate_random_tomogram_set(templates, training_criteria, number_of_training_tomograms, dim, seed, add_noise)
 training_analyzers = []
 
-if dim == 2:
-    if train:
-        svm_and_templates = svm_train(templates, training_tomograms, training_analyzers)
-        with open(svm_path, 'wb') as file:
-            pickle.dump(svm_and_templates, file)
-    else:
-        with open(svm_path, 'rb') as file:
-            svm_and_templates = pickle.load(file)
+if train:
+    svm_and_templates = svm_train(templates, training_tomograms, training_analyzers)
+    with open(svm_path, 'wb') as file:
+        pickle.dump(svm_and_templates, file)
 else:
-    if train:
-        svm_and_templates = svm_train(templates, training_tomograms, training_analyzers)
-        with open(svm_path, 'wb') as file:
-            pickle.dump(svm_and_templates[0], file)
-    else:
-        with open(svm_path, 'rb') as file:
-            svm = pickle.load(file)
-            svm_and_templates = (svm, templates)
+    with open(svm_path, 'rb') as file:
+        svm_and_templates = pickle.load(file)
+    # compatibilty with saar's code
+    if isinstance(svm_and_templates,tuple):
+        svm = svm_and_templates[0]
+    svm_and_templates = (svm, (EulerAngle.Tilts, templates))
 
 
 # eval
