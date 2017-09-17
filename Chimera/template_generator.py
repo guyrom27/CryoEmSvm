@@ -331,13 +331,14 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-    #tmp = r"C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\template_generator.py -o C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates\ -a 60 -g C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates\geometric.txt"
+
+    #tmp = r"C:\Users\omerben\PycharmProjects\CryoEmSvm\Chimera\template_generator.py -o C:\Users\omerben\PycharmProjects\CryoEmSvm\Chimera\Templates\ -a 60 -g C:\Users\omerben\PycharmProjects\CryoEmSvm\Chimera\Templates\geometric.txt"
     #main((tmp.split())[1:])
-    # output_path = r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\'
-    # sys.stdout = open(output_path + 'output.txt', 'w')
-    # sys.stderr = open(output_path + 'error.txt', 'w')
-    # pdb_name = r'C:\Users\Matan\Dropbox\Study\S-3B\Workshop\Tutotrial\1k4c.pdb'
-    # criteria = [('P',pdb_name,10),('G','cube',10),('G','sphere',10)]
-    # 
-    # flow(criteria, 30, output_path)
+    #output_path = r'C:\Users\omerben\PycharmProjects\Workshop\Chimera\Templates\\'
+    #sys.stdout = open(output_path + 'output.txt', 'w')
+    #sys.stderr = open(output_path + 'error.txt', 'w')
+    #pdb_name = r'C:\Users\Matan\Dropbox\Study\S-3B\Workshop\Tutotrial\1k4c.pdb'
+    #criteria = [('P',pdb_name,10),('G','cube',10),('G','sphere',10)]
+
+    #flow(criteria, 30, output_path)
     

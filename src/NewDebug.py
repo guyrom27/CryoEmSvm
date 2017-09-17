@@ -10,7 +10,7 @@ import VisualUtils
 
 # general settings
 dim = 2
-angular_resolution = 60
+angle_res = 60
 generate_3D_tempaltes_type = GEOMETRIC_3D # None if we do not want to generate
 template_path = CONFIG.CHIMERA_UTILS_PATH + 'Templates\\'
 
@@ -25,12 +25,12 @@ noise = True
 
 # create templates
 if dim == 2:
-    templates = generate_tilted_templates_2d()
+    templates = generate_tilted_templates_2d(angle_res)
 elif dim == 3:
     # generate or load existing
     if generate_3D_tempaltes_type:
         print("Generating Templates")
-        templates = generate_templates_3d(template_path,angular_resolution, generate_3D_tempaltes_type)
+        templates = generate_templates_3d(template_path,angle_res, generate_3D_tempaltes_type)
     else:
         templates = load_templates_3d(template_path)
 else:

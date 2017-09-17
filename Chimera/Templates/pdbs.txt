@@ -1,3 +1,0 @@
-.\Chimera\1k4c.pdb|30
-.\Chimera\1y1v.pdb|30
-.\Chimera\5n92.pdb|30

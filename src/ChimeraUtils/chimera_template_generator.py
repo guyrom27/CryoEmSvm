@@ -301,12 +301,14 @@ def main(argv):
     parser.add_argument('-a', '--angle_res', required=True, nargs=1, type=int, help='angle resolution')
     parser.add_argument('-g', '--geometric_config_path', nargs=1, type=str, help='output dir')
     parser.add_argument('-p', '--pdb_config_path', nargs=1, type=str, help='output dir')
-    args = parser.parse_args(argv)  
+    args = parser.parse_args(argv)
+    output_path = args.output_path[0]
+    if output_path[-1] != '\\':
+        output_path += '\\'
 
     # set sdtout and stderr
-    #stdpath = r'C:\Users\Matan\PycharmProjects\Workshop\Chimera\Templates\\'
-    sys.stdout = open(args.output_path[0] + 'output.txt', 'w')
-    sys.stderr = open(args.output_path[0] + 'error.txt', 'w')
+    sys.stdout = open(output_path + 'output.txt', 'w')
+    sys.stderr = open(output_path + 'error.txt', 'w')
     print('Start!')
 
     # get criteria
@@ -318,11 +320,11 @@ def main(argv):
     
 
     print(criteria)
-    print(args.output_path[0])
+    print(output_path)
     print(args.angle_res[0])
 
     # run
-    flow(criteria, args.angle_res[0], args.output_path[0])
+    flow(criteria, args.angle_res[0], output_path)
 
     print('Done!')
     sys.stdout.close()
