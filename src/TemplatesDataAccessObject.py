@@ -58,8 +58,29 @@ class BidimensionalLazyFileDAO(ActionDAO):
         """
         ActionDAO.__init__(self, directory if directory[-1] == '\\' else (directory + '\\'), dim1, None)
         #first dim returns another LazyDAO that actually reads the file only after second []
-        self.action = lambda dir, template_id: ActionDAO(dir + str(template_id) + separator, dim2,
-                                                         lambda base, tilt_id: TiltedTemplate.fromFile(base + str(tilt_id) + suffix, tilt_id, template_id))
+        self.action = self.action_dao_wrapper
+
+        # Currently part of the work around
+        self.dim2 = dim2
+        self.separator = separator
+        self.suffix = suffix
+        self.template_id = None
+
+    # These functions are a work around the lambda problem while pickling the svm_and_templates object
+    # The original lambda function:
+    # lambda dir, template_id: ActionDAO(dir + str(template_id) + separator, dim2,
+    #                                    lambda base, tilt_id: TiltedTemplate.fromFile(base + str(tilt_id) + suffix,
+    #                                                                                  tilt_id, template_id))
+    def action_dao_wrapper(self, dir, template_id):
+        action_dao = BidimensionalLazyFileDAO('\\', self.dim2, 0)
+        action_dao.base = dir + str(template_id) + self.separator
+        action_dao.action = self.tilted_template_from_file_wrapper
+        action_dao.template_id = template_id
+        return action_dao
+
+    def tilted_template_from_file_wrapper(self, base, tilt_id):
+        return TiltedTemplate.fromFile(base + str(tilt_id) + self.suffix, tilt_id, self.template_id)
+
 
 if __name__ == '__main__':
     path = r'C:\Users\guyrom\Documents\GitHub\CryoEmSvm\Chimera\Templates'

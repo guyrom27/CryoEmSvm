@@ -12,6 +12,7 @@ class Configuration:
         """
         Mandatory
         """
+        self.DIM = section.getint('DIM')
         self.TOMOGRAM_DIMENSION = section.getint('TOMOGRAM_DIMENSION')
         self.TEMPLATE_DIMENSION = section.getint('TEMPLATE_DIMENSION')
 

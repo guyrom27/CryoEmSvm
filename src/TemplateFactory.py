@@ -1,4 +1,5 @@
-from TemplateGenerator import TemplateGenerator, template_loader, template_generator_solid, template_generator_3d_load
+from TemplateGenerator import TemplateGenerator, template_loader, template_generator_solid, template_generator_3d_load,\
+    load_templates_3d, generate_chimera
 
 
 class TemplateFactory:
@@ -6,14 +7,19 @@ class TemplateFactory:
         assert TemplateGenerator.contains(kind)
         self.kind = kind
         self.paths = None
-        self.save = False
+        self.angular_resolution = None
+        self.template_type = None
 
     def set_paths(self, paths):
         self.paths = paths
         return self
 
-    def set_save(self, paths):
-        self.save = True
+    def set_angular_resolution(self, resolution):
+        self.angular_resolution = resolution
+        return self
+
+    def set_template_type(self, template_type):
+        self.template_type = template_type
         return self
 
     def build(self):
@@ -22,11 +28,15 @@ class TemplateFactory:
 
         # build the appropriate generator
         if self.kind == TemplateGenerator.LOAD:
-            return template_loader(self.paths, self.save)
+            return template_loader(self.paths)
         elif self.kind == TemplateGenerator.SOLID:
             return template_generator_solid(self.paths)
         elif self.kind == TemplateGenerator.LOAD_3D:
-            return template_generator_3d_load(self.paths)
+            return load_templates_3d(self.paths)
+        elif self.kind == TemplateGenerator.CHIMERA:
+            assert self.angular_resolution
+            assert self.template_type
+            return generate_chimera(self.paths, self.angular_resolution, self.template_type)
         else:
             raise NotImplementedError('The generator %s is not implemented' % str(self.kind))
 
