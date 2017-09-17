@@ -37,8 +37,6 @@ def add_noise(dmap, dim):
     noise = gauss_noise(dmap)
     noise = linear_noise(noise)
     noise = blur_filter(noise, dim)
-    if dim == 2:
-        noise = linear_noise(noise)
     return noise
 
 def make_noisy_tomogram(tomogram, dim):
