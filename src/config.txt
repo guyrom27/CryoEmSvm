@@ -9,11 +9,11 @@ TOMOGRAM_DIMENSION = 120
 # Noise parameters
 NOISE_GAUSS_PARAM = 0.2
 NOISE_LINEAR_PARAM = 0.4
-NOISE_GAUSSIAN_SIZE = 10
+NOISE_GAUSSIAN_SIZE = 5
 NOISE_GAUSSIAN_STDEV = 3
 
 # For correlation search
-NEIGHBORHOOD_HALF_SIDE = 5
+NEIGHBORHOOD_HALF_SIDE = 3
 
 # Candidate selector peak detection constants
 CORRELATION_THRESHOLD = 10
@@ -21,7 +21,7 @@ GAUSSIAN_SIZE = 10
 GAUSSIAN_STDEV = 3
 
 # For results metrics - if relative angle < TILT_THRESHOLD then correct tilt
-TILT_THRESHOLD = 15
+TILT_THRESHOLD = 16
 
 # For labeler
 #   This is used to determine the distance between a correlation peak and a possible Ground Truth that corresponds to it
@@ -29,4 +29,4 @@ TILT_THRESHOLD = 15
 #   2 for non noisy simulations
 #   12 for noisy 2D
 #   16 for noisy 3D
-DISTANCE_THRESHOLD = 16
+DISTANCE_THRESHOLD = 5
