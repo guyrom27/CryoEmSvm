@@ -1,5 +1,5 @@
 from CommonDataTypes import TiltedTemplate, EulerAngle
-from Constants import TEMPLATE_DIMENSION, TEMPLATE_DIMENSIONS_2D
+from Configuration import CONFIG
 from TemplateUtil import align_densitymap_to_COM
 from StringComperableEnum import StringComperableEnum
 from TemplatesDataAccessObject import BidimensionalLazyFileDAO
@@ -7,7 +7,12 @@ from TemplatesDataAccessObject import BidimensionalLazyFileDAO
 import numpy as np
 import scipy.ndimage.interpolation
 import pickle
+import os, shutil, subprocess, time
 
+
+GEOMETRIC_3D = 'GEOMETRIC_3D'
+PDBS_3D = 'PDBS_3D'
+ALL_3D = 'ALL_3D'
 
 """
 This file contains all the methods that are used to generate and load templates (from files)
@@ -31,31 +36,57 @@ def fill_with_sphere(dm, rad):
     return dm
 
 
-def fill_with_cube(dm, side):
-    dim = dm.shape[0]
-    top_left = int(dim/2-side/2)
-    for x in range(int(side)):
-        for y in range(int(side)):
-            for z in range(int(side)):
-                dm[top_left+x,top_left+y, top_left+z] = 1
-    return dm
+def generate_templates_3d(output_path, angular_resolution, templates_type):
+    """
+    Generates 3D tilted templates density maps by calling chimera script.
+    Path to chimera.exe (chimera instalation) and to ChimeraUtils (part of project)
+    must be specified in the configuration.
+
+    :param output_path: directory where output templates and meta data are saved.
+           Wipes content, creates if does not exist
+    :param angular_resolution: discrete resolution for tilts generated
+    :param templates_type: supports GEOMETRIC_3D, PDBS_3D, ALL_3D
+
+    :return tilted_templates object - refer to load_tempaltes_3d
+    """
+
+    # check output directory exists and clean it, if doesn't exist then create it
+    if output_path[-1] != '\\':
+        output_path += '\\'
+    if os.path.isdir(output_path):
+        shutil.rmtree(output_path)
+    os.makedirs(output_path)
 
 
-def rotate3d(dm, eu_angle):
-    # rotate euler angles
-    rotated = scipy.ndimage.interpolation.rotate(dm, eu_angle.Phi, (0, 1))
-    rotated = scipy.ndimage.interpolation.rotate(rotated, eu_angle.Theta, (0, 2))
-    rotated = scipy.ndimage.interpolation.rotate(rotated, eu_angle.Psi, (0, 1))
+    # prepare command
+    script_name = '.\chimera_template_generator.py'
+    cmnd = format(r'"%s" --debug --nogui --script "%s -o %s -a %d'%(CONFIG.CHIMERA_PATH,script_name,output_path,angular_resolution))
+    if templates_type in (GEOMETRIC_3D, ALL_3D):
+        cmnd += ' -g ' + r'.\geometric.txt'
+    if templates_type in (PDBS_3D, ALL_3D):
+        cmnd += ' -p ' + r'.\pdbs.txt'
+    if templates_type not in (GEOMETRIC_3D, PDBS_3D, ALL_3D):
+        raise Exception('Template generation failed - unkown templates type') # unkown template group
+    cmnd += '"'
 
-    # truncate
-    rotated_dim = rotated.shape[0]
-    original_dim = dm.shape[0]
+    # run chimera process
+    print('Running command:\n\t' + cmnd)
+    subprocess.Popen(cmnd, cwd = CONFIG.CHIMERA_UTILS_PATH)
 
-    return rotated[rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2,
-                   rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2,
-                   rotated_dim // 2 - original_dim // 2:rotated_dim // 2 + original_dim // 2]
+    # wait while files are being created
+    time.sleep(5)
+    prev_numfiles = 0
+    numfiles = len(os.listdir(output_path))
+    while numfiles > prev_numfiles: # as long as files are created, wait
+        prev_numfiles = numfiles
+        time.sleep(2)
+        numfiles = len(os.listdir(output_path))
+    if numfiles <= 0:
+        raise Exception('Template generation failed')
 
-    return rotated
+    # load generated templates
+    tilted_templates = load_templates_3d(output_path)
+    return tilted_templates
 
 
 def load_templates_3d(templates_path):
@@ -71,10 +102,8 @@ def load_templates_3d(templates_path):
     tilt_metadata = pickle.load(open(templates_path + 'tilt_ids.p','rb'))
     EulerAngle.init_tilts_from_list(tilt_metadata )
 
-
     # load and create tilted template for every tilt_id and template_id
     tilted_templates = BidimensionalLazyFileDAO(templates_path, len(template_metadata) , len(tilt_metadata))
-
     return tilted_templates
 
 
@@ -138,12 +167,12 @@ def check_if_in_bound(bound, p1, p2):
     return True
 
 
-def fill_with_rand_shape(dm, n_iterations=10, blur=True):
+def fill_with_rand_shape(dm, dim, n_iterations=10, blur=True):
     for i in range(n_iterations):
         add_random_shape(dm)
     if blur:
         import Noise
-        dm = Noise.blur_filter(dm)
+        dm = Noise.blur_filter(dm, dim)
     return dm
 
 
@@ -180,19 +209,20 @@ def generate_tilted_templates_2d():
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
 
+    template_dimensions_2d = tuple([CONFIG.TEMPLATE_DIMENSION, CONFIG.TEMPLATE_DIMENSION,1])
     # create different template density maps
     # circle
-    circle_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_circle(circle_dm[:, :, 0], TEMPLATE_DIMENSION // 4)
+    circle_dm = np.zeros(template_dimensions_2d )
+    fill_with_circle(circle_dm[:, :, 0], CONFIG.TEMPLATE_DIMENSION // 4)
     # square
-    square_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_square(square_dm[:, :, 0], TEMPLATE_DIMENSION // 2)
+    square_dm = np.zeros(template_dimensions_2d)
+    fill_with_square(square_dm[:, :, 0], CONFIG.TEMPLATE_DIMENSION // 2)
     # L
-    L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_L(L_dm[:, :, 0], TEMPLATE_DIMENSION // 2, TEMPLATE_DIMENSION // 3, 3, 3)
+    L_dm = np.zeros(template_dimensions_2d)
+    fill_with_L(L_dm[:, :, 0], CONFIG.TEMPLATE_DIMENSION // 2, CONFIG.TEMPLATE_DIMENSION // 3, 3, 3)
     # flipped L
-    flipped_L_dm = np.zeros(TEMPLATE_DIMENSIONS_2D)
-    fill_with_L(flipped_L_dm[:, :, 0], TEMPLATE_DIMENSION // 2, TEMPLATE_DIMENSION // 3, 3, 3, True)
+    flipped_L_dm = np.zeros(template_dimensions_2d)
+    fill_with_L(flipped_L_dm[:, :, 0], CONFIG.TEMPLATE_DIMENSION // 2, CONFIG.TEMPLATE_DIMENSION // 3, 3, 3, True)
 
     # create tilts
     angle_res = 15
@@ -203,7 +233,7 @@ def generate_tilted_templates_2d():
     for template_id, template_dm in enumerate([circle_dm, square_dm, L_dm, flipped_L_dm]):
         specific_templates = []
         for tilt_id , euler_angle in enumerate(EulerAngle.Tilts):
-            specific_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate2d(template_dm, euler_angle.Phi), TEMPLATE_DIMENSIONS_2D), tilt_id, template_id))
+            specific_templates.append(TiltedTemplate(align_densitymap_to_COM(rotate2d(template_dm, euler_angle.Phi), template_dimensions_2d), tilt_id, template_id))
         templates.append(tuple(specific_templates))
     return tuple(templates)
 

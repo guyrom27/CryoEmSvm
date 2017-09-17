@@ -1,10 +1,9 @@
+from TemplateUtil import shape_to_slices, get_normalize_template_dm
+from Configuration import CONFIG
+from CommonDataTypes import SixPosition
+
 from scipy import signal
 import numpy as np
-
-from TemplateUtil import shape_to_slices, get_normalize_template_dm
-from Constants import NEIGHBORHOOD_HALF_SIDE_2D, NEIGHBORHOOD_HALF_SIDE_3D
-from CommonDataTypes import SixPosition
-#import CrossCorrelation
 
 class TemplateMaxCorrelations:
     """
@@ -16,7 +15,7 @@ class TemplateMaxCorrelations:
         self.correlation_values = []
         self.best_tilt_ids = []
         for template_group in templates:
-            max_correlation = np.zeros(tomogram.density_map.shape)
+            max_correlation = -np.ones(tomogram.density_map.shape)
             max_correlation_tilt_id = np.zeros(max_correlation.shape, dtype = int)
             for tilted_template in template_group:
                 correlation = self.create_fit_score(tilted_template, tomogram)
@@ -39,9 +38,10 @@ class TemplateMaxCorrelations:
         else:
             dim = 2 if (self.correlation_values[0].shape[2] == 1) else 3
             if dim == 2:
-                neighborhood_half_side = NEIGHBORHOOD_HALF_SIDE_2D
+                neighborhood_half_side = tuple([CONFIG.NEIGHBORHOOD_HALF_SIDE,CONFIG.NEIGHBORHOOD_HALF_SIDE,0])
             else:
-                neighborhood_half_side = NEIGHBORHOOD_HALF_SIDE_3D
+                neighborhood_half_side = tuple([CONFIG.NEIGHBORHOOD_HALF_SIDE,CONFIG.NEIGHBORHOOD_HALF_SIDE,CONFIG.NEIGHBORHOOD_HALF_SIDE])
+
             cor_for_label = self.correlation_values[candidate.label]
             corner = [x[0] - x[1] for x in zip(candidate.get_position(),neighborhood_half_side)]
             relative_shape = [2*x+1 for x in neighborhood_half_side]

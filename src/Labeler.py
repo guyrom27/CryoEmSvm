@@ -1,6 +1,9 @@
-from Constants import JUNK_ID, DISTANCE_THRESHOLD
+from Configuration import CONFIG
 
 import numpy as np
+
+# The label that corresponds to NOTHING_IS_HERE
+JUNK_ID = -1
 
 class Labeler:
     """
@@ -16,7 +19,7 @@ class PositionLabeler:
         An entity that matches a candidate with a label using a known set of GroundTruth candidates
     """
     def __init__(self, composition):
-        self.threshold2 = DISTANCE_THRESHOLD**2
+        self.threshold2 = CONFIG.DISTANCE_THRESHOLD**2
         self.composition = composition
         #elements of composition who were found during labeling
         self.associated_composition = []

@@ -1,6 +1,9 @@
 import numpy as np
 from math import sqrt
 from scipy.ndimage import measurements
+from scipy import signal
+
+KERNEL_GAUSSIAN = 'GAUSSIAN'
 
 """
 Different Template manipulations are collected here
@@ -33,11 +36,31 @@ def put_template(tomogram_dm, template_dm, position):
     :param position: center of cube/square position
     :return:
     """
-    corner = [position[i] - template_dm.shape[i] // 2 for i in range(len(tomogram_dm.shape))]
-    shape = tuple([slice(corner[i],corner[i] + template_dm.shape[i]) for i in range(len(corner))])
-    if ([shape[i].start < 0 or shape[i].stop > tomogram_dm.shape[i] for i in range(len(tomogram_dm.shape))].count(True) > 0):
-        assert(False)
-    tomogram_dm[shape] += template_dm
+
+    # find corner position of template
+    corner = [position[i] - side // 2 for i,side in enumerate(template_dm.shape)]
+    # slice matchng positions in template and tomogram
+    template_slice = [slice(0, side) for side in template_dm.shape]
+    tomogram_slice = [slice(corner[i], corner[i] + side) for i,side in enumerate(template_dm.shape)]
+
+    # if template sticks out of tomogram edges, trim slices so it fits
+    for i in range(len((tomogram_slice))):
+        if (tomogram_slice[i].start < 0): # tempale starts before tomogram
+            template_slice[i] = slice(-tomogram_slice[i].start,template_slice[i].stop)
+            tomogram_slice[i] = slice(0,tomogram_slice[i].stop)
+        if (tomogram_slice[i].stop > tomogram_dm.shape[i]):  # template ends after tomogram
+            template_slice[i] = slice(template_slice[i].start,template_slice[i].stop + tomogram_dm.shape[i] - tomogram_slice[i].stop)
+            tomogram_slice[i] = slice(tomogram_slice[i].start, tomogram_dm.shape[i])
+
+    # place template in tomogram
+    tomogram_dm[tuple(tomogram_slice)] += template_dm[tuple(template_slice)]
+
+
+    #shape = tuple([slice(corner[i],corner[i] + template_dm.shape[i]) for i in range(len(corner))])
+    #if ([shape[i].start < 0 or shape[i].stop > tomogram_dm.shape[i] for i in range(len(tomogram_dm.shape))].count(True) > 0):
+    #    assert(False)
+    #tomogram_dm[shape] += template_dm
+
 
 
 
@@ -73,17 +96,30 @@ def align_densitymap_to_COM(densitymap, container_size_3D):
     return truncated_matrix.reshape(container_size_3D)
 
 
+def create_kernel(name, dim, gaussian_size, gaussian_stdev):
+    """
+    Creats a kernel of the specified kind and dimension.
+    :param name: Kind of kernel to create. Only KERNEL_GAUSSIAN at the moment.
+    :param dim: Dimension of the kernel. Only 2 of 3.
+    :param gaussian_size: size of gaussian
+    :param gaussian_stdev: standard deviation of gaussian
+    :return: 3 dimensional ndarray where the third dimension is of size 1 for the 2D case.
+    """
+    if KERNEL_GAUSSIAN == name:
+        base = signal.gaussian(gaussian_size, gaussian_stdev)
+        if 2 == dim:
+            return np.outer(base, base).reshape(len(base), len(base), 1)
+        elif 3 == dim:
+            plane = np.outer(base, base).reshape(len(base), len(base), 1)
+            kernel = np.outer(base, plane[0]).reshape(len(base), len(base), 1)
+            for row in plane[1:]:
+                kernel = np.concatenate((kernel, np.outer(base, row).reshape(len(base), len(base), 1)), 2)
+            return kernel
+        else:
+            raise NotImplementedError('Dimension can\'t be %d! (only 2 or 3)' % dim)
+    else:
+        raise NotImplementedError('No kernel option %s!' % name)
+
+
 if __name__ == '__main__':
-    from TemplateGenerator import generate_tilted_templates
-
-    dm = np.array([[0, 0, 1], [0, 0, 0], [0, 0, 0]])
-    t= align_densitymap_to_COM(dm, (9,9))
-    assert((np.array(measurements.center_of_mass(t)) == np.floor(np.array(t.shape)/2)).all())
-
-    templates = generate_tilted_templates()
-    t = templates[1][2]
-    norm = sqrt(np.sum(np.square(t.density_map)))
-    print("norm before normalizing: " + str(norm))
-    get_normalize_template_dm(t)
-    norm = sqrt(np.sum(np.square(t.density_map)))
-    print("norm after normalizing: " + str(norm))
+    pass

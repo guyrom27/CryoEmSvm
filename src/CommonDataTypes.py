@@ -1,6 +1,7 @@
 import numpy as np
 import random
 
+
 class EulerAngle:
     """
     This represents the angles of a rotated rigid body.
