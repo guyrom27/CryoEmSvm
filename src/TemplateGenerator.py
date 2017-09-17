@@ -10,9 +10,10 @@ import pickle
 import os, shutil, subprocess, time
 
 
-GEOMETRIC_3D = 'GEOMETRIC_3D'
-PDBS_3D = 'PDBS_3D'
-ALL_3D = 'ALL_3D'
+class TemplatesType(StringComperableEnum):
+    GEOMETRIC_3D = 'GEOMETRIC_3D'
+    PDBS_3D = 'PDBS_3D'
+    ALL_3D = 'ALL_3D'
 
 """
 This file contains all the methods that are used to generate and load templates (from files)
@@ -64,11 +65,11 @@ def generate_templates_3d(output_path, angle_res, templates_type):
                                                                     script_name,
                                                                     os.path.abspath(output_path),
                                                                     angle_res))
-    if templates_type in (GEOMETRIC_3D, ALL_3D):
+    if templates_type in (TemplatesType.GEOMETRIC_3D, TemplatesType.ALL_3D):
         cmnd += ' -g ' + r'.\geometric.txt'
-    if templates_type in (PDBS_3D, ALL_3D):
+    if templates_type in (TemplatesType.GEOMETRIC_3D.PDBS_3D, TemplatesType.GEOMETRIC_3D.ALL_3D):
         cmnd += ' -p ' + r'.\pdbs.txt'
-    if templates_type not in (GEOMETRIC_3D, PDBS_3D, ALL_3D):
+    if templates_type not in TemplatesType:
         raise Exception('Template generation failed - unknown templates type') # unknown template group
     cmnd += '"'
 
@@ -257,10 +258,6 @@ def generate_tilted_templates():  # TODO: remove
 # -------------------------------------------------- Generators ------------------------------------------------------ #
 # Enum containing all the supported generators
 class TemplateGenerator(StringComperableEnum):
-    LOAD = 'LOAD'
-    SOLID = 'SOLID'
-    SOLID_2D = 'SOLID_2D'
-    LOAD_3D = 'LOAD_3D'
     CHIMERA = 'CHIMERA'
 
 

@@ -3,20 +3,16 @@ import argparse
 import pickle
 
 from CommonDataTypes import EulerAngle
-from TemplateGenerator import TemplateGenerator
+from TemplateGenerator import TemplateGenerator, TemplatesType
 from TomogramGenerator import TomogramGenerator
 from TemplateFactory import TemplateFactory
 from TomogramFactory import TomogramFactory
+from Configuration import CONFIG
+from TomogramGenerator import generate_tomogram_with_given_candidates
 from SvmTrain import svm_train
 from SvmEval import svm_eval
+from SvmView import svm_view
 
-# Import for view results function. Consider moving to it's own file
-from TomogramGenerator import generate_tomogram_with_given_candidates
-from Configuration import CONFIG
-from MetricTester import MetricTester
-from ResultsMetrics import ResultsMetrics
-from Labeler import JUNK_ID
-import VisualUtils
 
 SUPPORTED_COMMANDS = ('generate', 'train', 'eval', 'view_results')
 GENERETABLES = ('templates', 'tomograms')
@@ -97,15 +93,7 @@ def _view_results(result_path):
     EulerAngle.Tilts, evaluation_tomograms, evaluated_tomogram, output_candidates = result
 
     # Show results
-    metrics = MetricTester(evaluation_tomograms[0].composition,
-                           [c for c in evaluated_tomogram.composition if c.label != JUNK_ID])
-    metrics.print_metrics()
-    print('')
-    result_metrics = ResultsMetrics(evaluation_tomograms[0].composition, output_candidates[0])
-    result_metrics.print_full_stats(short=False)
-    if CONFIG.DIM == 2:
-        VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[0], evaluated_tomogram)
-        VisualUtils.plt.show()
+    svm_view(evaluation_tomograms, evaluated_tomogram, output_candidates)
 
 
 def main(argv):
@@ -123,7 +111,7 @@ def main(argv):
                                  help='The kind of generator to use when creating the templates')
     template_parser.add_argument('out_path', nargs=1, help='Path to save in the generated template')
     template_parser.add_argument('-r', '--angular_resolution', type=int, help='Angular resolution')
-    template_parser.add_argument('-t', '--template_type', choices=['GEOMETRIC_3D', 'PDBS_3D', 'ALL_3D'],
+    template_parser.add_argument('-t', '--template_type', choices=TemplatesType.keys(),
                                  help='Type of templates to be generated')
 
     # Define generate tomograms sub-sub-command
@@ -184,8 +172,8 @@ def main(argv):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        main(['generate', 'templates', 'CHIMERA', 'C:\\dev\\Anaconda\\CryoEmSvm\\Chimera\\GeometricTemplates\\',
-              '-r', '60', '-t', 'GEOMETRIC_3D'])
+        # main(['generate', 'templates', 'CHIMERA', 'C:\\dev\\Anaconda\\CryoEmSvm\\Chimera\\GeometricTemplates\\',
+        #       '-r', '60', '-t', 'GEOMETRIC_3D'])
         # main(['generate', 'tomograms', 'RANDOM', 'C:\\dev\\Anaconda\\CryoEmSvm\\Chimera\\GeometricTemplates\\',
         #       'C:\\dev\\Anaconda\\CryoEmSvm\\Chimera\\GeometricTemplates\\tomograms.pkl', '-c', '2', '3', '-n', '1'])
         # print('Training')
@@ -197,7 +185,7 @@ if __name__ == '__main__':
         # main(['eval', 'my_svm.pkl', '-d', 'C:\\dev\\Anaconda\\CryoEmSvm\\Chimera\\GeometricTemplates\\eval_tomograms.pkl',
         #       '-o', 'my_result.pkl'])
         # print('Show results')
-        # main(['view_results', 'my_result.pkl'])
+        main(['view_results', 'my_result.pkl'])
         pass
     else:
         main(None)
