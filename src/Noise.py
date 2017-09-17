@@ -37,6 +37,7 @@ def add_noise(dmap, dim):
     noise = gauss_noise(dmap)
     noise = linear_noise(noise)
     noise = blur_filter(noise, dim)
+    noise = linear_noise(noise)
     return noise
 
 def make_noisy_tomogram(tomogram, dim):
@@ -47,19 +48,25 @@ def make_noisy_tomogram(tomogram, dim):
 
 if __name__ == '__main__':
     from TomogramGenerator import *
-    from TemplateGenerator import generate_tilted_templates, load_templates_3d
-    import CommonDataTypes
+    from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d
     from VisualUtils import compare_reconstruced_tomogram, slider3d
+    dim = 2
+    if dim == 2:
+        criteria = [4, 3, 0, 0]
+        templates = generate_tilted_templates_2d(15)
+    else:
+        criteria = [5, 6, 6]
+        templates = load_templates_3d(r'..\Chimera\Templates'+'\\')
 
-    #templates = generate_tilted_templates()
-    templates = load_templates_3d(r'..\Chimera\Templates'+'\\')
-    #criteria = [4, 3, 0, 0]
-    criteria = [5, 6, 6]
-    tomogram = generate_random_tomogram(templates, criteria, 3)
-    slider3d(tomogram.density_map)
-    noisy_tomogram = make_noisy_tomogram(tomogram, 3)
-    slider3d(noisy_tomogram.density_map)
+    tomogram = generate_random_tomogram(templates, criteria, dim)
+    noisy_tomogram = make_noisy_tomogram(tomogram, dim)
 
-    #compare_reconstruced_tomogram(tomogram, noisy_tomogram, True)
+    if dim == 2:
+        compare_reconstruced_tomogram(tomogram, noisy_tomogram, True)
+    else:
+        slider3d(tomogram.density_map)
+        #slider3d(noisy_tomogram.density_map)
+
+
 
 
