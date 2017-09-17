@@ -10,24 +10,34 @@ from ResultsMetrics import ResultsMetrics
 from Metrics import Metrics
 import VisualUtils
 import pickle
+import configparser
+
+# load configuration
+config_path = 'testing_2d.config'
+config = configparser.ConfigParser()
+config.read(config_path)
+to_int_list = lambda string: [int(val) for val in string.replace('[','').replace(']','').split(',')]
+
+# general
+dim = config['DEFAULT'].getint('dim')
+seed = config['DEFAULT'].get('seed')
+add_noise = config['DEFAULT'].getboolean('add_noise')
+svm_path = config['DEFAULT'].get('svm_path')
+template_file_path = config['DEFAULT'].get('template_file_path')
+
+# training
+training_criteria = to_int_list(config['train']['criteria'])
+number_of_training_tomograms = config['train'].getint('number_of_tomograms')
+train = config['train'].getboolean('train')
+
+#evaluation
+test_criteria = to_int_list(config['evaluate']['criteria'])
+number_of_test_tomograms = config['evaluate'].getint('number_of_tomograms')
+metrics_input_file = config['evaluate'].get('metrics_input_file')
+metrics_output_file = config['evaluate'].get('metrics_output_file')
 
 # train
-#criteria = [2, 2, 4, 4]     #2D
-criteria = [5, 5, 5]          #3D
-number_of_training_tomograms = 5
-number_of_test_tomograms = 5
-dim = 3
 #seed = 1909615246
-seed = None
-train = True
-add_noise = False
-svm_path = r'..\TrainedSVM\5_NoNoise_3D_PDB_555.pkl'
-metrics_input_file = r'..\SVM_Metrics_Results\5_NoNoise_3D_PDB_555.pkl'
-metrics_output_file = r'..\SVM_Metrics_Results\5_NoNoise_3D_PDB_555.pkl'
-template_file_path = r'..\Chimera\Templates' + '\\'  #only relevant in 3D
-#metrics_output_file = r'..\SVM_Metrics_Results\100_Noise_2D_2342.pkl'
-#metrics_input_file = r'..\SVM_Metrics_Results\1_Noise_3D.pkl'
-#metrics_output_file = r'..\SVM_Metrics_Results\1_Noise_3D.pkl'
 
 # create templates
 if dim == 2:
@@ -39,7 +49,7 @@ else:
 
 # train
 print("Training")
-training_tomograms = generate_random_tomogram_set(templates, criteria, number_of_training_tomograms, dim, seed, add_noise)
+training_tomograms = generate_random_tomogram_set(templates, training_criteria, number_of_training_tomograms, dim, seed, add_noise)
 training_analyzers = []
 
 if dim == 2:
@@ -60,9 +70,7 @@ else:
             svm = pickle.load(file)
             svm_and_templates = (svm, templates)
 
-#criteria = [2, 3, 4, 2]
-#criteria = [6, 6, 0, 0]
-criteria = [5, 6, 6]
+
 # eval
 print("Evaluating")
 
@@ -75,7 +83,7 @@ if metrics_input_file is not None:
 print_each_event = False
 
 for i in range(number_of_test_tomograms):
-    evaluation_tomograms = [generate_random_tomogram(templates, criteria, dim, noise=add_noise)]
+    evaluation_tomograms = [generate_random_tomogram(templates, test_criteria, dim, noise=add_noise)]
     output_candidates = svm_eval(svm_and_templates, evaluation_tomograms)
     if dim == 3:  #accoding to guy generate tomogram with given candidates is bugged in 3D for some reason
         evaluated_tomogram = Tomogram(None, output_candidates[0])
