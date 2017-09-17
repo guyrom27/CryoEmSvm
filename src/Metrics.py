@@ -43,7 +43,7 @@ class Metrics:
         print("number of false positives = {}".format(self.n_fp))
         print("number of true junk = {}".format(self.n_true_junk))
         if self.n_true_junk + self.n_fp != 0:
-            print("true junk detection rate = {:.2f}%".format(self.n_true_junk*100.0/self.n_true_junk + self.n_fp))
+            print("true junk detection rate = {:.2f}%".format(self.n_true_junk*100.0/(self.n_true_junk + self.n_fp)))
         if self.n_label_match != 0:
             print("tilt match rate = {0:.2f}%".format(self.n_tilt_match*100.0/self.n_label_match))
         
