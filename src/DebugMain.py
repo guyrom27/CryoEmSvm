@@ -15,7 +15,7 @@ from sklearn.svm import SVC
 
 if __name__ == '__main__':
     dim = 2
-    templates = generate_tilted_templates_2d()
+    templates = generate_tilted_templates_2d(15)
     #VisualUtils.show_templates(templates)
 
     #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_2D]

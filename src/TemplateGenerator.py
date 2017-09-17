@@ -18,7 +18,7 @@ ALL_3D = 'ALL_3D'
 This file contains all the methods that are used to generate and load templates (from files)
  important methods:
  load_templates_3d(templates_path): load 3d tempaltes produced by chimera bsed code
- generate_tilted_templates_2d(): create 2d geometric shaped templates
+ generate_tilted_templates_2d(angle_res): create 2d geometric shaped templates
 """
 
 # -------------------------------------------------------------------------------- #
@@ -36,7 +36,7 @@ def fill_with_sphere(dm, rad):
     return dm
 
 
-def generate_templates_3d(output_path, angular_resolution, templates_type):
+def generate_templates_3d(output_path, angle_res, templates_type):
     """
     Generates 3D tilted templates density maps by calling chimera script.
     Path to chimera.exe (chimera instalation) and to ChimeraUtils (part of project)
@@ -44,7 +44,7 @@ def generate_templates_3d(output_path, angular_resolution, templates_type):
 
     :param output_path: directory where output templates and meta data are saved.
            Wipes content, creates if does not exist
-    :param angular_resolution: discrete resolution for tilts generated
+    :param angle_res: discrete resolution for tilts generated
     :param templates_type: supports GEOMETRIC_3D, PDBS_3D, ALL_3D
 
     :return tilted_templates object - refer to load_tempaltes_3d
@@ -60,7 +60,10 @@ def generate_templates_3d(output_path, angular_resolution, templates_type):
 
     # prepare command
     script_name = '.\chimera_template_generator.py'
-    cmnd = format(r'"%s" --debug --nogui --script "%s -o %s -a %d'%(CONFIG.CHIMERA_PATH,script_name,output_path,angular_resolution))
+    cmnd = format(r'"%s" --debug --nogui --script "%s -o %s -a %d'%(CONFIG.CHIMERA_PATH,
+                                                                    script_name,
+                                                                    os.path.abspath(output_path),
+                                                                    angle_res))
     if templates_type in (GEOMETRIC_3D, ALL_3D):
         cmnd += ' -g ' + r'.\geometric.txt'
     if templates_type in (PDBS_3D, ALL_3D):
@@ -82,7 +85,7 @@ def generate_templates_3d(output_path, angular_resolution, templates_type):
         time.sleep(2)
         numfiles = len(os.listdir(output_path))
     if numfiles <= 0:
-        raise Exception('Template generation failed')
+        raise Exception(format('Template generation failed - %d files generated' % numfiles))
 
     # load generated templates
     tilted_templates = load_templates_3d(output_path)
@@ -204,8 +207,10 @@ def rotate2d(dm, theta):
     return rotated[rotated_dim//2-original_dim//2:rotated_dim//2-original_dim//2 + original_dim,rotated_dim//2-original_dim//2:rotated_dim//2-original_dim//2 + original_dim]
 
 
-def generate_tilted_templates_2d():
+def generate_tilted_templates_2d(angle_res):
     """
+    :param angle_res: discrete resolution for tilts generated
+
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
 
@@ -225,7 +230,6 @@ def generate_tilted_templates_2d():
     fill_with_L(flipped_L_dm[:, :, 0], CONFIG.TEMPLATE_DIMENSION // 2, CONFIG.TEMPLATE_DIMENSION // 3, 3, 3, True)
 
     # create tilts
-    angle_res = 15
     EulerAngle.init_tilts_from_list([(phi, 0, 0) for phi in range(0, 360, angle_res)])
 
     # create tilted templates tuple of tuples
