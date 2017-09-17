@@ -4,9 +4,7 @@ from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_g
 from CommonDataTypes import EulerAngle
 from SvmTrain import svm_train
 from SvmEval import svm_eval
-from Noise import make_noisy_tomogram
 from MetricTester import MetricTester
-from ResultsMetrics import ResultsMetrics
 from Metrics import Metrics
 import VisualUtils
 import pickle
@@ -38,9 +36,7 @@ test_criteria = to_int_list(config['evaluate']['criteria'])
 number_of_test_tomograms = config['evaluate'].getint('number_of_tomograms')
 metrics_input_file = config['evaluate'].get('metrics_input_file')
 metrics_output_file = config['evaluate'].get('metrics_output_file')
-
-# train
-#seed = 1909615246
+print_each_event = config['evaluate'].getboolean('print_each_event')
 
 # create templates
 if dim == 2:
@@ -53,39 +49,46 @@ elif dim == 3:
 else:
     assert(False)
 
-# train
-print("Training")
-training_tomograms = generate_random_tomogram_set(templates, training_criteria, number_of_training_tomograms, dim, seed, add_noise)
-training_analyzers = []
-
 if train:
+    # train SVM
+    print("Training")
+    training_tomograms = generate_random_tomogram_set(templates, training_criteria, number_of_training_tomograms, dim,
+                                                      seed, add_noise)
+    training_analyzers = []
+
+    # save results
     svm_and_templates = svm_train(templates, training_tomograms, training_analyzers)
     with open(svm_path, 'wb') as file:
         pickle.dump(svm_and_templates, file)
 else:
+    # load trained SVM
     with open(svm_path, 'rb') as file:
         svm_and_templates = pickle.load(file)
-    # compatibilty with saar's code
+    # backwards compatibilty with old format for pickle
     if isinstance(svm_and_templates,tuple):
         svm = svm_and_templates[0]
     svm_and_templates = (svm, (EulerAngle.Tilts, templates))
 
 
-# eval
+# evaluate
 print("Evaluating")
 
 aggregated_metrics = Metrics()
 event_metrics = Metrics()
+
+# add to metrics to previuosly calculated metrics
 if metrics_input_file is not None:
     with open(metrics_input_file, 'rb') as file:
         aggregated_metrics = pickle.load(file)
 
-print_each_event = False
-
 for i in range(number_of_test_tomograms):
+    # create single tomogram for evaluation
     evaluation_tomograms = [generate_random_tomogram(templates, test_criteria, dim, noise=add_noise)]
+    # evaluate
     output_candidates = svm_eval(svm_and_templates, evaluation_tomograms)
+    # reconstruct tomogram
     evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
+    # calculate metrics
     metric_tester = MetricTester(evaluation_tomograms[0].composition, output_candidates[0])
     event_metrics.init_from_tester(metric_tester)
     if print_each_event:
@@ -95,40 +98,26 @@ for i in range(number_of_test_tomograms):
         #VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[0], evaluated_tomogram, True)
     aggregated_metrics.merge(event_metrics)
 
-'''
-if add_noise:
-    evaluation_tomograms = [make_noisy_tomogram(generate_random_tomogram(templates, criteria, dim), dim)]
-else:
-    evaluation_tomograms = [generate_random_tomogram(templates, criteria, dim)]
-
-evaluation_analyzers = []
-output_candidates = svm_eval(svm_and_templates, evaluation_tomograms, evaluation_analyzers)
-'''
-
-
-#evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
-
-# show results
-print('Results')
-
-
-
+# save metrics
 if metrics_output_file is not None:
     with open(metrics_output_file, 'wb') as file:
         pickle.dump(aggregated_metrics, file)
 
+# show results
+print('Results')
+
+# print metrics for last evaluated tomogram
 metric_tester = MetricTester(evaluation_tomograms[0].composition, [c for c in evaluated_tomogram.composition if c.label != JUNK_ID])
-#metrics.print_metrics()
 metric_tester.print()
 print('')
 metric_tester.print_metrics()
 print('')
+
+# print aggregated metrics
 aggregated_metrics.print_stat()
-
-
 print('')
-#result_metrics = ResultsMetrics(evaluation_tomograms[0].composition, output_candidates[0])
-#result_metrics.print_full_stats()
+
+# visualy display results
 if dim == 2:
     VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[0], evaluated_tomogram)
     VisualUtils.plt.show()
@@ -136,4 +125,5 @@ else:
     VisualUtils.slider3d(evaluated_tomogram.density_map)
     VisualUtils.slider3d(evaluation_tomograms[0].density_map)
     VisualUtils.slider3d(evaluation_tomograms[0].density_map - evaluated_tomogram.density_map)
+
 print("Done")
