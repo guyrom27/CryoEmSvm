@@ -17,7 +17,7 @@ This file contains all the methods that are used to generate and load tomograms 
  + generate_random_tomogram
  - load tomogram from file
    - with known composition
-   - with unkown composition
+   - with unknown composition
 
  Ways to get training set (set of tomogrmas)
  - generate random tomograms from criteria and number
@@ -36,6 +36,7 @@ def get_tomogram_shape(dim):
         return tuple([CONFIG.TOMOGRAM_DIMENSION,CONFIG.TOMOGRAM_DIMENSION,CONFIG.TOMOGRAM_DIMENSION])
     else:
         assert(False)
+
 
 def generate_tomogram_with_given_candidates(templates, composition, dim):
     """
@@ -95,7 +96,7 @@ def generate_random_candidates(template_side_len, criteria, dim):
         COM_valid_space[2] = 1
 
     points = randomize_spaced_out_points(COM_valid_space, separation, n)
-    #correct base (push away from sides of tomogram)
+    # correct base (push away from sides of tomogram)
     points = [[x[0] + x[1] for x in zip(p,gap_shape)] for p in points]
     ids = [[i] * criteria[i] for i in range(len(criteria))]
     import itertools
@@ -105,10 +106,11 @@ def generate_random_candidates(template_side_len, criteria, dim):
 
 
 def generate_random_tomogram(templates, criteria, dim, noise=False):
+    # TODO: write noise docstring
     """
     :param templates:  list of lists: first dimension is different template_ids second dimension is tilt_id
     :param criteria: list of integers. criteria[i] means how many instances of template_id==i should appear in the resulting tomogram
-    :param dim 2 for 2D 3 for 3D
+    :param dim: 2 for 2D 3 for 3D
     :return: a random Tomogram according to the criteria
     """
     template_side = templates[0][0].density_map.shape[0]
@@ -142,28 +144,13 @@ def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, 
 # -------------------------------------------------- Generators ------------------------------------------------------ #
 class TomogramGenerator(StringComperableEnum):
     LOAD = 'LOAD'
-    OLD_GENERATOR = 'OLD_GENERATOR'
-
-# TODO: place holders for the tomogram generators
-# Broken!!!
-def tomogram_generator(paths, templates):
-    pass
-#     from Constants import DEFAULT_COMPOSITION_TUPLES_2D
-#     composition = [Candidate.fromTuple(*t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
-#     for path in paths:
-#         tomogram = generate_tomogram_with_given_candidates(templates, composition, dim)
-#         yield tomogram
+    RANDOM = 'RANDOM'
 
 
-def tomogram_loader(paths, save):
-    if not save:
-        for path in paths:
-            with open(path, 'rb') as file:
-                yield pickle.load(file)
-    else:
-        for path in paths:
-            with open(path, 'wb') as file:
-                yield lambda x: pickle.dump(x, file)
+def tomogram_loader(path):
+    with open(path, 'rb') as file:
+        return pickle.load(file)
+
 
 
 # An example for a generator:
@@ -224,9 +211,8 @@ def tomogram_loader(paths, save):
 #       3. Add any new values that the shell command didn't previously accept to the command.
 #          This is done by adding the arguments to the correct parser. For more information about how to add an
 #          argument look up argparse.
-def tomogram_example_generator_random(templates, template_side, criteria, dim, num_tomograms):
-    for _ in range(num_tomograms):
-        yield generate_random_tomogram(templates, criteria, dim)
+def tomogram_generator_random(templates, criteria, dim, num_tomograms):
+    return generate_random_tomogram_set(templates, criteria, num_tomograms, dim)
 #training_tomograms = tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_tomograms=1)
 
 if __name__ == '__main__':

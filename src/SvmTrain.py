@@ -1,8 +1,9 @@
-from Labeler import PositionLabeler
-from TomogramAnalyzer import TomogramAnalyzer
-
 from sklearn.svm import SVC
 import numpy as np
+
+from Labeler import PositionLabeler
+from TomogramAnalyzer import TomogramAnalyzer
+from CommonDataTypes import EulerAngle
 
 
 def svm_train(templates, tomograms, test_list = None):
@@ -43,4 +44,4 @@ def svm_train(templates, tomograms, test_list = None):
         exit()
     svm.fit(x, y)
 
-    return (svm, templates)
+    return svm, (EulerAngle.Tilts, templates)

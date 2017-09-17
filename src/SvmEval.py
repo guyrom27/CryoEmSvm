@@ -1,6 +1,6 @@
 from Labeler import SvmLabeler
 from TomogramAnalyzer import TomogramAnalyzer
-
+from CommonDataTypes import EulerAngle
 
 def svm_eval(svm_and_templates, tomograms, test_list = None):
     """
@@ -11,7 +11,8 @@ def svm_eval(svm_and_templates, tomograms, test_list = None):
     :return A list of lists of the candidates for each tomogram.
     """
 
-    (svm, templates) = svm_and_templates
+    svm, tilts_templates = svm_and_templates
+    EulerAngle.Tilts, templates = tilts_templates
     tomogram_candidates = []
     labeler = SvmLabeler(svm)
 

@@ -243,11 +243,12 @@ def generate_tilted_templates_2d():
 # -------------------------------------------------------------------------------- #
 
 
-def generate_tilted_templates(): #TODO: remove
+def generate_tilted_templates():  # TODO: remove
     """
     :return: tuple of tuples of TiltedTemplates (each group has the same template_id)
     """
     return generate_tilted_templates_2d()
+
 
 # -------------------------------------------------- Generators ------------------------------------------------------ #
 # Enum containing all the supported generators
@@ -256,11 +257,12 @@ class TemplateGenerator(StringComperableEnum):
     SOLID = 'SOLID'
     SOLID_2D = 'SOLID_2D'
     LOAD_3D = 'LOAD_3D'
+    CHIMERA = 'CHIMERA'
 
 
 # TODO: Place holders for template generator
-def template_loader(paths, save):
-    if not save:
+def template_loader(paths):
+    if not False:
         for path in paths:
             with open(path, 'rb') as file:
                 yield pickle.load(file)
@@ -268,6 +270,12 @@ def template_loader(paths, save):
         for path in paths:
             with open(path, 'wb') as file:
                 yield lambda x: pickle.dump(x, file)
+
+
+def generate_chimera(paths, angular_resolution, template_type):
+    # TODO: for now template_type won't be chosen because it's better be an enum beforehand
+    generate_templates_3d(paths[0], angular_resolution, template_type)
+    return load_templates_3d(paths[0])
 
 
 def template_generator_solid(paths):
@@ -283,10 +291,9 @@ def template_generator_solid_2d(paths):
     for template in generate_tilted_templates_2d():
         yield template
 
+
 def template_generator_3d_load(paths):
-    templates = load_templates_3d(paths[0])
-    for template in templates:
-        yield template
+    load_templates_3d(paths[0])
 
 
 if __name__ == '__main__':
