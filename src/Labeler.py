@@ -19,7 +19,7 @@ class PositionLabeler:
         An entity that matches a candidate with a label using a known set of GroundTruth candidates
     """
     def __init__(self, composition):
-        self.threshold2 = CONFIG.DISTANCE_THRESHOLD**2
+        self.threshold = CONFIG.DISTANCE_THRESHOLD
         self.composition = composition
         #elements of composition who were found during labeling
         self.associated_composition = []
@@ -35,7 +35,7 @@ class PositionLabeler:
         reals = []
         for real_candidate in self.composition:
             dist_squared = np.linalg.norm(np.array(candidate.six_position.COM_position) - np.array(real_candidate.six_position.COM_position))
-            if dist_squared <= self.threshold2:
+            if dist_squared <= self.threshold:
                 reals.append((dist_squared, real_candidate))
         if (len(reals) > 0):
             ground_truth_candidate = min(reals,key=lambda x: x[0])[1]

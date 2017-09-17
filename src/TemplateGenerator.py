@@ -69,7 +69,7 @@ def generate_templates_3d(output_path, angle_res, templates_type):
     if templates_type in (PDBS_3D, ALL_3D):
         cmnd += ' -p ' + r'.\pdbs.txt'
     if templates_type not in (GEOMETRIC_3D, PDBS_3D, ALL_3D):
-        raise Exception('Template generation failed - unkown templates type') # unkown template group
+        raise Exception('Template generation failed - unknown templates type') # unknown template group
     cmnd += '"'
 
     # run chimera process
