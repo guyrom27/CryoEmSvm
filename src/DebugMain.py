@@ -9,6 +9,7 @@ import Noise
 from MetricTester import MetricTester
 import VisualUtils
 from TomogramAnalyzer import TomogramAnalyzer
+import Metrics
 
 from sklearn.svm import SVC
 
@@ -20,9 +21,10 @@ if __name__ == '__main__':
 
     #composition = [Candidate.fromTuple(t) for t in DEFAULT_COMPOSITION_TUPLES_2D]
     #tomogram = generate_tomogram_with_given_candidates(templates, composition, dim)
-    criteria = [2, 2, 3, 2]
+    criteria = [2, 0, 3, 1]
     seed = None
-    for tom in generate_random_tomogram_set(templates, criteria, 1, dim, seed):
+    #junk allways detected seed 526699644
+    for tom in generate_random_tomogram_set(templates, criteria, 1, dim, seed, noise=True):
         truth_tomogram = tom
 
     # tomogram = Noise.make_noisy_tomogram(truth_tomogram) #TODO: might be broken
@@ -72,7 +74,9 @@ if __name__ == '__main__':
 
     metric = MetricTester(truth_tomogram.composition,svm_tomogram.composition)
     metric.print_metrics()
-
+    m = Metrics.Metrics()
+    m.init_from_tester(metric)
+    m.print_stat()
     VisualUtils.compare_reconstruced_tomogram(truth_tomogram, svm_tomogram, True) #True = draw the difference map as well
     VisualUtils.compare_candidate_COM(svm_tomogram.composition, svm_candidates, truth_tomogram) #display the center of mass of the candidates
 

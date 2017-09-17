@@ -28,14 +28,13 @@ if __name__ == '__main__':
     tomogram = make_noisy_tomogram(true_tomogram, 3)
     composition = tomogram.composition
     VisualUtils.slider3d(tomogram.density_map)
-
     print('calculating correlations')
     max_correlations = TemplateMaxCorrelations(tomogram, templates)
 
     print('selecting')
     selector = CandidateSelector(max_correlations, templates[0][0].density_map.shape)
     candidates = selector.select(tomogram)
-    #show_candidates(selector, candidates, tomogram)
+    VisualUtils.show_candidates3D(selector, candidates, tomogram)
 
     print('labeling')
     labeler = PositionLabeler(tomogram.composition)
@@ -78,5 +77,8 @@ if __name__ == '__main__':
 
     metric = MetricTester(tomogram.composition,svm_tomogram.composition, tomogram, svm_tomogram)
     metric.print_metrics()
-
+    from Metrics import Metrics
+    m = Metrics()
+    m.init_from_tester(metric)
+    m.print_stat()
     VisualUtils.slider3d(svm_tomogram.density_map - true_tomogram.density_map)
