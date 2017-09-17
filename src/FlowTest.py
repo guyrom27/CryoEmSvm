@@ -14,16 +14,17 @@ import pickle
 # train
 #criteria = [2, 2, 4, 4]     #2D
 criteria = [5, 5, 5]          #3D
-number_of_training_tomograms = 30
-number_of_test_tomograms = 4
+number_of_training_tomograms = 5
+number_of_test_tomograms = 5
 dim = 3
 #seed = 1909615246
 seed = None
-train = False
-add_noise = True
-svm_path = r'..\TrainedSVM\30_Noise_3D_PDB_566.pkl'
-metrics_input_file = r'..\SVM_Metrics_Results\30_Noise_3D_PDB_566.pkl'
-metrics_output_file = r'..\SVM_Metrics_Results\30_Noise_3D_PDB_566.pkl'
+train = True
+add_noise = False
+svm_path = r'..\TrainedSVM\5_NoNoise_3D_PDB_555.pkl'
+metrics_input_file = r'..\SVM_Metrics_Results\5_NoNoise_3D_PDB_555.pkl'
+metrics_output_file = r'..\SVM_Metrics_Results\5_NoNoise_3D_PDB_555.pkl'
+template_file_path = r'..\Chimera\Templates' + '\\'  #only relevant in 3D
 #metrics_output_file = r'..\SVM_Metrics_Results\100_Noise_2D_2342.pkl'
 #metrics_input_file = r'..\SVM_Metrics_Results\1_Noise_3D.pkl'
 #metrics_output_file = r'..\SVM_Metrics_Results\1_Noise_3D.pkl'
@@ -32,7 +33,7 @@ metrics_output_file = r'..\SVM_Metrics_Results\30_Noise_3D_PDB_566.pkl'
 if dim == 2:
     templates = generate_tilted_templates_2d()
 elif dim == 3:
-    templates = load_templates_3d(r'..\Chimera\Templates' + '\\')
+    templates = load_templates_3d(template_file_path)
 else:
     assert(False)
 
