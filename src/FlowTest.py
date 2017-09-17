@@ -1,5 +1,5 @@
 from Labeler import JUNK_ID
-from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d
+from TemplateGenerator import generate_tilted_templates_2d, load_templates_3d, generate_templates_3d
 from TomogramGenerator import generate_random_tomogram, generate_tomogram_with_given_candidates, generate_random_tomogram_set
 from CommonDataTypes import Tomogram
 from SvmTrain import svm_train
@@ -20,6 +20,7 @@ to_int_list = lambda string: [int(val) for val in string.replace('[','').replace
 
 # general
 dim = config['DEFAULT'].getint('dim')
+angle_res = config['DEFAULT'].getint('angle_res')
 seed = config['DEFAULT'].get('seed')
 add_noise = config['DEFAULT'].getboolean('add_noise')
 svm_path = config['DEFAULT'].get('svm_path')
@@ -29,6 +30,8 @@ template_file_path = config['DEFAULT'].get('template_file_path')
 training_criteria = to_int_list(config['train']['criteria'])
 number_of_training_tomograms = config['train'].getint('number_of_tomograms')
 train = config['train'].getboolean('train')
+generate_templates = config['train'].getboolean('generate_templates')
+templates_type = config['train'].get('templates_type')
 
 #evaluation
 test_criteria = to_int_list(config['evaluate']['criteria'])
@@ -41,9 +44,12 @@ metrics_output_file = config['evaluate'].get('metrics_output_file')
 
 # create templates
 if dim == 2:
-    templates = generate_tilted_templates_2d()
+    templates = generate_tilted_templates_2d(angle_res)
 elif dim == 3:
-    templates = load_templates_3d(template_file_path)
+    if generate_templates:
+        templates = generate_templates_3d(template_file_path, angle_res, templates_type)
+    else:
+        templates = load_templates_3d(template_file_path)
 else:
     assert(False)
 
