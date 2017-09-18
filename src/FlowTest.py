@@ -17,7 +17,9 @@ import configparser
 config_path = 'testing_2d.config'
 
 
-def main(config):
+def main(config_path):
+    config = configparser.ConfigParser()
+    config.read(config_path)
     to_int_list = lambda string: [int(val) for val in string.replace('[','').replace(']','').split(',')]
 
     # general
@@ -134,12 +136,9 @@ def main(config):
 
 
 if __name__ == '__main__':
-    config = configparser.ConfigParser()
     if len(sys.argv) == 1:
         # load manual configuration
-        config.read(config_path)
-        main(config)
+        main(config_path)
     else:
         # load configuration from sys.argv
-        config.read(sys.argv[1])
-        main(config)
+        main(sys.argv[1])
