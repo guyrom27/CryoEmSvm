@@ -16,5 +16,5 @@ The name of the file:
     easy way to translate index to size: start + i * step
 
 Other information:
-    In 2D the criteria used is [1, 1, 1]
-    In 3D the criteria used is [2, 2, 2] and template type is ALL_3D
+    In 2D the criteria used is [1, 1, 1] and angular resolution is 15
+    In 3D the criteria used is [2, 2, 2], angular resolution is 60 and template type is ALL_3D
