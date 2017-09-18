@@ -17,4 +17,4 @@ The name of the file:
 
 Other information:
     In 2D the criteria used is [1, 1, 1]
-    In 3D the criteria used is [2, 2, 2]
+    In 3D the criteria used is [2, 2, 2] and template type is ALL_3D
