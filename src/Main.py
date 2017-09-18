@@ -78,11 +78,9 @@ def _eval(svm_path, tomogram_paths, out_path):
     # Evaluate the tomograms
     eval_result = svm_eval(svm_and_templates, tomograms)
 
-    evaluated_tomogram = generate_tomogram_with_given_candidates(svm_and_templates[1][1], eval_result[0], CONFIG.DIM)
-
     # Save results
     with open(out_path, 'wb') as file:
-        pickle.dump((EulerAngle.Tilts, tomograms, evaluated_tomogram, eval_result), file)
+        pickle.dump((svm_and_templates[1][0], tomograms, svm_and_templates[1][1], eval_result), file)
 
 
 # View results wrapper function
@@ -90,10 +88,10 @@ def _view_results(result_path):
     # Load results
     with open(result_path, 'rb') as file:
         result = pickle.load(file)
-    EulerAngle.Tilts, evaluation_tomograms, evaluated_tomogram, output_candidates = result
+    EulerAngle.Tilts, evaluation_tomograms, templates, output_candidates = result
 
     # Show results
-    svm_view(evaluation_tomograms, evaluated_tomogram, output_candidates)
+    svm_view(evaluation_tomograms, templates, output_candidates)
 
 
 def main(argv):
@@ -121,7 +119,7 @@ def main(argv):
     tomogram_parser.add_argument('template_paths', help='Path to the templates to be used in the generation')
     tomogram_parser.add_argument('out_path', nargs='+', help='Path to save in the generated tomograms')
     tomogram_parser.add_argument('-c', '--criteria', nargs='+', type=int,
-                                 help='Criteria to be used buy the tomogram generator')
+                                 help='Criteria to be used by the tomogram generator')
     tomogram_parser.add_argument('-n', '--num_tomograms', type=int,
                                  help='Number of tomograms to create')
 

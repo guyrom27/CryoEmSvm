@@ -67,9 +67,9 @@ def generate_templates_3d(output_path, angle_res, templates_type):
                                                                     angle_res))
     if templates_type in (TemplatesType.GEOMETRIC_3D, TemplatesType.ALL_3D):
         cmnd += ' -g ' + r'.\geometric.txt'
-    if templates_type in (TemplatesType.GEOMETRIC_3D.PDBS_3D, TemplatesType.GEOMETRIC_3D.ALL_3D):
+    if templates_type in (TemplatesType.PDBS_3D, TemplatesType.ALL_3D):
         cmnd += ' -p ' + r'.\pdbs.txt'
-    if templates_type not in TemplatesType:
+    if templates_type not in TemplatesType.keys():
         raise Exception('Template generation failed - unknown templates type') # unknown template group
     cmnd += '"'
 
@@ -258,6 +258,9 @@ def generate_tilted_templates():  # TODO: remove
 # -------------------------------------------------- Generators ------------------------------------------------------ #
 # Enum containing all the supported generators
 class TemplateGenerator(StringComperableEnum):
+    LOAD = 'LOAD'
+    LOAD_3D = 'LOAD_3D'
+    SOLID = 'SOLID'
     CHIMERA = 'CHIMERA'
 
 
@@ -274,7 +277,6 @@ def template_loader(paths):
 
 
 def generate_chimera(paths, angular_resolution, template_type):
-    # TODO: for now template_type won't be chosen because it's better be an enum beforehand
     generate_templates_3d(paths[0], angular_resolution, template_type)
     return load_templates_3d(paths[0])
 

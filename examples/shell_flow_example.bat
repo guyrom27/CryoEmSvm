@@ -5,7 +5,7 @@ SET my_python=C:\ProgramData\Anaconda3\python.exe
 SET full_path=%~dp0
 
 @REM Generate templates using chimera.
-%my_python% ..\src\Main.py generate templates CHIMERA %fill_path%\..\Chimera\GeometricTemplates\ -r 60 -t GEOMETRIC_3D
+%my_python% ..\src\Main.py generate templates CHIMERA %fill_path%..\Chimera\GeometricTemplates\ -r 60 -t GEOMETRIC_3D
 
 @REM Generate random tomograms using the generated templates. The criteria used will be [2, 3] and 1 tomogram will be generated.
 %my_python% ..\src\Main.py generate tomograms RANDOM ..\Chimera\GeometricTemplates\ ..\Chimera\GeometricTemplates\tomograms.pkl -c 2 3 -n 1
