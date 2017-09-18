@@ -69,7 +69,7 @@ def generate_templates_3d(output_path, angle_res, templates_type):
         cmnd += ' -g ' + r'.\geometric.txt'
     if templates_type in (TemplatesType.PDBS_3D, TemplatesType.ALL_3D):
         cmnd += ' -p ' + r'.\pdbs.txt'
-    if templates_type not in TemplatesType.keys():
+    if not TemplatesType.contains(templates_type):
         raise Exception('Template generation failed - unknown templates type') # unknown template group
     cmnd += '"'
 
