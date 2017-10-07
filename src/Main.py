@@ -108,7 +108,9 @@ def main(argv):
     template_parser.add_argument('generator', choices=TemplateGenerator.keys(),
                                  help='The kind of generator to use when creating the templates')
     template_parser.add_argument('out_path', nargs=1, help='Path to save in the generated template')
-    template_parser.add_argument('-r', '--angular_resolution', type=int, help='Angular resolution')
+    template_parser.add_argument('-r', '--angular_resolution', type=int,
+                                 help='Angular resolution to use in the generation of the templates, i.e. the size of '
+                                      'the jump in the angles in every relevant direction')
     template_parser.add_argument('-t', '--template_type', choices=TemplatesType.keys(),
                                  help='Type of templates to be generated')
 
@@ -171,7 +173,7 @@ def main(argv):
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         # main(['generate', 'templates', 'CHIMERA', 'C:\\dev\\Anaconda\\CryoEmSvm\\Chimera\\GeometricTemplates\\',
-        #       '-r', '60', '-t', 'GEOMETRIC_3D'])
+        #       '-r', '60', '-t', 'ALL_3D'])
         # main(['generate', 'tomograms', 'RANDOM', 'C:\\dev\\Anaconda\\CryoEmSvm\\Chimera\\GeometricTemplates\\',
         #       'C:\\dev\\Anaconda\\CryoEmSvm\\Chimera\\GeometricTemplates\\tomograms.pkl', '-c', '2', '3', '-n', '1'])
         # print('Training')
@@ -183,7 +185,7 @@ if __name__ == '__main__':
         # main(['eval', 'my_svm.pkl', '-d', 'C:\\dev\\Anaconda\\CryoEmSvm\\Chimera\\GeometricTemplates\\eval_tomograms.pkl',
         #       '-o', 'my_result.pkl'])
         # print('Show results')
-        main(['view_results', 'my_result.pkl'])
+        main(['view_results', '-h'])
         pass
     else:
         main(None)
