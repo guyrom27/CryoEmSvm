@@ -1,0 +1,6 @@
+C:\ProgramData\Anaconda3\python.exe ..\src\Main.py generate templates CHIMERA ..\Chimera\Templates\ -r 60 -t PDBS_3D
+C:\ProgramData\Anaconda3\python.exe ..\src\Main.py generate tomograms RANDOM ..\Chimera\Templates\ ..\Chimera\Templates\tomograms.pkl -c 2 3 -n 1
+C:\ProgramData\Anaconda3\python.exe ..\src\Main.py train my_svm.pkl -t ..\Chimera\Templates\ -d ..\Chimera\Templates\tomograms.pkl
+C:\ProgramData\Anaconda3\python.exe ..\src\Main.py generate tomograms RANDOM ..\Chimera\Templates\ ..\Chimera\Templates\eval_tomograms.pkl -c 3 3 -n 1
+C:\ProgramData\Anaconda3\python.exe ..\src\Main.py eval my_svm.pkl -d ..\Chimera\Templates\eval_tomograms.pkl -o my_result.pkl
+C:\ProgramData\Anaconda3\python.exe ..\src\Main.py view_results my_result.pkl
