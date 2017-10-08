@@ -1,4 +1,6 @@
 from Labeler import JUNK_ID
+from Configuration import CONFIG
+import subprocess
 
 
 import numpy as np
@@ -179,3 +181,29 @@ def candidates2dm3D(candidates, shape):
                 for k in range(-2,2):
                     peaks[c.six_position.COM_position] += 1
     return peaks
+
+
+def chimeraDisplay(evaluated_tomogoram, reconstructed_tomogram):
+    """
+    Opens chimera and displays density maps of evaluated and
+    reconstructed tomograms.
+
+    :param evaluated_tomogoram: tomogram object (not only density map)
+    :param reconstructed_tomogram: tomogram object
+    :return:
+    """
+
+    # save density map matrices as backwards compatible numpy files
+    paths = [CONFIG.CHIMERA_UTILS_PATH + r'\evaluated.npy',
+             CONFIG.CHIMERA_UTILS_PATH + r'\reconstructed.npy']
+    np.save(paths[0], evaluated_tomogoram.density_map, fix_imports=True)
+    np.save(paths[1], reconstructed_tomogram.density_map, fix_imports=True)
+
+    # prepare chimera script command
+    script_name = '.\chimera_display_results.py'
+    cmnd = format(r'"%s" --debug --script "%s %s"' %
+                  (CONFIG.CHIMERA_PATH, script_name, ' '.join(paths)))
+
+    # run chimera process
+    print('Running command:\n\t' + cmnd)
+    subprocess.Popen(cmnd, cwd=CONFIG.CHIMERA_UTILS_PATH)
