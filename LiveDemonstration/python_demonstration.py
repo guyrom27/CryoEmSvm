@@ -3,6 +3,9 @@ from TomogramGenerator import generate_random_tomogram_set, generate_random_tomo
 from SvmTrain import svm_train
 from SvmEval import svm_eval
 from SvmView import svm_view
+from Configuration import CONFIG
+
+CONFIG.load_config(r'../LiveDemonstration/config_2d.txt')
 
 templates = generate_tilted_templates_2d(33)
 
