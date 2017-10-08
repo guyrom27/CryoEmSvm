@@ -183,7 +183,7 @@ def candidates2dm3D(candidates, shape):
     return peaks
 
 
-def chimeraDisplay(evaluated_tomogoram, reconstructed_tomogram):
+def chimera_display(evaluated_tomogoram, reconstructed_tomogram):
     """
     Opens chimera and displays density maps of evaluated and
     reconstructed tomograms.
