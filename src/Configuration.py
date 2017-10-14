@@ -48,4 +48,9 @@ class Configuration:
         self.CHIMERA_PATH = section['CHIMERA_PATH']
         self.CHIMERA_UTILS_PATH = section['CHIMERA_UTILS_PATH']
 
+        if 'SEED' in section:
+            self.SEED = section['SEED']
+        else:
+            self.SEED = None
+
 CONFIG = Configuration()

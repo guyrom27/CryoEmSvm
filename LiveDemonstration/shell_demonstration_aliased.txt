@@ -1,0 +1,3 @@
+python ..\src\Main.py generate tomograms RANDOM ..\Chimera\Templates\ ..\Chimera\Templates\eval_tomograms.pkl -c 3 3 -n 1
+python ..\src\Main.py eval my_svm.pkl -d ..\Chimera\Templates\eval_tomograms.pkl -o my_result.pkl
+python ..\src\Main.py view_results my_result.pkl

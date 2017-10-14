@@ -25,6 +25,4 @@ def svm_view(evaluation_tomograms, templates, output_candidates):
         VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[0], evaluated_tomogram)
         VisualUtils.plt.show()
     else:
-        VisualUtils.slider3d(evaluation_tomograms[0].density_map)
-        VisualUtils.slider3d(evaluated_tomogram.density_map)
         VisualUtils.chimera_display(evaluation_tomograms[0], evaluated_tomogram)

@@ -9,6 +9,7 @@ class TomogramFactory:
         self.templates = None
         self.criteria = None
         self.num_tomograms = None
+        self.seed = None
 
     def set_templates(self, templates):
         self.templates = templates
@@ -30,6 +31,10 @@ class TomogramFactory:
         self.num_tomograms = num_tomograms
         return self
 
+    def set_seed(self, seed):
+        self.seed = seed
+        return self
+
     def build(self):
         # Assert that all the required values are set
 
@@ -41,6 +46,6 @@ class TomogramFactory:
             assert self.templates
             assert self.criteria
             assert self.num_tomograms
-            return tomogram_generator_random(self.templates, self.criteria, CONFIG.DIM, self.num_tomograms)
+            return tomogram_generator_random(self.templates, self.criteria, CONFIG.DIM, self.num_tomograms, CONFIG.SEED, True)
         else:
             raise NotImplementedError('The generator %s is not implemented' % str(self.kind))

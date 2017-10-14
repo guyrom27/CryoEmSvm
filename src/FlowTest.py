@@ -25,7 +25,7 @@ def main(config_path):
     # general
     dim = config['DEFAULT'].getint('dim')
     angle_res = config['DEFAULT'].getint('angle_res')
-    seed = config['DEFAULT'].get('seed')
+    seed = config['DEFAULT'].getint('seed')
     add_noise = config['DEFAULT'].getboolean('add_noise')
     svm_path = config['DEFAULT'].get('svm_path')
     template_file_path = config['DEFAULT'].get('template_file_path')
@@ -87,15 +87,15 @@ def main(config_path):
         with open(metrics_input_file, 'rb') as file:
             aggregated_metrics = pickle.load(file)
 
+    # create tomograms for evaluation
+    evaluation_tomograms = list(generate_random_tomogram_set(templates, test_criteria, number_of_test_tomograms, dim, seed + 1, noise=add_noise))
     for i in range(number_of_test_tomograms):
-        # create single tomogram for evaluation
-        evaluation_tomograms = [generate_random_tomogram(templates, test_criteria, dim, noise=add_noise)]
         # evaluate
-        output_candidates = svm_eval(svm_and_templates, evaluation_tomograms)
+        output_candidates = svm_eval(svm_and_templates, [evaluation_tomograms[i]])
         # reconstruct tomogram
         evaluated_tomogram = generate_tomogram_with_given_candidates(templates, output_candidates[0], dim)
         # calculate metrics
-        metric_tester = MetricTester(evaluation_tomograms[0].composition, output_candidates[0])
+        metric_tester = MetricTester(evaluation_tomograms[i].composition, output_candidates[0])
         event_metrics.init_from_tester(metric_tester)
         if print_each_event:
             print("===================")
@@ -113,7 +113,7 @@ def main(config_path):
     print('Results')
 
     # print metrics for last evaluated tomogram
-    metric_tester = MetricTester(evaluation_tomograms[0].composition, [c for c in evaluated_tomogram.composition if c.label != JUNK_ID])
+    metric_tester = MetricTester(evaluation_tomograms[-1].composition, [c for c in evaluated_tomogram.composition if c.label != JUNK_ID])
     metric_tester.print()
     print('')
     metric_tester.print_metrics()
@@ -125,12 +125,12 @@ def main(config_path):
 
     # visualy display results
     if dim == 2:
-        VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[0], evaluated_tomogram)
+        VisualUtils.compare_reconstruced_tomogram(evaluation_tomograms[-1], evaluated_tomogram)
         VisualUtils.plt.show()
     else:
         VisualUtils.slider3d(evaluated_tomogram.density_map)
-        VisualUtils.slider3d(evaluation_tomograms[0].density_map)
-        VisualUtils.slider3d(evaluation_tomograms[0].density_map - evaluated_tomogram.density_map)
+        VisualUtils.slider3d(evaluation_tomograms[-1].density_map)
+        VisualUtils.slider3d(evaluation_tomograms[-1].density_map - evaluated_tomogram.density_map)
 
     print("Done")
 

@@ -211,8 +211,8 @@ def tomogram_loader(path):
 #       3. Add any new values that the shell command didn't previously accept to the command.
 #          This is done by adding the arguments to the correct parser. For more information about how to add an
 #          argument look up argparse.
-def tomogram_generator_random(templates, criteria, dim, num_tomograms):
-    return generate_random_tomogram_set(templates, criteria, num_tomograms, dim)
+def tomogram_generator_random(templates, criteria, dim, num_tomograms, seed, noise):
+    return generate_random_tomogram_set(templates, criteria, num_tomograms, dim, seed, noise)
 #training_tomograms = tomogram_example_generator_random(templates, TEMPLATE_DIMENSION, [2,2], 2, num_tomograms=1)
 
 if __name__ == '__main__':
