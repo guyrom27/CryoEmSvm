@@ -1,7 +1,7 @@
 [config]
 
 CHIMERA_PATH = C:\Program Files\Chimera 1.11.2\bin\chimera
-CHIMERA_UTILS_PATH = C:\dev\Anaconda\CryoEmSvm\src\ChimeraUtils\
+CHIMERA_UTILS_PATH = C:\dev\Anaconda\CryoEmSvm\src\ChimeraUtils
 
 DIM = 3
 TEMPLATE_DIMENSION = 25

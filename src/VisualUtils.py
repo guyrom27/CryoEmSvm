@@ -183,7 +183,7 @@ def candidates2dm3D(candidates, shape):
     return peaks
 
 
-def chimera_display(evaluated_tomogoram, reconstructed_tomogram):
+def chimera_display(evaluated_tomogoram, reconstructed_tomogram, ground_truth_tomogram):
     """
     Opens chimera and displays density maps of evaluated and
     reconstructed tomograms.
@@ -195,9 +195,12 @@ def chimera_display(evaluated_tomogoram, reconstructed_tomogram):
 
     # save density map matrices as backwards compatible numpy files
     paths = [CONFIG.CHIMERA_UTILS_PATH + r'\evaluated.npy',
-             CONFIG.CHIMERA_UTILS_PATH + r'\reconstructed.npy']
+             CONFIG.CHIMERA_UTILS_PATH + r'\reconstructed.npy',
+             CONFIG.CHIMERA_UTILS_PATH + r'\ground_truth.npy',]
     np.save(paths[0], evaluated_tomogoram.density_map, fix_imports=True)
     np.save(paths[1], reconstructed_tomogram.density_map, fix_imports=True)
+    np.save(paths[2], ground_truth_tomogram.density_map, fix_imports=True)
+
 
     # prepare chimera script command
     script_name = '.\chimera_display_results.py'
