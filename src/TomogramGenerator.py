@@ -135,6 +135,7 @@ def generate_random_tomogram_set(templates, criteria, number_of_tomograms, dim, 
         seed = random.randint(0, 2 ** 31 - 1)
     print('Using random seed: ', seed)
     random.seed(seed)
+    np.random.seed(seed)
 
     for i in range(number_of_tomograms):
         yield generate_random_tomogram(templates, criteria, dim, noise)
